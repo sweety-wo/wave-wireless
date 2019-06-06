@@ -1,0 +1,22 @@
+:host {
+  flex-grow: 1;
+  display: flex;
+}
+
+.text-label {
+  border-left: solid 2px #ffffff;
+}
+
+.overlay {
+  background-image: url("../../../assets/images/bg-0.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-filter: grayscale(100%) opacity(0.2); /* Safari 6.0 - 9.0 */
+  filter: grayscale(100%) opacity(0.2);
+  left: 0;
+  z-index: -1;
+}
+
+.shadow{
+  margin-bottom: 150px;
+}
