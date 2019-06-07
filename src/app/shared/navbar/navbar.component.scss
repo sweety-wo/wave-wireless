@@ -1,5 +1,4 @@
-
-.navbar {
+/*.navbar {
   background: #3CB371;
   .nav-item {
     a.nav-link {
@@ -8,4 +7,13 @@
       padding-right: 20px;
     }
   }
+}*/
+
+.nav-item.active {
+  font-weight: bold;
+}
+
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
 }
