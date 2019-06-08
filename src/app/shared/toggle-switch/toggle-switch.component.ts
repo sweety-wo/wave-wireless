@@ -6,6 +6,8 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
   styleUrls: ['./toggle-switch.component.scss']
 })
 export class ToggleSwitchComponent {
+  @Input() size = 'medium';
+  @Input() theme = 'dark';
   @Input() toggled: boolean;
   @Output() toggledChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 }

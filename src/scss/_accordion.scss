@@ -1,0 +1,48 @@
+.custom-acc {
+  .card, .card-header {
+    background: transparent;
+    border: none;
+  }
+
+  .card-header {
+    padding: 0.5rem 1.25rem;
+  }
+
+  .card-body {
+    padding-top: 1rem;
+  }
+
+  .btn-toggle {
+    .right-arrow {
+      display: none;
+    }
+
+    .down-arrow {
+      display: inline-block;
+    }
+
+    &.collapsed {
+      .right-arrow {
+        display: inline-block;
+      }
+
+      .down-arrow {
+        display: none;
+      }
+    }
+  }
+
+  .expand-panel {
+    padding-left: 6.8rem !important;
+    padding-right: 6.8rem !important;
+  }
+}
+
+@media only screen and (max-width: 1440px) {
+  .custom-acc {
+    .expand-panel {
+      padding-right: 0rem !important;
+    }
+  }
+
+}

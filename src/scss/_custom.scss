@@ -12,4 +12,40 @@ html, body {
   .header {
     border-bottom: solid thin rgba(80, 80, 80, 0.5);
   }
+
+  .footer {
+    border-top: solid thin rgba(80, 80, 80, 0.5);
+  }
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+svg-icon {
+  line-height: 0;
+}
+
+::placeholder {
+  font-style: italic;
+}
+
+.search-group {
+  input {
+    border-right: transparent;
+  }
+  .input-group-append {
+    .input-group-text {
+      background: #fff;
+      padding: 0.3rem;
+    }
+  }
+}
+
+//.all-0 {
+//  top: 0;
+//  bottom: 0;
+//  left: 0;
+//  right: 0;
+//}
+
