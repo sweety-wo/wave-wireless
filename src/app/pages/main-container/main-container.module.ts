@@ -9,12 +9,10 @@ const routes = [
   {
     path: '', component: MainContainerComponent,
     children: [
-      {
-        path: '', loadChildren: './map/map.module#MapModule'
-      }
+      {path: '', loadChildren: './map/map.module#MapModule'},
+      {path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'}
     ]
   }
-
 ];
 
 @NgModule({
