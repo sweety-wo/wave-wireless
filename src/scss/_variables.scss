@@ -1,4 +1,17 @@
 $primary: #199b8a;
 $dark: #424242;
-$warning: #fc5425;
+$orange: #fc5425;
+$red:  #ff0000;
 
+$theme-colors: (
+ "primary": $primary,
+ "dark":$dark,
+ "orange": $orange,
+ "red": $red
+);
+
+@each $color, $value in $theme-colors {
+  .fill-#{$color} {
+    fill: $value
+  }
+}

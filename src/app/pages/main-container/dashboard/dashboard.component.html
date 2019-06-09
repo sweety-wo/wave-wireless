@@ -32,18 +32,18 @@
         </div>
         <div class="d-flex align-items-center justify-content-between w-30">
           <label class="m-0">
-            <svg-icon src="assets/images/icons/verified.svg" class="cursor-pointer"
-              [svgStyle]="{ 'height.px':20, 'width.px':20, 'fill': 'green'}"></svg-icon>
+            <svg-icon src="assets/images/icons/verified.svg" class="cursor-pointer fill-primary"
+              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
             <span class="text-white ml-2">2000</span>
           </label>
           <label class="m-0">
-            <svg-icon src="assets/images/icons/round-error-symbol.svg" class="cursor-pointer"
-              [svgStyle]="{ 'height.px':20, 'width.px':20, 'fill': 'orange'}"></svg-icon>
+            <svg-icon src="assets/images/icons/round-error-symbol.svg" class="cursor-pointer fill-red"
+              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
             <span class="text-white ml-2">2000</span>
           </label>
           <label class="m-0">
-            <svg-icon src="assets/images/icons/cancel.svg" class="cursor-pointer"
-              [svgStyle]="{ 'height.px':20, 'width.px':20, 'fill': 'red'}"></svg-icon>
+            <svg-icon src="assets/images/icons/cancel.svg" class="cursor-pointer fill-orange"
+              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
             <span class="text-white ml-2">2000</span>
           </label>
           <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light"></app-toggle-switch>
@@ -62,8 +62,8 @@
                     <label [for]="'rowCheck' + i" class="check-input mr-3">
                       <input type="checkbox" [id]="'rrowCheckw' + i" name="rowCheck" [(ngModel)]="obj.state">
                     </label>
-                    <svg-icon src="assets/images/icons/round-error-symbol.svg" class="cursor-pointer mr-3"
-                      [svgStyle]="{ 'height.px':20, 'width.px':20, 'fill': 'red'}"></svg-icon>
+                    <svg-icon src="assets/images/icons/round-error-symbol.svg" class="cursor-pointer fill-red mr-3"
+                      [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
 
                     <button ngbPanelToggle class="btn-toggle d-flex btn btn-link mr-3 p-0">
                       <svg-icon src="assets/images/icons/right-arrow.svg" class="right-arrow"
