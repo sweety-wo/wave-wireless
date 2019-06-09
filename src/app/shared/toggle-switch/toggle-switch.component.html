@@ -1,8 +1,6 @@
 <div [ngClass]="size + ' ' + theme">
-  <input type="checkbox" id="toggle-button-checkbox" [checked]="toggled"
-         (change)="toggledChange.emit($event.target.checked)">
-  <label class="toggle-button-switch"
-         for="toggle-button-checkbox"></label>
+  <input type="checkbox" [id]="inputId" [checked]="toggled" (change)="toggledChange.emit($event.target.checked)">
+  <label class="toggle-button-switch" [for]="inputId"></label>
   <div class="toggle-button-text">
     <div class="toggle-button-text-on"></div>
     <div class="toggle-button-text-off"></div>

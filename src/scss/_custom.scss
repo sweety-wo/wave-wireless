@@ -1,5 +1,5 @@
 html, body {
-  height: 100vh;
+  height: 100% !important;
   font-family: 'Quicksand', sans-serif;
   background: #eeeeee;
 }
@@ -11,6 +11,10 @@ html, body {
 
   .header {
     border-bottom: solid thin rgba(80, 80, 80, 0.5);
+  }
+
+  .body{
+     flex: 1 0 1px;
   }
 
   .footer {
@@ -42,10 +46,6 @@ svg-icon {
   }
 }
 
-//.all-0 {
-//  top: 0;
-//  bottom: 0;
-//  left: 0;
-//  right: 0;
-//}
-
+.flex-wrapper {
+     flex: 1 0 1px;
+}

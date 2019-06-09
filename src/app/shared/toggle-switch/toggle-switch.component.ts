@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as uuid from 'uuid';
 
 @Component({
   selector: 'app-toggle-switch',
@@ -10,4 +11,5 @@ export class ToggleSwitchComponent {
   @Input() theme = 'dark';
   @Input() toggled: boolean;
   @Output() toggledChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+  inputId = uuid.v4();
 }

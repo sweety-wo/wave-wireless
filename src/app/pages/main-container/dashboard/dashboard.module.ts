@@ -6,6 +6,7 @@ import {DashboardComponent} from './dashboard.component';
 import {ToggleSwitchModule} from '../../../shared/toggle-switch/toggle-switch.module';
 import {NgbAccordionModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularSvgIconModule} from 'angular-svg-icon';
+import { FormsModule } from '@angular/forms';
 
 const routes = [
   {path: '', component: DashboardComponent}
@@ -16,6 +17,7 @@ const routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
+    FormsModule,
     ToggleSwitchModule,
     NgbDropdownModule,
     NgbAccordionModule,

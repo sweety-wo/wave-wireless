@@ -14,9 +14,13 @@
   -webkit-filter: grayscale(100%) opacity(0.2); /* Safari 6.0 - 9.0 */
   filter: grayscale(100%) opacity(0.2);
   left: 0;
-  z-index: -1;
+  z-index: 0;
 }
 
-.shadow{
+.container{
+  z-index: 1;
+}
+
+.content{
   margin-bottom: 150px;
 }
