@@ -1,30 +1,29 @@
 <div class="container-fluid d-flex">
-  <div class="position-absolute w-100 h-100 overlay"></div>
-  <div class="container d-flex flex-column">
-    <div class="d-flex w-75 justify-content-center mx-auto bg-primary p-5 content">
-      <img src="assets/images/whiteLogo2.svg">
-      <div class="text-label d-flex align-items-center text-white h2 m-0 ml-4 pl-4">
-        Unleashed Connectivity
-      </div>
+    <div class="position-absolute w-100 h-100 overlay"></div>
+    <div class="container d-flex flex-column">
+        <div class="d-flex w-75 justify-content-center mx-auto bg-primary p-5 shadow">
+            <img src="assets/images/whiteLogo2.svg">
+            <div class="text-label d-flex align-items-center text-white h2 m-0 ml-4 pl-4">
+                Unleashed Connectivity
+            </div>
+        </div>
+        <div class="d-flex h-100 w-75 mx-auto">
+            <div class="w-50 text-center mx-auto mb-5">
+                <h1 class="mb-4">Sign In</h1>
+                <form class="d-flex flex-column" *ngIf="!isSecurityMode"
+                      role="form" [formGroup]="loginForm" (ngSubmit)="fnNext()">
+                    <input class="form-control mb-3" type="text" placeholder="Email / User Name"
+                           formControlName="email" name="email">
+                    <button class="btn btn-primary" type="submit" *ngIf="!isLoading">Next</button>
+                    <app-loader *ngIf="isLoading"></app-loader>
+                </form>
+                <form class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
+                    <formly-form [form]="form" [fields]="fieldsArray" [model]="model"></formly-form>
+                    <button class="btn btn-primary text-uppercase" type="submit">Sign In Securely</button>
+                    <a href="javscript:void" class="mx-auto" (click)="fnBack()">BACK</a>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="d-flex h-100 w-75 mx-auto">
-      <div class="w-50 text-center mx-auto mb-5">
-        <h1 class="mb-4">Sign In</h1>
-        <form class="d-flex flex-column" *ngIf="!isSecurityMode"
-              role="form" [formGroup]="loginForm" (ngSubmit)="fnNext()">
-          <input class="form-control mb-3" type="text" placeholder="Email / User Name"
-                 formControlName="email" name="email">
-          <button class="btn btn-primary" type="submit" *ngIf="!isLoading">Next</button>
-          <app-loader *ngIf="isLoading"></app-loader>
-        </form>
-        <form class="d-flex flex-column" *ngIf="isSecurityMode">
-          <input class="form-control mb-3" type="password" placeholder="password">
-          <input class="form-control mb-3" type="text" placeholder="Security Token">
-          <button class="btn btn-primary text-uppercase mb-3">Sign In Securely</button>
-          <a href="javscript:void" class="mx-auto" (click)="fnBack()">BACK</a>
-        </form>
-      </div>
-    </div>
-  </div>
 </div>
 
