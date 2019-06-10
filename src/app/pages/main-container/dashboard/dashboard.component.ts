@@ -347,7 +347,7 @@ export class DashboardComponent implements OnInit {
       'c1': '1a2b3c4d-5e6f7g8h',
       'c2': '10.0.6.99',
       'd1': '37.38928392',
-      'd2': '-88.4508295', 'isTrue': true
+        'd2': '-88.4508295', 'isTrue': true
     }
   ];
 
@@ -360,7 +360,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkAll(event?) {
-    this.data.forEach(x => x.state = event.target.checked)
+    this.data.forEach(x => x.state = event.target.checked);
   }
 
   isAllChecked() {

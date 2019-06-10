@@ -4,23 +4,25 @@ import {MainContainerComponent} from './main-container.component';
 import {LoginComponent} from '../login/login.component';
 import {RouterModule} from '@angular/router';
 import {NavbarComponent} from '../../shared/navbar/navbar.component';
+import {AngularSvgIconModule} from 'angular-svg-icon';
 
 const routes = [
-  {
-    path: '', component: MainContainerComponent,
-    children: [
-      {path: '', loadChildren: './map/map.module#MapModule'},
-      {path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'}
-    ]
-  }
+    {
+        path: '', component: MainContainerComponent,
+        children: [
+            {path: '', loadChildren: './map/map.module#MapModule'},
+            {path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule'}
+        ]
+    }
 ];
 
 @NgModule({
-  declarations: [MainContainerComponent, NavbarComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes)
-  ]
+    declarations: [MainContainerComponent, NavbarComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        AngularSvgIconModule
+    ]
 })
 export class MainContainerModule {
 }
