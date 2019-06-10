@@ -3,13 +3,15 @@ $dark: #424242;
 $orange: #fc5425;
 $red: #fb0d1c;
 $white: #ffffff;
+$light-gray: #bbbbbb;
 
 $theme-colors: (
     "primary": $primary,
     "dark":$dark,
     "orange": $orange,
     "red": $red,
-    "white":$white
+    "white":$white,
+    "light-gray":$light-gray
 );
 
 @each $color, $value in $theme-colors {
