@@ -23,7 +23,7 @@ import {LeafletModule} from '@asymmetrik/ngx-leaflet';
         CookieModule.forRoot(),
         LeafletModule.forRoot(),
         FormlyModule.forRoot(),
-        FormlyBootstrapModule,
+        FormlyBootstrapModule
     ],
     providers: [
         CookieService,
