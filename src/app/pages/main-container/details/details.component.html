@@ -1,4 +1,4 @@
-<div class="container-fluid flex-column d-flex p-3">
+<!--<div class="container-fluid flex-column d-flex p-3">
   <div class="d-flex w-100 h-100 mb-2">
     <div class="w-25 mr-2 container-card">
       <div class="px-3 py-2 header text-dark bg-warning d-flex justify-content-between align-items-center">
@@ -44,4 +44,119 @@
       </div>
     </div>
   </div>
+</div>-->
+
+<!-- main-container -->
+<div class="d-flex flex-grow-1 p-3">
+
+    <!-- left-container -->
+    <div class="d-flex w-25 flex-column">
+
+        <!-- left-top-container -->
+        <div class="d-flex flex-column flex-grow-1 mr-2 mb-2 container-card">
+            <!-- Header -->
+            <div class="header px-3 py-2 d-flex justify-content-between align-items-center bg-orange">
+                <label class="m-0 h2 text-white">Noah Place</label>
+                <app-toggle-switch [(toggled)]="test"></app-toggle-switch>
+            </div>
+            <!-- Body -->
+            <div class="body px-3 py-2 overflow-auto">
+                Body
+            </div>
+        </div>
+
+        <!-- left-bottom-container -->
+        <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card">
+            <!-- Header -->
+            <div class="header px-3 py-2">
+                <label class="m-0 h2">Details</label>
+            </div>
+            <!-- Body -->
+            <div class="body px-3 py-2 overflow-auto">
+                Body
+            </div>
+        </div>
+    </div>
+
+    <!-- right-container -->
+    <div class="d-flex w-75 flex-column">
+
+        <!-- right-top-container -->
+        <div class="d-flex flex-column flex-grow-1 ml-2 mb-2 container-card">
+            <!-- Header -->
+            <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
+                <label class="m-0 h2">Performance</label>
+                <div>
+                    <div class="btn-group mr-3">
+                        <button type="button" class="btn btn-dark" style="margin-right: 2px">Split me</button>
+                        <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                            <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <button ngbDropdownItem>One</button>
+                                <button ngbDropdownItem>Two</button>
+                                <button ngbDropdownItem>Four!</button>
+                            </div>
+                        </div>
+                    </div>
+                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                              [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                </div>
+            </div>
+            <!-- Body -->
+            <div class="body px-3 py-2 overflow-auto">
+                Body
+            </div>
+        </div>
+
+        <!-- right-bottom-container -->
+        <div class="d-flex flex-grow-1 ml-2 mt-2">
+            <div class="d-flex flex-column flex-grow-1 mr-2 container-card w-50">
+                <!-- Header -->
+                <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
+                    <label class="m-0 h2">Alarms</label>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="input-group search-group mr-2">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                            <span class="input-group-text">
+                              <svg-icon src="assets/images/icons/magnifying-glass.svg"
+                                        [svgStyle]="{ 'height.px':24, 'width.px':24, 'fill':'#bbbbbb' }"></svg-icon>
+                            </span>
+                            </div>
+                        </div>
+                        <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                    </div>
+                </div>
+                <!-- Body -->
+                <div class="body px-3 py-2 overflow-auto">
+                    Body
+                </div>
+            </div>
+
+            <div class="d-flex flex-column flex-grow-1 ml-2 container-card w-50">
+                <!-- Header -->
+                <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
+                    <label class="m-0 h2">Telemetry</label>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="input-group search-group mr-2">
+                            <input type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                            <span class="input-group-text">
+                              <svg-icon src="assets/images/icons/magnifying-glass.svg"
+                                        [svgStyle]="{ 'height.px':24, 'width.px':24, 'fill':'#bbbbbb' }"></svg-icon>
+                            </span>
+                            </div>
+                        </div>
+                        <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                    </div>
+                </div>
+                <!-- Body -->
+                <div class="body px-3 py-2 overflow-auto">
+                    Body
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
