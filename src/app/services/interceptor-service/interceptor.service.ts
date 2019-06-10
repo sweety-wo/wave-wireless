@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 import {AuthService} from '../auth-service/auth.service';
-import {environment} from '../../environments/environment';
+import {environment} from '../../../environments/environment';
 
 
 @Injectable({
@@ -18,19 +18,14 @@ export class InterceptorService implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        if (this._auth.fnGetToken() && !request.headers.has('Authorization')) {
-            if (request.url.startsWith(environment.API_URL)) {
-                request = request.clone({
-                    setHeaders: {
-                        Authorization: `Bearer ${this._auth.fnGetToken()}`
-                    }
-                });
-            }
-        }
         return next.handle(request).pipe(
             tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                     // do stuff with response if you want
+                    if (event && event.url && event.url.includes('access/sessions') && request.method === 'POST') {
+                        const currentAuthUserId = event.headers.get('x-pre-api-principal-id');
+                        this._auth.currentAuthUserId.next(currentAuthUserId);
+                    }
                 }
             }, (error: any) => {
                 if (error instanceof HttpErrorResponse) {

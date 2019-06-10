@@ -4,7 +4,7 @@ import {LoginComponent} from './login.component';
 import {RouterModule} from '@angular/router';
 import {LoaderModule} from '../../shared/loader/loader.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SecurityService} from '../../services/access';
+import {SecurityService, UserService} from '../../services/access';
 import {FormlyModule} from '@ngx-formly/core';
 
 const routes = [
@@ -21,7 +21,7 @@ const routes = [
         ReactiveFormsModule,
         FormlyModule
     ],
-    providers: [SecurityService],
+    providers: [SecurityService, UserService],
 })
 export class LoginModule {
 }

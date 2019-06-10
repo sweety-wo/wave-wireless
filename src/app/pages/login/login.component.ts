@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {SecurityService} from '../../services/access';
+import {SecurityService, UserService} from '../../services/access';
 
 import * as _ from 'lodash';
-import {AuthService} from '../../auth-service/auth.service';
+import {AuthService} from '../../services/auth-service/auth.service';
+import {InterceptorService} from '../../services/interceptor-service/interceptor.service';
+import {CookieService} from 'ngx-cookie';
 
 @Component({
     selector: 'app-login',
@@ -16,12 +18,15 @@ export class LoginComponent implements OnInit {
     form: FormGroup;
     payloadObj: any;
     isLoading: boolean;
+    userId: string;
     fieldsArray: any[];
     model: any = {};
 
     constructor(private _formBuilder: FormBuilder,
                 private _security: SecurityService,
-                private _auth: AuthService) {
+                private _auth: AuthService,
+                private _user: UserService,
+                private _cookie: CookieService) {
         this.isSecurityMode = false;
         this.isLoading = false;
         this.fieldsArray = [];
@@ -29,8 +34,12 @@ export class LoginComponent implements OnInit {
 
     ngOnInit() {
         this.fnCreateForm();
+        this._auth.currentAuthUserId.subscribe((id) => {
+            if (id) {
+                this.userId = id;
+            }
+        });
     }
-
 
     private fnCreateForm() {
         this.loginForm = this._formBuilder.group({
@@ -59,6 +68,8 @@ export class LoginComponent implements OnInit {
                 this.isLoading = false;
                 this.isSecurityMode = true;
                 this.fieldsArray = res.fields;
+            }, (error) => {
+                this.isLoading = false;
             });
     }
 
@@ -67,6 +78,12 @@ export class LoginComponent implements OnInit {
         this._security.createSession(this.payloadObj.type, this.payloadObj.identifier, this.payloadObj.body)
             .subscribe((res: any) => {
                 this._auth.fnSetToken(res.id);
+                if (this.userId) {
+                    const authorization = `Bearer ${this._auth.fnGetToken()}`;
+                    this._user.getUser(authorization, this.userId).subscribe((userObj) => {
+                        this._auth.loggedInUser.next(userObj);
+                    });
+                }
             });
     }
 

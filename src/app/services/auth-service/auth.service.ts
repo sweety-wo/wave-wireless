@@ -10,6 +10,7 @@ export class AuthService {
 
     public static COOKIE_NAME = 'wave-wireless';
     public loggedInUser: Subject<any> = new BehaviorSubject<any>(null);
+    public currentAuthUserId: Subject<any> = new BehaviorSubject<any>(null);
     private _loggedInUser: any = null;
 
     constructor(private _router: Router,
