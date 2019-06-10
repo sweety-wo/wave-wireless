@@ -46,7 +46,8 @@
               [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
             <span class="text-white ml-2">2000</span>
           </label>
-          <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light"></app-toggle-switch>
+          <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light" key="isTrue" [(dataArr)]="data"
+            type="true"></app-toggle-switch>
         </div>
       </div>
 

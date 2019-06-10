@@ -1,5 +1,14 @@
-<div [ngClass]="size + ' ' + theme">
+<div [ngClass]="size + ' ' + theme" *ngIf="!type">
   <input type="checkbox" [id]="inputId" [checked]="toggled" (change)="toggledChange.emit($event.target.checked)">
+  <label class="toggle-button-switch" [for]="inputId"></label>
+  <div class="toggle-button-text">
+    <div class="toggle-button-text-on"></div>
+    <div class="toggle-button-text-off"></div>
+  </div>
+</div>
+
+<div [ngClass]="size + ' ' + theme" *ngIf="type">
+  <input type="checkbox" [id]="inputId" [checked]="isAllChecked()" (change)="checkAll($event)">
   <label class="toggle-button-switch" [for]="inputId"></label>
   <div class="toggle-button-text">
     <div class="toggle-button-text-on"></div>
