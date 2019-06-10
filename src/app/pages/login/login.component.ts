@@ -1,11 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {SecurityService, UserService} from '../../services/access';
 
 import * as _ from 'lodash';
 import {AuthService} from '../../services/auth-service/auth.service';
-import {InterceptorService} from '../../services/interceptor-service/interceptor.service';
+
 import {CookieService} from 'ngx-cookie';
+import {UserService} from '../../services/access/user/user.service';
+import {SecurityService} from '../../services/access/security/security.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-login',
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit {
                 private _security: SecurityService,
                 private _auth: AuthService,
                 private _user: UserService,
-                private _cookie: CookieService) {
+                private _router: Router) {
         this.isSecurityMode = false;
         this.isLoading = false;
         this.fieldsArray = [];
@@ -79,10 +81,12 @@ export class LoginComponent implements OnInit {
             .subscribe((res: any) => {
                 this._auth.fnSetToken(res.id);
                 if (this.userId) {
-                    const authorization = `Bearer ${this._auth.fnGetToken()}`;
-                    this._user.getUser(authorization, this.userId).subscribe((userObj) => {
-                        this._auth.loggedInUser.next(userObj);
-                    });
+                   this._user.getUser(this.userId).subscribe((userObj) => {
+                       this._auth.loggedInUser.next(userObj);
+                       this._router.navigate(['/map']);
+                       /*this._user.getUserPrivileges().subscribe((res) => {
+                       });*/
+                   });
                 }
             });
     }

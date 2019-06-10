@@ -4,8 +4,9 @@ import {LoginComponent} from './login.component';
 import {RouterModule} from '@angular/router';
 import {LoaderModule} from '../../shared/loader/loader.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SecurityService, UserService} from '../../services/access';
 import {FormlyModule} from '@ngx-formly/core';
+import {SecurityService} from '../../services/access/security/security.service';
+import {UserService} from '../../services/access/user/user.service';
 
 const routes = [
     {path: '', component: LoginComponent}

@@ -11,6 +11,8 @@ import {UniversalStorageService} from './services/universal-storage-service/univ
 import {CookieModule, CookieService} from 'ngx-cookie';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {InterceptorService} from './services/interceptor-service/interceptor.service';
+import {NotAuthGuardService} from './services/not-auth-guard-service/not-auth-guard.service';
+import {AuthGuardService} from './services/auth-guard-service/auth-guard.service';
 
 @NgModule({
     declarations: [
@@ -29,7 +31,9 @@ import {InterceptorService} from './services/interceptor-service/interceptor.ser
     providers: [
         CookieService,
         {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
-        UniversalStorageService
+        UniversalStorageService,
+        AuthGuardService,
+        NotAuthGuardService
     ],
     bootstrap: [AppComponent]
 })

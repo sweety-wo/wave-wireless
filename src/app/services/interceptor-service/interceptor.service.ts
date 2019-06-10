@@ -18,6 +18,15 @@ export class InterceptorService implements HttpInterceptor {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        if (this._auth.fnGetToken() && !request.headers.has('Authorization')) {
+            if (request.url.startsWith(environment.API_URL)) {
+                request = request.clone({
+                    setHeaders: {
+                        Authorization: `Bearer ${this._auth.fnGetToken()}`
+                    }
+                });
+            }
+        }
         return next.handle(request).pipe(
             tap((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
