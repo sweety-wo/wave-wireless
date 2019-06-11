@@ -9,23 +9,36 @@
         </div>
         <div class="d-flex h-100 w-75 mx-auto">
             <div class="w-50 text-center mx-auto mb-5">
-                <h1 class="mb-4">Sign In</h1>
-                <form class="d-flex flex-column" *ngIf="!isSecurityMode"
+                <h1 class="header mb-4">Sign In</h1>
+                <form #formcontrol="ngForm" class="d-flex flex-column" *ngIf="!isSecurityMode"
                       role="form" [formGroup]="loginForm" (ngSubmit)="fnNext()">
                     <input class="form-control mb-3" type="text" placeholder="Email / User Name"
-                           formControlName="email" name="email">
-                    <button class="btn btn-primary" type="submit" *ngIf="!isLoading">Next</button>
+                           (ngModelChange)="isEmailInvalid = false"
+                           formControlName="email" name="email" required>
+                    <small *ngIf="isEmailInvalid"
+                           class="mb-3 text-left">
+                        Sorry we don't recognize this {{accountType}}
+                    </small>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            [disabled]="!formcontrol.form.valid"
+                            *ngIf="!isLoading">
+                        Next
+                    </button>
                     <app-loader *ngIf="isLoading"></app-loader>
                 </form>
-                <form class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
+                <form #formcontrol="ngForm" class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
 
                     <formly-form [form]="form" [fields]="fieldsArray" [model]="model"></formly-form>
+                    <small class="mb-3 text-left" *ngIf="isSessionFailed">Invalid Credentials</small>
 
-                    <button class="btn btn-primary text-uppercase" type="submit" *ngIf="!isLoading">
+                    <button class="btn btn-primary text-uppercase"
+                            [disabled]="!formcontrol.form.valid"
+                            type="submit" *ngIf="!isLoading">
                         Sign In Securely
                     </button>
                     <app-loader *ngIf="isLoading"></app-loader>
-                    <a href="javscript:void" class="mx-auto mt-2" (click)="fnBack()">BACK</a>
+                    <a *ngIf="!isLoading" href="javscript:void" class="mx-auto mt-2" (click)="fnBack()">BACK</a>
                 </form>
             </div>
         </div>

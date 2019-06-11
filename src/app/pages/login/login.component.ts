@@ -6,6 +6,7 @@ import {Constant} from '../../constant/constant';
 import {AuthService} from '../../services/auth-service/auth.service';
 import {UserService} from '../../services/access/user/user.service';
 import {SecurityService} from '../../services/access/security/security.service';
+import {ToastrService} from '../../services/toastr-service/toastr.service';
 
 @Component({
     selector: 'app-login',
@@ -20,15 +21,21 @@ export class LoginComponent implements OnInit {
     isLoading: boolean;
     fieldsArray: any[];
     model: any = {};
+    isEmailInvalid: boolean;
+    accountType: string;
+    isSessionFailed: boolean;
 
     constructor(private _formBuilder: FormBuilder,
                 private _security: SecurityService,
                 private _auth: AuthService,
                 private _user: UserService,
+                private _toastr: ToastrService,
                 private _router: Router) {
         this.isSecurityMode = false;
         this.isLoading = false;
         this.fieldsArray = [];
+        this.isEmailInvalid = false;
+        this.isSessionFailed = false;
     }
 
     ngOnInit() {
@@ -51,24 +58,34 @@ export class LoginComponent implements OnInit {
                 type: 'email',
                 identifier: email
             };
+            this.accountType = 'Email';
         } else {
             this.payloadObj = {
                 type: 'username',
                 identifier: email
             };
+            this.accountType = 'user Name';
         }
         this._security.getAuthenticationParameters(this.payloadObj.type, this.payloadObj.identifier)
             .subscribe((res: any) => {
+                res.fields.forEach((fieldObj) => {
+                    fieldObj.templateOptions.label = '';
+                    fieldObj.templateOptions.description = '';
+                });
                 this.isLoading = false;
                 this.isSecurityMode = true;
                 this.fieldsArray = res.fields;
-            }, (error) => {
+            }, (err) => {
+                if (err && err.status === 401) {
+                    this.isEmailInvalid = true;
+                }
                 this.isLoading = false;
             });
     }
 
     fnSignIn(model) {
         this.isLoading = true;
+        this.isSessionFailed = false;
         this.payloadObj.body = model;
         this._security.createSession(this.payloadObj.type, this.payloadObj.identifier, this.payloadObj.body)
             .subscribe((res: any) => {
@@ -76,7 +93,12 @@ export class LoginComponent implements OnInit {
                 this._auth.fnGetAuthUser();
                 this._router.navigate(['/map']);
                 this.isLoading = false;
-            }, (error) => {
+            }, (err) => {
+                console.log('err', err);
+                if (err && err.error && err.error.message) {
+                    this._toastr.error(err.error.message);
+                }
+                this.isSessionFailed = true;
                 this.isLoading = false;
             });
     }
