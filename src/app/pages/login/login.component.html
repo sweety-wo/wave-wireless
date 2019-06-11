@@ -18,9 +18,14 @@
                     <app-loader *ngIf="isLoading"></app-loader>
                 </form>
                 <form class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
+
                     <formly-form [form]="form" [fields]="fieldsArray" [model]="model"></formly-form>
-                    <button class="btn btn-primary text-uppercase" type="submit">Sign In Securely</button>
-                    <a href="javscript:void" class="mx-auto" (click)="fnBack()">BACK</a>
+
+                    <button class="btn btn-primary text-uppercase" type="submit" *ngIf="!isLoading">
+                        Sign In Securely
+                    </button>
+                    <app-loader *ngIf="isLoading"></app-loader>
+                    <a href="javscript:void" class="mx-auto mt-2" (click)="fnBack()">BACK</a>
                 </form>
             </div>
         </div>

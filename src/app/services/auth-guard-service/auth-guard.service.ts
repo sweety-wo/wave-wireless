@@ -29,11 +29,9 @@ export class AuthGuardService implements CanActivate {
      * @param {string} url
      */
     private fnCheckAuthenticate(next, url: string): Promise<boolean> | boolean {
-        console.log('url', url);
         return new Promise((resolve, reject) => {
 
             // Check if token is available or not for accessing auth routing otherwise redirect to login page.
-            console.log(this._auth.fnGetToken());
             if (!this._auth.fnGetToken()) {
                 this._router.navigate(['login']);
                 reject(false);

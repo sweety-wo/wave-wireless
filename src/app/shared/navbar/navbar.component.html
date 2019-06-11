@@ -18,7 +18,8 @@
                 <li class="nav-item mx-3">
                     <a class="nav-link d-flex flex-column py-0" href="#">
                         <small>Good Morning</small>
-                        Manny</a>
+                        <span *ngIf="loggedInUser">{{loggedInUser.name}}</span>
+                    </a>
                 </li>
                 <li class="nav-item d-flex align-items-center mx-3">
                     <a class="nav-link" href="#">
@@ -27,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="#" (click)="fnLogout()">
                         <svg-icon src="assets/images/icons/sign-out.svg" class="fill-white"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                     </a>

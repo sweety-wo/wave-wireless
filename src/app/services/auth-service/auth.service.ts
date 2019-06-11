@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {UniversalStorageService} from '../universal-storage-service/universal-storage.service';
+import {UserService} from '../access/user/user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -10,28 +11,28 @@ export class AuthService {
 
     public static COOKIE_NAME = 'wave-wireless';
     public loggedInUser: Subject<any> = new BehaviorSubject<any>(null);
-    public currentAuthUserId: Subject<any> = new BehaviorSubject<any>(null);
     private _loggedInUser: any = null;
 
     constructor(private _router: Router,
-                private cookies: UniversalStorageService) {
+                private _cookies: UniversalStorageService,
+                private _user: UserService) {
     }
 
-    /**
-     * Checked logged in user information
-     * */
-    public fnCheckLoggedUserInfo(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            if (this.fnGetToken()) {
-            }
-        });
+    public fnGetAuthUser() {
+        if (this.fnGetToken()) {
+            const userId = this._cookies.getItem('xContextId');
+            this._user.getUser(userId).subscribe((user) => {
+                this.loggedInUser.next(user);
+                this._loggedInUser = user;
+            });
+        }
     }
 
     /**
      * Get auth token
      * */
     fnGetToken(): any {
-        const getCookie = this.cookies.getItem(AuthService.COOKIE_NAME);
+        const getCookie = this._cookies.getItem(AuthService.COOKIE_NAME);
         // HERE: Path condition  for universal because it get cookie if not available at client side.
         if (getCookie && getCookie.indexOf('path') === -1) {
             return getCookie;
@@ -42,20 +43,21 @@ export class AuthService {
     }
 
     /**
-     * Get auth token
+     * Set auth token
      * @param {string} authToken
      * */
     fnSetToken(authToken: string) {
-        this.cookies.setItem(AuthService.COOKIE_NAME, authToken);
+        this._cookies.setItem(AuthService.COOKIE_NAME, authToken);
     }
 
     /**
-     * Get auth token
+     * Remoove auth token
      * */
     fnRemoveToken() {
         this._loggedInUser = null;
         this.loggedInUser.next(null);
-        this.cookies.removeItem(AuthService.COOKIE_NAME);
+        this._cookies.removeItem(AuthService.COOKIE_NAME);
+        this._cookies.removeItem('xContextId');
     }
 
     /**
@@ -63,7 +65,7 @@ export class AuthService {
      * */
     fnRemoveCookieToken() {
         this._loggedInUser = null;
-        this.cookies.removeItem(AuthService.COOKIE_NAME);
+        this._cookies.removeItem(AuthService.COOKIE_NAME);
     }
 
     /**

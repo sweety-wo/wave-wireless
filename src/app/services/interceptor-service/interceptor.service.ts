@@ -6,6 +6,7 @@ import {tap} from 'rxjs/operators';
 
 import {AuthService} from '../auth-service/auth.service';
 import {environment} from '../../../environments/environment';
+import {UniversalStorageService} from '../universal-storage-service/universal-storage.service';
 
 
 @Injectable({
@@ -14,7 +15,8 @@ import {environment} from '../../../environments/environment';
 export class InterceptorService implements HttpInterceptor {
 
     constructor(private _router: Router,
-                private _auth: AuthService) {
+                private _auth: AuthService,
+                private _cookies: UniversalStorageService) {
     }
 
     public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -33,7 +35,7 @@ export class InterceptorService implements HttpInterceptor {
                     // do stuff with response if you want
                     if (event && event.url && event.url.includes('access/sessions') && request.method === 'POST') {
                         const currentAuthUserId = event.headers.get('x-pre-api-principal-id');
-                        this._auth.currentAuthUserId.next(currentAuthUserId);
+                        this._cookies.setItem('xContextId', currentAuthUserId);
                     }
                 }
             }, (error: any) => {
