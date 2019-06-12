@@ -2,12 +2,11 @@
     <div class="input-group">
         <div class="input-group-prepend">
             <div ngbDropdown class="d-inline-block">
-                <button class="btn" ngbDropdownToggle id="dropdown">Zip</button>
+                <button class="btn" ngbDropdownToggle id="dropdown">{{this.selectedSearchOption}}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button ngbDropdownItem>Zip</button>
-                    <button ngbDropdownItem>Area</button>
-                    <button ngbDropdownItem>Latitude</button>
-                    <button ngbDropdownItem>Longitude</button>
+                    <button ngbDropdownItem (click)="fnSetSearchOption(option.name)"
+                            *ngFor="let option of searchOptions">{{option.name}}
+                    </button>
                 </div>
             </div>
         </div>
@@ -16,7 +15,7 @@
         <div class="input-group-append">
             <span class="input-group-text bg-white px-1 border-left-0 border-right-0 border-top-0">
                 <svg-icon src="assets/images/icons/magnifying-glass.svg" class="cursor-pointer mr-1 fill-light-gray "
-                      [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                          [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
             </span>
         </div>
     </div>
