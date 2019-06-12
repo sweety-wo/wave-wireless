@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import * as L from 'leaflet';
+import * as _ from 'lodash';
 import 'leaflet.markercluster';
 import {latLng, tileLayer} from 'leaflet';
+import {Constant} from '../../../constant/constant';
 
 @Component({
     selector: 'app-map',
@@ -10,35 +12,42 @@ import {latLng, tileLayer} from 'leaflet';
 })
 export class MapComponent implements OnInit {
 
-    options = {
-        layers: [
-            tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-            })
-        ],
-        zoom: 7,
-        center: latLng([46.879966, -121.726909]),
-    };
-
+    deviceData: any;
+    options: any;
+    centerLat: any;
+    centerLong: any;
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
 
     constructor() {
+        this.deviceData = Constant.deviceData;
     }
 
     ngOnInit() {
-        this.markerClusterData = this.generateData(1000);
+        _.forEach(this.deviceData, (o) => {
+            if (o.data && o.data.long[0] && o.data.lat[0]) {
+                this.centerLat = o.data.lat[0];
+                this.centerLong = o.data.long[0];
+                if (this.centerLat && this.centerLong) {
+                    return false;
+                }
+            }
+        });
+
+        this.options = {
+            layers: [
+                tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors',
+                })
+            ],
+            zoom: 5,
+            center: latLng([this.centerLat, this.centerLong]),
+        };
+        this.markerClusterData = this.generateMarkers(this.deviceData);
     }
 
-    generateLat() {
-        return Math.random() * 360 - 180;
-    }
 
-    generateLon() {
-        return Math.random() * 180 - 90;
-    }
-
-    generateData(count: number): L.Marker[] {
+    generateMarkers(dataArr: any): L.Marker[] {
         const content =
             '<div class="d-flex">' +
             '<div class="w-75">' +
@@ -63,15 +72,19 @@ export class MapComponent implements OnInit {
             '</div>' +
             '</div>';
         const data: L.Marker[] = [];
-        for (let i = 0; i < count; i++) {
-
-            const icon = L.icon({
-                iconUrl: 'leaflet/marker-icon.png',
-                shadowUrl: 'leaflet/marker-shadow.png'
-            });
-            data.push(L.marker([this.generateLon(), this.generateLat()], {icon})
-                .bindPopup(content).openPopup());
-        }
+        _.forEach(dataArr, (o) => {
+            if (o.data && o.data.long[0] && o.data.lat[0]) {
+                const icon = L.icon({
+                    iconUrl: 'leaflet/marker-icon.png',
+                    shadowUrl: 'leaflet/marker-shadow.png'
+                });
+                data.push(L.marker([o.data.lat[0], o.data.long[0]], {icon})
+                    .bindPopup(content)
+                    .openPopup()
+                );
+            }
+        });
+        console.log('dzata', data);
         return data;
 
     }
