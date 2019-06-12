@@ -1,11 +1,6 @@
 <div class="container-fluid d-flex p-3">
-    <app-search-bar class="search-bar ml-4 mt-4"></app-search-bar>
+    <app-search-bar (searchChangeEvent)="fnSearch($event)"></app-search-bar>
     <div class="d-flex bg-light w-100">
-        <div leaflet
-             [leafletOptions]="options"
-             (leafletMapReady)="mapReady($event)"
-             [leafletMarkerCluster]="markerClusterData"
-             [leafletMarkerClusterOptions]="markerClusterOptions">
-        </div>
+      <app-custom-map [mapData]="filteredData" class="w-100 h-100"></app-custom-map>
     </div>
 </div>
