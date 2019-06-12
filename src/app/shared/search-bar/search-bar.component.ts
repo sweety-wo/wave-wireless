@@ -14,10 +14,14 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
     selectedSearchOption: string;
     searchOptions: any;
+    searchText: any = '';
+    searchFilter: number = null;
+    filterObj: any;
 
     constructor() {
         this.searchOptions = DropdownOptions.searchOptions;
         this.selectedSearchOption = DropdownOptions.searchOptions[0].name;
+        this.filterObj = {};
     }
 
     ngOnInit() {
@@ -29,11 +33,13 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     }
 
     fnSearchChange(text) {
-        const obj = {
+        this.searchText = text;
+        this.filterObj = {
             searchOption: this.selectedSearchOption,
-            searchText: text
+            searchText: text,
+            searchFilter: this.searchFilter
         };
-        this.searchChangeEvent.next(obj);
+        this.searchChangeEvent.next(this.filterObj);
     }
 
 
@@ -62,6 +68,16 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
     fnSetSearchOption(option) {
         this.selectedSearchOption = option;
+    }
+
+    fnSetSearchFilter(option) {
+        this.searchFilter = option;
+        this.filterObj = {
+            searchOption: this.selectedSearchOption,
+            searchText: this.searchText,
+            searchFilter: this.searchFilter
+        };
+        this.searchChangeEvent.next(this.filterObj);
     }
 
 
