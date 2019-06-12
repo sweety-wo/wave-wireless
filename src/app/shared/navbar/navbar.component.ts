@@ -8,13 +8,28 @@ import {Router} from '@angular/router';
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-    loggedInUser: any;
 
     constructor(private _auth: AuthService,
                 private _router: Router) {
     }
+    loggedInUser: any;
+    greetings: any;
+
+    static getGreetings() {
+        const myDate = new Date();
+        const hrs = myDate.getHours();
+
+        if (hrs < 12) {
+            return 'Good Morning';
+        } else if (hrs >= 12 && hrs <= 17) {
+            return 'Good Afternoon';
+        } else if (hrs >= 17 && hrs <= 24) {
+            return 'Good Evening';
+        }
+    }
 
     ngOnInit() {
+        this.greetings = NavbarComponent.getGreetings();
         this._auth.loggedInUser.subscribe((user) => {
             if (user) {
                 this.loggedInUser = user;

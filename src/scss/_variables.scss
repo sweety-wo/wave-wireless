@@ -4,6 +4,8 @@ $orange: #fc5425;
 $red: #fb0d1c;
 $white: #ffffff;
 $light-gray: #bbbbbb;
+$input-text-color: #515151;
+$placeholder-text: #ACACAE;
 
 $theme-colors: (
     "primary": $primary,
@@ -11,7 +13,9 @@ $theme-colors: (
     "orange": $orange,
     "red": $red,
     "white":$white,
-    "light-gray":$light-gray
+    "light-gray":$light-gray,
+    "input-text-color": $input-text-color,
+    "placeholder-text": $placeholder-text
 );
 
 @each $color, $value in $theme-colors {

@@ -1,7 +1,28 @@
+$text-color: $input-text-color;
+$placeholder-color: $placeholder-text;
+
 html, body {
   height: 100% !important;
   font-family: 'Quicksand', sans-serif;
   background: #eeeeee;
+}
+
+input {
+    color: $text-color;
+    font-weight: 600;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: $placeholder-color;
+    opacity: 1; /* Firefox */
+    font-style: unset;
+    font-weight: normal;
+}
+
+:-ms-input-placeholder, ::-ms-input-placeholder  { /* Internet Explorer 10-11 */ /* Microsoft Edge */
+    color: $placeholder-color;
+    font-style: unset;
+    font-weight: normal;
 }
 
 .container-card {
