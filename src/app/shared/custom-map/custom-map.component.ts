@@ -46,16 +46,27 @@ export class CustomMapComponent implements OnInit, OnChanges {
             }
         });
 
+        const maxScreenDimension = window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
+        const tileSize = 256;
+        const maxTiles = Math.floor(maxScreenDimension / tileSize);
+        let minZoom = Math.ceil(Math.log(maxTiles) / Math.log(2));
+        minZoom = minZoom < 2 ? 2 : minZoom;
+        const bounds = new L.LatLngBounds(new L.LatLng(85, -180), new L.LatLng(-85, 180));
+        console.log(minZoom);
+
         this.options = {
             layers: [
                 tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; OpenStreetMap contributors',
+                    noWrap: true,
                 })
             ],
             zoom: 5,
             center: latLng([this.centerLat, this.centerLong]),
             attributionControl: false,
             zoomControl: false,
+            maxBounds: bounds,
+            minZoom: minZoom
         };
         this.markerClusterData = this.generateMarkers(mapData);
     }
