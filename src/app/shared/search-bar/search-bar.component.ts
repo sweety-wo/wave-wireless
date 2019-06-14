@@ -13,22 +13,20 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     @ViewChild('searchInput', {static: false}) searchInput: ElementRef;
     @Output() searchChangeEvent = new EventEmitter<any>();
 
+    filterObj = {};
+    searchObj: any;
     selectedSearchOption: string;
     searchOptions: any;
     searchText: any = '';
-    searchFilter: number = null;
-    criticalHealth: number = null;
-    attentionHealth: number = null;
-    okHealth: number = null;
-    filterObj: any;
 
     constructor() {
         this.searchOptions = DropdownOptions.searchOptions;
         this.selectedSearchOption = DropdownOptions.searchOptions[0].name;
-        this.filterObj = {};
-        this.criticalHealth = Constant.CRITICAL_HEALTH;
-        this.attentionHealth = Constant.ATTENTION_HEALTH;
-        this.okHealth = Constant.OK_HEALTH;
+        this.filterObj = {
+            'CRITICAL_HEALTH': true,
+            'ATTENTION_HEALTH': true,
+            'OK_HEALTH': false
+        };
     }
 
     ngOnInit() {
@@ -41,12 +39,11 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
     fnSearchChange(text) {
         this.searchText = text;
-        this.filterObj = {
+        this.searchObj = {
             searchOption: this.selectedSearchOption,
             searchText: text,
-            searchFilter: this.searchFilter
         };
-        this.searchChangeEvent.next(this.filterObj);
+        // this.searchChangeEvent.next(this.searchObj);
     }
 
 
@@ -64,7 +61,7 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
                 }
             })
             // Time in milliseconds between key events
-            , debounceTime(200)
+            , debounceTime(500)
             // If previous query is diffent from current
             , distinctUntilChanged()
             // subscription for response
@@ -82,15 +79,8 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
         this.selectedSearchOption = option;
     }
 
-    fnSetSearchFilter(option) {
-        this.searchFilter = option;
-        this.filterObj = {
-            searchOption: this.selectedSearchOption,
-            searchText: this.searchText,
-            searchFilter: this.searchFilter
-        };
+    fnToggleSearchFilter(option) {
+        this.filterObj[option] = !this.filterObj[option];
         this.searchChangeEvent.next(this.filterObj);
     }
-
-
 }

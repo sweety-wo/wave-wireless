@@ -17,7 +17,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'TIC - Park Place Irvine SOLiD Rel 6 DMS1200',
             'description': 'The Irvine Company - Park Place Aparments SOLiD Rel6 DMS1200',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'https': false,
@@ -38,7 +38,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Darden - Verizon/Sprint DAS',
             'description': 'Darden Restaurants - Verizon/Sprint CMA2k DAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -94,7 +94,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OIA - netBooter',
             'description': 'Orlando International Airport - netBooter',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -152,7 +152,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OIA - AT&T DAS',
             'description': 'Orlando International Airport - AT&T CMA2k DAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -210,7 +210,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OIA - Sprint DAS',
             'description': 'Orlando International Airport - Sprint CMA2k DAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -268,7 +268,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'South Point Casino - T-Mobile OMT',
             'description': 'T-Mobile OMT - JMA Teko DAS',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -347,7 +347,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'South Point Casino - Sprint OMT',
             'description': 'Sprint OMT - JMA Teko DAS',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -405,7 +405,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'NREL - Colorado',
             'description': 'National Renewable Energy Laboratory ADRF ADXV DAS',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -476,7 +476,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - MC Main',
             'description': 'Medical Center Main SOLiD Rel5 DMS1200',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -583,7 +583,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Raney House',
             'description': 'Raney House SOLiD Rel6 DMS1200',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -640,7 +640,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Valley Childrens Hospital',
             'description': 'SOLiD REL6 DMS1200 v7.2',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -727,7 +727,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 7_2',
             'description': 'Host7_2 Greenlaw',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -785,7 +785,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 2_1',
             'description': 'Host 2_1 Morehead, Cobb Parking, Carmichael RH, AOB',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -814,7 +814,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 3_4',
             'description': 'Host3_4 Hinton James',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -901,7 +901,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 3_2',
             'description': 'Host3_2 Greenlaw',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -930,7 +930,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 1_1',
             'description': 'Host1_1 Cobb Parking, Morehead, Kenan Music',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -959,7 +959,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 2_4',
             'description': 'Host2_4 Kenan Music, FedEx Global, Cardinal Parking, Kenan Stadium',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1075,7 +1075,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 7_1',
             'description': 'Host7_1 Greenlaw',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1104,7 +1104,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 1_2',
             'description': 'Host1_2 Kenan Stadium West, Kenan Stadium East, Ehringhaus RH, Carmichael RH',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1133,7 +1133,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC iDAS Kenan Stadium Sectors 9-14',
             'description': 'RMC1600 #2 Kenan Stadium DAS Controller Sectors 9-14',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1162,7 +1162,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC iDAS Kenan Stadium Sectors 1-8',
             'description': 'Kenan Stadium Master DAS Controller Sectors 1-8',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1191,7 +1191,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 1_4',
             'description': 'Host 1_4 AOB, FedEx Global, Cardinal Parking',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1278,7 +1278,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UNC ODAS Host 3_5',
             'description': 'Host 3_5 Hinton James',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1394,7 +1394,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Psychology SOLID REL6',
             'description': 'SOLiD REL6 DMS1200',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1452,7 +1452,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL5 Schott DMS 2',
             'description': 'SOLiD REL5 Schott DMS 2',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'port': 80,
@@ -1472,7 +1472,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL6 DMS 1 - Stadium',
             'description': 'SOLiD REL6 DMS 1 - Stadium',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'https': false,
@@ -1493,7 +1493,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL6 DMS 2 - Stadium',
             'description': 'SOLiD REL6 DMS 2 - Stadium',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'https': false,
@@ -1514,7 +1514,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL6 DMS 3 - Stadium',
             'description': 'SOLiD REL6 DMS 3 - Stadium',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'https': false,
@@ -1535,7 +1535,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL5 Schott DMS 1',
             'description': 'SOLiD REL5 Schott DMS 1',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'port': 80,
@@ -1555,7 +1555,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'OSU - Carmack SOLiD REL5 DMS 4 - ODAS',
             'description': 'SOLiD REL5 DMS 4 - ODAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'port': 80,
@@ -1683,7 +1683,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Raytheon - Aurora HCM 1',
             'description': 'Raytheon Aurora, CO CorningONE DAS HCM 1',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1770,7 +1770,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Fort Hood - SOLiD DAS',
             'description': 'Fort Hood - Darnall Army Medical Center - SOLiD REL5 DMS1200 DAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1827,7 +1827,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UCH Longs Peak ADRF SDR-N #2',
             'description': 'UCH Longs Peak ADRF SDR-N #2',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -1914,7 +1914,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'John Glenn International CorningONE Sector 1B',
             'description': 'John Glenn International CorningONE Sector 1B',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2029,7 +2029,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'John Glenn International CorningONE Sector 2A',
             'description': 'John Glenn International CorningONE Sector 2A',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2137,7 +2137,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Raytheon - Cityline CorningONE DAS',
             'description': 'Raytheon Cityline CorningONE DAS',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'properties': {
                 'https': true,
@@ -2179,7 +2179,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'JP Morgan Chase Host Unit 9 - AT&T Sector 3',
             'description': 'Host Unit 9 - AT&T Sector 3',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2266,7 +2266,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'JP Morgan Chase VZW Host Unit 4',
             'description': 'Host Unit 4 DAS Controller',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2353,7 +2353,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'JP Morgan Chase VZW Host Unit 5',
             'description': 'Host Unit 5 DAS Controller',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2440,7 +2440,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Deloitte - Rosslyn DAS',
             'description': 'Deloitte - Rosslyn - CMA2k DAS',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2489,7 +2489,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UCH - Memorial Central 1k/2k Slave Controller',
             'description': 'CMA 1k/2k Slave Controller',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'port': 80,
@@ -2509,7 +2509,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Morgan Group Midtown 29 JMA Teko DAS',
             'description': 'Midtown 29 (Morgan Group Properties)',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'properties': {
                 'https': false,
@@ -2579,7 +2579,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'UCH - Memorial North Corning DAS',
             'description': 'CMA 1k/2k VZW DAS Controller',
-            'health': 500,
+            'health': 300,
             'defaultHealth': 200,
             'properties': {
                 'port': 80,
@@ -2599,7 +2599,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'TIC - 500 Block SOLiD REL5 DMS1200',
             'description': 'TIC - 500 Block SOLiD REL5 DMS1200',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2627,7 +2627,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Denver Health - netBooter',
             'description': 'Denver Health - netBooter',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'data': {
                 'lat': [
@@ -2685,7 +2685,7 @@ export class Constant {
             'mode': 'DUPLEX',
             'name': 'Raytheon - Indianapolis - ADRF SDR-N',
             'description': 'Raytheon Indianapolis - ADRF SDR-N',
-            'health': 200,
+            'health': 500,
             'defaultHealth': 200,
             'properties': {
                 'https': false,

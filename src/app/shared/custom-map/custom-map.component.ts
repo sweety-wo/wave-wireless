@@ -16,7 +16,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     options: any;
     centerLat: any;
     centerLong: any;
-    markers: L.Marker[] = [];
+    markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
 
@@ -64,6 +64,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     generateMarkers(dataArr: any) {
+        this.markers = [];
         let color = '';
         let className = '';
         _.forEach(dataArr, (o) => {
@@ -138,7 +139,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
             }
         });
         return this.markers;
-
     }
 
 }

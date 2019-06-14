@@ -14,19 +14,19 @@ export class MapComponent implements OnInit {
 
     deviceData: any;
     filteredData: any;
-    searchText: string;
-    searchOption: string;
-    searchFilter: number;
+    geoResult: any;
     isDeviceLoading: boolean;
 
     constructor(private _device: DeviceService) {
         this.deviceData = Constant.deviceData;
-        this.filteredData = Constant.deviceData;
         this.isDeviceLoading = true;
     }
 
     ngOnInit() {
         this.getDevices();
+        this.filteredData = _.filter(this.deviceData, (device: any) => {
+            return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
+        });
     }
 
     getDevices () {
@@ -41,32 +41,23 @@ export class MapComponent implements OnInit {
         });*/
     }
 
-    fnSearch(res: any) {
-        this.searchText = res.searchText;
-        this.searchOption = res.searchOption;
-        this.searchFilter = res.searchFilter;
-        // setup
-        /*if (this.searchOption === 'Custom') {
+    async fnSearch(res: any) {
+        if (res.searchOption === 'Custom') {
 
         } else {
             const provider = new OpenStreetMapProvider();
-            const results = await provider.search({ query: this.searchText });
-            console.log("results", results);
-        }
-*/
-        if (this.searchFilter)  {
-            const filteredData = _.filter(this.deviceData, (device: any) => {
-                return device.health === this.searchFilter;
-            });
-            this.filteredData = filteredData;
+            this.geoResult = await provider.search({ query: res.searchText });
         }
 
-    }
-
-
-
-    fnGeoSearch(qry) {
-
+        const healthArr: any = [];
+         _.forOwn(res, (value, key) => {
+             if (value === true) {
+                 healthArr.push(Constant[key]);
+             }
+         });
+        this.filteredData = _.filter(this.deviceData, (device: any) => {
+            return (healthArr.includes(device.health));
+        });
     }
 
 }
