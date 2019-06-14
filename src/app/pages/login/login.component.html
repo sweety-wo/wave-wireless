@@ -10,30 +10,29 @@
         <div class="d-flex h-100 w-75 mx-auto">
             <div class="w-50 text-center mx-auto mb-5">
                 <h1 class="header mb-4">Sign In</h1>
-                <form #formcontrol="ngForm" class="d-flex flex-column" *ngIf="!isSecurityMode"
+                <form class="d-flex flex-column" *ngIf="!isSecurityMode"
                       role="form" [formGroup]="loginForm" (ngSubmit)="fnNext()">
                     <input class="form-control mb-3" type="text" placeholder="Email / User Name"
-                           (ngModelChange)="isEmailInvalid = false"
-                           formControlName="email" name="email" required>
+                           formControlName="email" name="email" (input)="isEmailInvalid = false">
                     <small *ngIf="isEmailInvalid"
                            class="mb-3 text-left">
                         Sorry we don't recognize this {{accountType}}
                     </small>
                     <button class="btn btn-primary"
                             type="submit"
-                            [disabled]="!formcontrol.form.valid"
+                            [disabled]="loginForm.status !== 'VALID'"
                             *ngIf="!isLoading">
                         Next
                     </button>
                     <app-loader *ngIf="isLoading"></app-loader>
                 </form>
-                <form #formcontrol="ngForm" class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
 
+                <form class="d-flex flex-column" [formGroup]="form" *ngIf="isSecurityMode" (ngSubmit)="fnSignIn(model)">
                     <formly-form [form]="form" [fields]="fieldsArray" [model]="model"></formly-form>
                     <small class="mb-3 text-left" *ngIf="isSessionFailed">Invalid Credentials</small>
 
                     <button class="btn btn-primary text-uppercase"
-                            [disabled]="!formcontrol.form.valid"
+                            [disabled]="form.status !== 'VALID'"
                             type="submit" *ngIf="!isLoading">
                         Sign In Securely
                     </button>

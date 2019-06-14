@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Constant} from '../../constant/constant';
 
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
     private fnCreateForm() {
         this.loginForm = this._formBuilder.group({
-            email: ''
+            email: ['', Validators.required],
         });
         this.form = this._formBuilder.group({
         });

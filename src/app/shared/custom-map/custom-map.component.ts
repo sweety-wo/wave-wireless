@@ -76,16 +76,20 @@ export class CustomMapComponent implements OnInit, OnChanges {
 
     generateMarkers(dataArr: any) {
         let color = '';
+        let className = '';
         _.forEach(dataArr, (o) => {
             switch (o.health) {
                 case 500:
                     color = '#fb0d1c';
+                    className = 'bg-red';
                     break;
                 case 300:
                     color = '#fc5425';
+                    className = 'bg-red';
                     break;
                 case 200:
                     color = '#199b8a';
+                    className = 'bg-primary';
                     break;
                 default:
             }
@@ -97,7 +101,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 ' </svg>';
             const content =
                 `<div class="d-flex flex-column flex-grow-1">` +
-                `<div class="text-white rounded-top bg-red">` +
+                `<div class="text-white rounded-top ${className}">` +
                 `    <div class="d-flex px-3 py-3 align-items-center">` +
                 `        <label class="m-0 h6">Noah Place</label>` +
                 `    </div>` +
