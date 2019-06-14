@@ -6,6 +6,7 @@ $white: #ffffff;
 $light-gray: #bbbbbb;
 $input-text-color: #515151;
 $placeholder-text: #ACACAE;
+$gray-100: 	#E8E8E8;
 
 $theme-colors: (
     "primary": $primary,
@@ -15,7 +16,9 @@ $theme-colors: (
     "white":$white,
     "light-gray":$light-gray,
     "input-text-color": $input-text-color,
-    "placeholder-text": $placeholder-text
+    "placeholder-text": $placeholder-text,
+    "gray-100": $gray-100
+
 );
 
 @each $color, $value in $theme-colors {

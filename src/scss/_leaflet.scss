@@ -1,3 +1,5 @@
+@import "../scss/_variables.scss";
+
 div.leaflet-container {
     width: 100%;
     height: 100%;
@@ -18,11 +20,24 @@ div.leaflet-container {
     box-shadow: none;
 }
 
-
 .leaflet-touch .leaflet-bar a:first-child {
     margin-left: 10px;
 }
 
 .leaflet-control-zoom-in, .leaflet-control-zoom-out{
     float: right;
+}
+
+//Modifying popup marker
+.leaflet-popup-tip , .leaflet-popup-content-wrapper {
+    background-color: $gray-100;
+}
+
+.leaflet-popup-content-wrapper {
+    width: 300px;
+    padding: 0px;
+}
+
+.leaflet-popup-content {
+    margin: 0px;
 }
