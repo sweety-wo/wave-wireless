@@ -1,6 +1,9 @@
 export class Constant {
     // tslint:disable-next-line:max-line-length
     public static EMAIL_REG_EX = /(([^<>()[\]\\.,;:\s@\']+(\.[^<>()[\]\\.,;:\s@\']+)*)|('.+\'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+    public static CRITICAL_HEALTH = 500;
+    public static ATTENTION_HEALTH = 300;
+    public static OK_HEALTH = 200;
     public static deviceData = [
         {
             'id': 'a7504eb0-04ffb381-5e363c9b',

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import 'leaflet.markercluster';
 import {Constant} from '../../../constant/constant';
-import * as L from 'leaflet';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as _ from 'lodash';
 

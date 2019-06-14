@@ -3,7 +3,7 @@
         <div class="input-group-prepend">
             <div ngbDropdown class="d-inline-block">
                 <button class="btn" ngbDropdownToggle id="dropdown">{{this.selectedSearchOption}}</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <div ngbDropdownMenu>
                     <button ngbDropdownItem (click)="fnSetSearchOption(option.name)"
                             *ngFor="let option of searchOptions">{{option.name}}
                     </button>
@@ -11,18 +11,21 @@
             </div>
         </div>
         <input type="text" #searchInput class="form-control border-right-0 border-left-0 border-top-0"
-               placeholder="Search">
+               placeholder="Search" id="searchInput">
         <div class="input-group-append">
             <span class="input-group-text bg-white px-1 border-left-0 border-right-0 border-top-0">
                 <svg-icon src="assets/images/icons/magnifying-glass.svg" class="cursor-pointer mr-1 fill-light-gray "
-                          [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                          [svgStyle]="{ 'height.px':20, 'width.px':20}" *ngIf="!searchText"></svg-icon>
+                <svg-icon src="assets/images/icons/close-button.svg" class="cursor-pointer mr-1 fill-light-gray "
+                          [svgStyle]="{ 'height.px':20, 'width.px':20}" *ngIf="searchText"
+                          (click)="fnResetSearch()"></svg-icon>
             </span>
-        </div>
+    </div>
     </div>
     <div>
-        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(500)">CRITICAL</small>
-        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(300)">ATTENTION</small>
-        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(200)">OK</small>
+        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(criticalHealth)">CRITICAL</small>
+        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(attentionHealth)">ATTENTION</small>
+        <small class="m-2 text-primary cursor-pointer" (click)="fnSetSearchFilter(okHealth)">OK</small>
     </div>
 </div>
 

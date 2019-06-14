@@ -1,10 +1,28 @@
 div.leaflet-container {
-     width: 100%;
-     height: 100%;
- }
+    width: 100%;
+    height: 100%;
+}
 
 .leaflet-tile-pane {
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
 }
 
+/* customize look of leaflet zoom controls */
+
+.leaflet-touch .leaflet-control-layers, .leaflet-touch .leaflet-bar {
+    border: none;
+}
+
+.leaflet-bar{
+    box-shadow: none;
+}
+
+
+.leaflet-touch .leaflet-bar a:first-child {
+    margin-left: 10px;
+}
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out{
+    float: right;
+}

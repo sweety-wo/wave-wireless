@@ -6,6 +6,10 @@
     border: 1px solid $light-gray;
     border-radius: 0.25rem;
     z-index:10000;
+    #searchInput:focus {
+        border: 1px solid #ced4da;
+        box-shadow: none;
+    }
     #dropdown {
         background-color: $light-gray;
         color: $white;

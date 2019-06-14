@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, View
 import {DropdownOptions} from '../../constant/dropdown-options';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {Constant} from '../../constant/constant';
 
 @Component({
     selector: 'app-search-bar',
@@ -16,12 +17,18 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     searchOptions: any;
     searchText: any = '';
     searchFilter: number = null;
+    criticalHealth: number = null;
+    attentionHealth: number = null;
+    okHealth: number = null;
     filterObj: any;
 
     constructor() {
         this.searchOptions = DropdownOptions.searchOptions;
         this.selectedSearchOption = DropdownOptions.searchOptions[0].name;
         this.filterObj = {};
+        this.criticalHealth = Constant.CRITICAL_HEALTH;
+        this.attentionHealth = Constant.ATTENTION_HEALTH;
+        this.okHealth = Constant.OK_HEALTH;
     }
 
     ngOnInit() {
@@ -57,7 +64,7 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
                 }
             })
             // Time in milliseconds between key events
-            , debounceTime(500)
+            , debounceTime(200)
             // If previous query is diffent from current
             , distinctUntilChanged()
             // subscription for response
@@ -65,6 +72,11 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
             this.fnSearchChange(text);
         });
     }
+
+    fnResetSearch() {
+        this.searchInput.nativeElement.value = this.searchText = '';
+    }
+
 
     fnSetSearchOption(option) {
         this.selectedSearchOption = option;
