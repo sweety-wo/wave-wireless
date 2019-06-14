@@ -1,4 +1,7 @@
-<div class="container-fluid d-flex p-3">
+<div class="w-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
+    <app-loader></app-loader>
+</div>
+<div class="container-fluid d-flex p-3" *ngIf="!isDeviceLoading">
     <app-search-bar (searchChangeEvent)="fnSearch($event)"></app-search-bar>
     <div class="d-flex bg-light w-100">
       <app-custom-map [mapData]="filteredData" class="w-100 h-100"></app-custom-map>

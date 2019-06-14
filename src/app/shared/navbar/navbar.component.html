@@ -21,14 +21,15 @@
                         <span *ngIf="loggedInUser">{{loggedInUser.name}}</span>
                     </a>
                 </li>
-                <li class="nav-item d-flex align-items-center mx-3">
-                    <a class="nav-link" href="#">
+                <li class="nav-item d-flex align-items-center mx-3" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}">
+                    <a class="nav-link" href="javascript:void(0)" routerLink="/settings">
                         <svg-icon src="assets/images/icons/gear.svg" class="fill-white"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                     </a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a class="nav-link" href="#" (click)="fnLogout()">
+                    <a class="nav-link" href="javascript:void(0)" (click)="fnLogout()">
                         <svg-icon src="assets/images/icons/sign-out.svg" class="fill-white"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                     </a>

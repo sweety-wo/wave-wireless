@@ -3,6 +3,7 @@ import 'leaflet.markercluster';
 import {Constant} from '../../../constant/constant';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as _ from 'lodash';
+import {DeviceService} from '../../../services/node/device.service';
 
 @Component({
     selector: 'app-map',
@@ -16,13 +17,28 @@ export class MapComponent implements OnInit {
     searchText: string;
     searchOption: string;
     searchFilter: number;
+    isDeviceLoading: boolean;
 
-    constructor() {
+    constructor(private _device: DeviceService) {
         this.deviceData = Constant.deviceData;
         this.filteredData = Constant.deviceData;
+        this.isDeviceLoading = true;
     }
 
     ngOnInit() {
+        this.getDevices();
+    }
+
+    getDevices () {
+        this.isDeviceLoading = false;
+        /*this._device.getDevices().subscribe((devices) => {
+            console.log('devices', devices);
+            this.deviceData = devices;
+            this.filteredData = devices;
+            this.isDeviceLoading = false;
+        }, (err) => {
+            this.isDeviceLoading = false;
+        });*/
     }
 
     fnSearch(res: any) {

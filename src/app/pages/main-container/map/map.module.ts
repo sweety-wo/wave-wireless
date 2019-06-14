@@ -4,6 +4,7 @@ import {MapComponent} from './map.component';
 import {RouterModule} from '@angular/router';
 import {SearchBarModule} from '../../../shared/search-bar/search-bar.module';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
+import {LoaderModule} from '../../../shared/loader/loader.module';
 import {AngularSvgIconModule} from 'angular-svg-icon';
 
 const routes = [
@@ -15,6 +16,7 @@ const routes = [
     imports: [
         CommonModule,
         RouterModule.forChild(routes),
+        LoaderModule,
         SearchBarModule,
         CustomMapModule,
         AngularSvgIconModule

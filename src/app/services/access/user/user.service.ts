@@ -17,14 +17,14 @@ export class UserService {
      * Get user based on id.
      * */
     getUser(userId: string) {
-        return this._http.get(environment.API_URL + `users/${userId}`);
+        return this._http.get(environment.API_URL + `access/users/${userId}`);
     }
 
     /**
      * Get user privileges
      * */
     getUserPrivileges() {
-        return this._http.get(environment.API_URL + 'privileges');
+        return this._http.get(environment.API_URL + 'access/privileges');
     }
 
 

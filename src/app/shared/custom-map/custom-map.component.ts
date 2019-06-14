@@ -25,6 +25,8 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     constructor() {
+        this.centerLat = 38.89511;
+        this.centerLong = -77.03637;
     }
 
     ngOnChanges(change: any) {
@@ -35,7 +37,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
 
     fnCreateMap(mapData) {
         _.forEach(mapData, (o) => {
-            if (o.data && o.data.long[0] && o.data.lat[0]) {
+            if (o.data && o.data.lat && o.data.lang && o.data.long[0] && o.data.lat[0]) {
                 this.centerLat = o.data.lat[0];
                 this.centerLong = o.data.long[0];
                 if (this.centerLat && this.centerLong) {
