@@ -21,12 +21,27 @@
         </div>
         <div class="p-3">
             <form class="d-flex flex-column"
-                  role="form" [formGroup]="changePasswordForm">
-                <input class="form-control mb-3" type="text" placeholder=""
-                       formControlName="email" name="email" required>
+                  *ngIf="!isSecurityMode"
+                  role="form" [formGroup]="changePasswordForm" (ngSubmit)="fnGetAuthFields()">
+                <small class="font-weight-bold">New Password</small>
+                <input class="form-control mb-3" type="password"
+                       formControlName="password" name="password" required>
+                <small class="font-weight-bold">Confirm Password</small>
+                <input class="form-control mb-3" type="password"
+                       formControlName="confirmPassword" name="confirmPassword" required>
                 <button class="btn btn-primary"
                         type="submit">
                     Next
+                </button>
+            </form>
+            <form class="d-flex flex-column"
+                  *ngIf="isSecurityMode"
+                  role="form" [formGroup]="form" (ngSubmit)="fnChangePassword(model)">
+                <formly-form [form]="form" [fields]="userFields" [model]="model"></formly-form>
+                <button class="btn btn-primary text-uppercase"
+                        [disabled]="form.status !== 'VALID'"
+                        type="submit">
+                    Change password
                 </button>
             </form>
         </div>
