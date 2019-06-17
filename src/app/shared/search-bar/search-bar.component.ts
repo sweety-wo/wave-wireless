@@ -23,9 +23,10 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
         this.searchOptions = DropdownOptions.searchOptions;
         this.selectedSearchOption = DropdownOptions.searchOptions[0].name;
         this.filterObj = {
-            'CRITICAL_HEALTH': true,
-            'ATTENTION_HEALTH': true,
-            'OK_HEALTH': false
+            CRITICAL_HEALTH: true,
+            ATTENTION_HEALTH: true,
+            OK_HEALTH: false,
+            isFromFilter: true
         };
     }
 
@@ -42,13 +43,14 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
         this.searchObj = {
             searchOption: this.selectedSearchOption,
             searchText: text,
+            isGeoSearch: true
         };
-        // this.searchChangeEvent.next(this.searchObj);
+        this.searchChangeEvent.next(this.searchObj);
     }
 
 
     fnBindKeyUpEventForSearchInput() {
-        fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+        fromEvent(this.searchInput.nativeElement, 'blur').pipe(
             // get value
             map((event: any) => {
                 if (event.keyCode === 13) { // search on enter
@@ -72,10 +74,17 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
     fnResetSearch() {
         this.searchInput.nativeElement.value = this.searchText = '';
+        this.searchObj = {
+            searchOption: this.selectedSearchOption,
+            searchText: this.searchText,
+            isGeoSearch: false
+        };
+        this.searchChangeEvent.next(this.searchObj);
     }
 
 
     fnSetSearchOption(option) {
+        this.searchText = '';
         this.selectedSearchOption = option;
     }
 

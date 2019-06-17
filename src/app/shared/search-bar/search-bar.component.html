@@ -20,12 +20,18 @@
                           [svgStyle]="{ 'height.px':20, 'width.px':20}" *ngIf="searchText"
                           (click)="fnResetSearch()"></svg-icon>
             </span>
-    </div>
+        </div>
     </div>
     <div>
-        <small class="m-2 cursor-pointer" [ngClass]="{'text-primary': filterObj.CRITICAL_HEALTH === true}" (click)="fnToggleSearchFilter('CRITICAL_HEALTH')">CRITICAL</small>
-        <small class="m-2 text-primary cursor-pointer" [ngClass]="{'text-primary': filterObj.ATTENTION_HEALTH === true}" (click)="fnToggleSearchFilter('ATTENTION_HEALTH')">ATTENTION</small>
-        <small class="m-2 cursor-pointer" [ngClass]="{'text-primary': filterObj.OK_HEALTH === true}"(click)="fnToggleSearchFilter('OK_HEALTH')">OK</small>
+        <small class="m-2 cursor-pointer" [ngClass]="{'text-primary': filterObj.CRITICAL_HEALTH === true}"
+               (click)="fnToggleSearchFilter('CRITICAL_HEALTH')">CRITICAL
+        </small>
+        <small class="m-2 text-primary cursor-pointer" [ngClass]="{'text-primary': filterObj.ATTENTION_HEALTH === true}"
+               (click)="fnToggleSearchFilter('ATTENTION_HEALTH')">ATTENTION
+        </small>
+        <small class="m-2 cursor-pointer" [ngClass]="{'text-primary': filterObj.OK_HEALTH === true}"
+               (click)="fnToggleSearchFilter('OK_HEALTH')">OK
+        </small>
     </div>
 </div>
 

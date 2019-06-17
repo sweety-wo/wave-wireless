@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 import {tileLayer} from 'leaflet';
@@ -13,46 +13,48 @@ import '../../../scss/_variables.scss';
 export class CustomMapComponent implements OnInit, OnChanges {
 
     @Input() mapData: any;
+    @Input() centerLat: any;
+    @Input() centerLong: any;
+    @Input() isGeoSearch: any;
     options: any;
-    centerLat: any;
-    centerLong: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
+    map: L.Map;
+    LatLng: any;
 
     mapReady(map: L.Map) {
-        map.addControl(L.control.zoom({position: 'bottomleft'}));
+        this.map = map;
+        this.map.addControl(L.control.zoom({position: 'bottomleft'}));
     }
 
     constructor() {
-        this.centerLat = 38.89511;
-        this.centerLong = -77.03637;
     }
 
     ngOnChanges(change: any) {
         if (change.mapData && change.mapData.currentValue) {
             this.fnCreateMap(change.mapData.currentValue);
+        } else if (change.isGeoSearch || change.centerLat || change.centerLong) {
+            this.fnCreateMap(this.mapData);
         }
     }
 
-    fnCreateMap(mapData) {
-        _.forEach(mapData, (o) => {
-            if (o.data && o.data.lat && o.data.lang && o.data.long[0] && o.data.lat[0]) {
-                this.centerLat = o.data.lat[0];
-                this.centerLong = o.data.long[0];
-                if (this.centerLat && this.centerLong) {
-                    return false;
-                }
-            }
-        });
+    ngOnInit() {
+    }
 
+    fnCreateMap(mapData) {
+        console.log('this.centerLat, this.centerLong', this.centerLat, this.centerLong);
+        console.log('mapData', this.mapData);
+        if (this.map) {
+            // Move map to the latitude/longitude mentioned
+            this.map.panTo([this.centerLat, this.centerLong]);
+        }
         const maxScreenDimension = window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
         const tileSize = 256;
         const maxTiles = Math.floor(maxScreenDimension / tileSize);
         let minZoom = Math.ceil(Math.log(maxTiles) / Math.log(2));
         minZoom = minZoom < 2 ? 2 : minZoom;
         const bounds = new L.LatLngBounds(new L.LatLng(85, -180), new L.LatLng(-85, 180));
-        console.log(minZoom);
 
         this.options = {
             layers: [
@@ -69,9 +71,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
             minZoom: minZoom
         };
         this.markerClusterData = this.generateMarkers(mapData);
-    }
-
-    ngOnInit() {
     }
 
     generateMarkers(dataArr: any) {

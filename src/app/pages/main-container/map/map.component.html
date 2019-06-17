@@ -4,7 +4,9 @@
 <div class="container-fluid d-flex p-3" *ngIf="!isDeviceLoading">
     <app-search-bar (searchChangeEvent)="fnSearch($event)"></app-search-bar>
     <div class="d-flex bg-light w-100">
-        <app-custom-map [mapData]="filteredData"
+        <app-custom-map [mapData]="filteredData" [centerLat]="centerLat" [centerLong]="centerLong"
+                        [isGeoSearch]="isGeoSearch"
                         class="w-100 h-100"></app-custom-map>
     </div>
 </div>
+
