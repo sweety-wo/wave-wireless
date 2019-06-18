@@ -168,7 +168,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     img +
                 `</div>` +
                 `<div class="px-3 pb-3">` +
-                `       <a class="pull-right" data-link="/details">View Details</a>` +
+                `       <a class="pull-right" data-link="/device/${o.id}">View Details</a>` +
                 `</div>` +
                 `</div>`;
             if (o.data && o.data.long[0] && o.data.lat[0]) {
