@@ -4,6 +4,7 @@ import {SettingsComponent} from './settings.component';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FormlyModule} from '@ngx-formly/core';
+import {LoaderModule} from '../../../shared/loader/loader.module';
 
 const routes = [
     {path: '', component: SettingsComponent}
@@ -16,7 +17,8 @@ const routes = [
         RouterModule.forChild(routes),
         FormsModule,
         ReactiveFormsModule,
-        FormlyModule
+        FormlyModule,
+        LoaderModule
     ],
     exports: [SettingsComponent]
 })

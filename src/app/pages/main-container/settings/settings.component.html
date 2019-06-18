@@ -5,13 +5,13 @@
         </div>
         <div class="px-3">
             <div class="py-3">
-                <label>Name: Manny Dureja</label>
+                <label>Name: {{loggedInUser.name}}</label>
             </div>
             <div class="py-3">
-                <label>Username: manny_dureja</label>
+                <label>Username: {{loggedInUser.username}}</label>
             </div>
             <div class="py-3">
-                <label>Email: manny@exmaple.com</label>
+                <label>Email: {{loggedInUser.email}}</label>
             </div>
         </div>
     </div>
@@ -28,21 +28,34 @@
                        formControlName="password" name="password" required>
                 <small class="font-weight-bold">Confirm Password</small>
                 <input class="form-control mb-3" type="password"
+                       (input)="fnCheckPassword()"
                        formControlName="confirmPassword" name="confirmPassword" required>
+                <small class="mb-3" *ngIf="isPasswordMismatch">
+                    Passwords do not match
+                </small>
                 <button class="btn btn-primary"
+                        *ngIf="!isLoading"
+                        [disabled]="changePasswordForm.status !== 'VALID' || isPasswordMismatch"
                         type="submit">
                     Next
                 </button>
+                <div class="text-center" *ngIf="isLoading">
+                    <app-loader></app-loader>
+                </div>
             </form>
             <form class="d-flex flex-column"
                   *ngIf="isSecurityMode"
                   role="form" [formGroup]="form" (ngSubmit)="fnChangePassword(model)">
                 <formly-form [form]="form" [fields]="userFields" [model]="model"></formly-form>
                 <button class="btn btn-primary text-uppercase"
+                        *ngIf="!isLoading"
                         [disabled]="form.status !== 'VALID'"
                         type="submit">
                     Change password
                 </button>
+                <div class="text-center" *ngIf="isLoading">
+                    <app-loader></app-loader>
+                </div>
             </form>
         </div>
     </div>
