@@ -7,7 +7,6 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/common/common.service';
 import {AuthService} from '../../../services/auth-service/auth.service';
-import {createDiffieHellman} from 'crypto';
 
 @Component({
     selector: 'app-map',
