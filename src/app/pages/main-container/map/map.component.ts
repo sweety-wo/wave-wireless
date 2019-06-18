@@ -7,6 +7,7 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/common/common.service';
 import {AuthService} from '../../../services/auth-service/auth.service';
+import {createDiffieHellman} from 'crypto';
 
 @Component({
     selector: 'app-map',
@@ -33,7 +34,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-
         this.getDevices();
         this.filteredData = _.filter(this.deviceData, (device: any) => {
             return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
@@ -41,6 +41,18 @@ export class MapComponent implements OnInit, OnDestroy {
         this.setLatLng(this.filteredData);
         this.fnInitializeWebSockets();
     }
+
+    getDevices(query?: string) {
+        this.isDeviceLoading = false;
+        /*this._device.getDevices(query).subscribe((devices) => {
+            this.deviceData = devices;
+            this.filteredData = devices;
+            this.isDeviceLoading = false;
+        }, (err) => {
+            this.isDeviceLoading = false;
+        });*/
+    }
+
 
     ngOnDestroy() {
         if (this._client) {
@@ -65,24 +77,13 @@ export class MapComponent implements OnInit, OnDestroy {
         }
     }
 
-    getDevices () {
-        this.isDeviceLoading = false;
-        /*this._device.getDevices().subscribe((devices) => {
-            this.deviceData = devices;
-            this.filteredData = devices;
-            this.isDeviceLoading = false;
-        }, (err) => {
-            this.isDeviceLoading = false;
-        });*/
-    }
-
-    onConnectionLost (responseObject) {
+    onConnectionLost(responseObject) {
         if (responseObject.errorCode !== 0) {
             this.fnInitializeWebSockets();
         }
     }
 
-    onMessageArrived (message) {
+    onMessageArrived(message) {
         const messageJson = JSON.parse(message.payloadString);
         const index = _.findIndex(this.deviceData, (device: any) => {
             return device.id === messageJson.id;
@@ -112,7 +113,7 @@ export class MapComponent implements OnInit, OnDestroy {
         }
     }
 
-    fnInitializeWebSockets () {
+    fnInitializeWebSockets() {
         let loginUser: any;
         const self = this;
         this._auth.loggedInUser.subscribe((user) => {
@@ -146,12 +147,19 @@ export class MapComponent implements OnInit, OnDestroy {
 
     async fnSearch(res: any) {
         this.isGeoSearch = res.isGeoSearch;
-        if (res.searchOption === 'Custom') {
-
+        if (res.searchOption === 'Custom' && res.searchText) {
+            const text = res.searchText;
+            const query = 'contains(#{id}, ${' + text + '}) or contains(#{name}, ${' + text + '}) or contains(#{description}, ${' + text + '}) or contains(#{phase}, ${' + text + '}) or contains(#{typeId}, ${' + text + '}) or contains(#{health}, ${' + text + '}) or contains(#{defaultHealth}, ${' + text + '})';
+            this.getDevices(query);
         } else {
-            if (res.isGeoSearch) {
+            // Get all device data when Geo Search option is selected after Custom option as device data will be only the one's that are filtered
+            if (res.isDropdownChanged) {
+                this.getDevices();
+            }
+            // Geo search
+            if (res.isGeoSearch && res.searchText) {
                 const provider = new OpenStreetMapProvider();
-                this.geoResult = await provider.search({ query: res.searchText });
+                this.geoResult = await provider.search({query: res.searchText});
                 if (this.geoResult && this.geoResult.length) {
                     this.centerLat = this.geoResult && this.geoResult[0]['y'];
                     this.centerLong = this.geoResult && this.geoResult[0]['x'];
@@ -165,10 +173,12 @@ export class MapComponent implements OnInit, OnDestroy {
             }
         }
 
+        // Filters of health
         if (res.isFromFilter) {
             const healthArr: any = [];
             _.forOwn(res, (value, key) => {
-                if (value === true) {
+                // Looping only over health keys
+                if (value === true && key !== 'isFromFilter') {
                     healthArr.push(Constant[key]);
                 }
             });

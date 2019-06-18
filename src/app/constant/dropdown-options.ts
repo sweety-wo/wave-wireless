@@ -1,8 +1,6 @@
 export class DropdownOptions {
     public static searchOptions = [
-        {name: 'Zip', value: 'Zip'},
-        {name: 'Area', value: 'Area'},
-        {name: 'Latitude', value: 'Latitude'},
+        {name: 'Geo-Search', value: 'Geo-Search'},
         {name: 'Custom', value: 'Custom'},
     ];
 

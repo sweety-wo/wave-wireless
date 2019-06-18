@@ -39,18 +39,21 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     }
 
     fnSearchChange(text) {
-        this.searchText = text;
-        this.searchObj = {
-            searchOption: this.selectedSearchOption,
-            searchText: text,
-            isGeoSearch: true
-        };
-        this.searchChangeEvent.next(this.searchObj);
+        if (text) {
+            this.searchText = text;
+            this.searchObj = {
+                searchOption: this.selectedSearchOption,
+                searchText: text,
+                isGeoSearch: true
+            };
+            this.searchChangeEvent.next(this.searchObj);
+        }
+
     }
 
 
     fnBindKeyUpEventForSearchInput() {
-        fromEvent(this.searchInput.nativeElement, 'blur').pipe(
+        fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
             // get value
             map((event: any) => {
                 if (event.keyCode === 13) { // search on enter
@@ -84,8 +87,16 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
 
     fnSetSearchOption(option) {
-        this.searchText = '';
+        this.searchInput.nativeElement.value = this.searchText = '';
+        // Emit search event only when option changes from Custom to Geo-Search
+        if (this.selectedSearchOption === 'Custom' && option === 'Geo-Search') {
+            this.searchObj = {
+                isDropdownChanged: true
+            };
+            this.searchChangeEvent.next(this.searchObj);
+        }
         this.selectedSearchOption = option;
+
     }
 
     fnToggleSearchFilter(option) {

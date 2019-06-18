@@ -15,7 +15,11 @@ export class DeviceService {
     /**
      * Get devices.
      * */
-    getDevices() {
-        return this._http.get(environment.API_URL + `node/devices?perPage=0`);
+    getDevices(query) {
+        let url = environment.API_URL + `node/devices?perPage=0`;
+        if (query) {
+            url = url + '&filter=' + encodeURIComponent(query);
+        }
+        return this._http.get(url);
     }
 }
