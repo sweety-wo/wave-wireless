@@ -12,7 +12,7 @@ const routes = [
         children: [
             {path: 'map', loadChildren: './map/map.module#MapModule'},
             {path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-            {path: 'details', loadChildren: './details/details.module#DetailsModule'},
+            {path: 'device/:id', loadChildren: './details/details.module#DetailsModule'},
             {path: 'settings', loadChildren: './settings/settings.module#SettingsModule'},
         ]
     }

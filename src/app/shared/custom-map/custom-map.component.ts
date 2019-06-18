@@ -1,9 +1,21 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnChanges, OnInit} from '@angular/core';
+import {
+    AfterViewInit,
+    ApplicationRef,
+    ChangeDetectorRef,
+    Component,
+    ComponentFactoryResolver, EmbeddedViewRef,
+    HostListener, Injector,
+    Input,
+    OnChanges,
+    OnInit
+} from '@angular/core';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
 import {tileLayer} from 'leaflet';
 import {latLng} from 'leaflet';
 import '../../../scss/_variables.scss';
+import {Router} from '@angular/router';
+import {LeafletPopupComponent} from '../leaflet-popup/leaflet-popup.component';
 
 @Component({
     selector: 'app-custom-map',
@@ -12,23 +24,32 @@ import '../../../scss/_variables.scss';
 })
 export class CustomMapComponent implements OnInit, OnChanges {
 
+
     @Input() mapData: any;
     @Input() centerLat: any;
     @Input() centerLong: any;
     @Input() isGeoSearch: any;
     options: any;
+    componentRef: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
     map: L.Map;
     LatLng: any;
 
+    constructor(private _router: Router) {
+    }
+
+    @HostListener('click', ['$event.target']) onClick($event) {
+        if ($event.getAttribute('data-link')) {
+            const goRoute = $event.getAttribute('data-link');
+            this._router.navigate([goRoute]);
+        }
+    }
+
     mapReady(map: L.Map) {
         this.map = map;
         this.map.addControl(L.control.zoom({position: 'bottomleft'}));
-    }
-
-    constructor() {
     }
 
     ngOnChanges(change: any) {
@@ -43,8 +64,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
-        console.log('this.centerLat, this.centerLong', this.centerLat, this.centerLong);
-        console.log('mapData', this.mapData);
         if (this.map) {
             // Move map to the latitude/longitude mentioned
             this.map.panTo([this.centerLat, this.centerLong]);
@@ -77,7 +96,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
         this.markers = [];
         let color = '';
         let className = '';
-        _.forEach(dataArr, (o) => {
+        _.forEach(dataArr, (o, i) => {
             switch (o.health) {
                 case 500:
                     color = '#fb0d1c';
@@ -99,38 +118,57 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 'M28.034,40.477c-6.871,0-12.442-5.572-12.442-12.442c0-6.872,5.571-12.442,12.442-12.442c6.872,0,12.442,5.57,12.442,12.442' +
                 'C40.477,34.905,34.906,40.477,28.034,40.477z"/>' +
                 ' </svg>';
+            let owner = '';
+            let address = '';
+            let tel = '';
+            let email = '';
+            let img = '';
+            if (o.data) {
+                if (o.data.owner && o.data.owner[0]) {
+                    owner =    (`<div class="d-flex align-items-center mb-3">` +
+                                `    <i class="fa fa-2x fa-building mr-2"></i>` +
+                                `        <span>${o.data.owner[0]}</span>` +
+                                ` </div>`);
+                }
+                if (o.data.address && o.data.address[0]) {
+                    address =    (`<div class="d-flex align-items-center mb-3">` +
+                        `    <i class="fa fa-2x fa-map-marker mr-2"></i>` +
+                        `        <span>${o.data.address[0]}</span>` +
+                        ` </div>`);
+                }
+                if (o.data.tel && o.data.tel[0]) {
+                    tel =    (`<div class="d-flex align-items-center mb-3">` +
+                        `   <i class="fa fa-2x fa-phone mr-2"></i>` +
+                        `        <span>${o.data.tel[0]}</span>` +
+                        ` </div>`);
+                }
+                if (o.data.email && o.data.email[0]) {
+                    email =    (`<div class="d-flex align-items-center mb-3">` +
+                        `    <i class="fa fa-2x fa-envelope-o mr-2"></i>` +
+                        `        <span>${o.data.email[0]}</span>` +
+                        ` </div>`);
+                }
+                if (o.data.photo && o.data.photo[0]) {
+                    img =    ( `<div class="w-25">` +
+                        `<img src="${o.data.photo[0]}" class="rounded-circle pull-right" width="30" height="30">` +
+                        `</div>`);
+                }
+            }
             const content =
                 `<div class="d-flex flex-column flex-grow-1">` +
                 `<div class="text-white rounded-top ${className}">` +
                 `    <div class="d-flex px-3 py-3 align-items-center">` +
-                `        <label class="m-0 h6">Noah Place</label>` +
+                `        <label class="m-0 h6">${o.name}</label>` +
                 `    </div>` +
                 `</div>` +
                 `<div class="body px-3 pt-3 overflow-auto d-flex">` +
                 `   <div class="w-75">` +
-                `        <div class="d-flex align-items-center mb-3">` +
-                `            <i class="fa fa-2x fa-building mr-2"></i>` +
-                `            <span>Building Systems Inc.</span>` +
-                `        </div>` +
-                `        <div class="d-flex align-items-center mb-3">` +
-                `             <i class="fa fa-2x fa-map-marker mr-2"></i>` +
-                `            <span>385 Noah Place Suite 878</span>` +
-                `        </div>` +
-                `        <div class="d-flex align-items-center mb-3">` +
-                `             <i class="fa fa-2x fa-phone mr-2"></i>` +
-                `            <span>877-255-7945</span>` +
-                `        </div>` +
-                `        <div class="d-flex align-items-center mb-2">` +
-                `           <i class="fa fa-2x fa-envelope-o mr-2"></i>` +
-                `            <span>info@from.com</span>` +
-                `        </div>` +
+                        owner + address + tel + email +
                 `   </div>` +
-                `   <div class="w-25">` +
-                `<img src="assets/images/pexels-photo-374023.jpeg" class="rounded-circle pull-right" width="30" height="30">` +
-                `</div>` +
+                    img +
                 `</div>` +
                 `<div class="px-3 pb-3">` +
-                `       <a class="pull-right" href="javascript:void(0)" routerLink="/details">View Details</a>` +
+                `       <a class="pull-right" data-link="/device/${o.id}">View Details</a>` +
                 `</div>` +
                 `</div>`;
             if (o.data && o.data.long[0] && o.data.lat[0]) {

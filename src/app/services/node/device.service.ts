@@ -11,7 +11,6 @@ export class DeviceService {
     }
 
 
-
     /**
      * Get devices.
      * */
@@ -22,4 +21,13 @@ export class DeviceService {
         }
         return this._http.get(url);
     }
+
+    /**
+     * Get device by id.
+     * */
+    getDevice(deviceId) {
+        return this._http.get(environment.API_URL + `node/devices/${deviceId}`);
+    }
+
+
 }
