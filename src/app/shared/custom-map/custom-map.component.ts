@@ -1,10 +1,6 @@
 import {
-    AfterViewInit,
-    ApplicationRef,
-    ChangeDetectorRef,
     Component,
-    ComponentFactoryResolver, EmbeddedViewRef,
-    HostListener, Injector,
+    HostListener,
     Input,
     OnChanges,
     OnInit
@@ -15,7 +11,6 @@ import {tileLayer} from 'leaflet';
 import {latLng} from 'leaflet';
 import '../../../scss/_variables.scss';
 import {Router} from '@angular/router';
-import {LeafletPopupComponent} from '../leaflet-popup/leaflet-popup.component';
 
 @Component({
     selector: 'app-custom-map',
