@@ -19,6 +19,19 @@ export class Constant {
             'description': 'The Irvine Company - Park Place Aparments SOLiD Rel6 DMS1200',
             'health': 300,
             'defaultHealth': 200,
+            'data': {
+                'lat': [
+                    '28.4170294'
+                ],
+                'long': [
+                    '-81.4289348'
+                ],
+                'name' : ['Noah Place'],
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
+            },
             'properties': {
                 'https': false,
                 'port': 80,
@@ -46,7 +59,13 @@ export class Constant {
                 ],
                 'long': [
                     '-81.4289348'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'owner' : ['Building Systems Inc.'] ,
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'port': 80,
@@ -102,7 +121,13 @@ export class Constant {
                 ],
                 'long': [
                     '-81.3142908'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'owner' : ['Building Systems Inc.'] ,
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'https': false,
@@ -247,7 +272,13 @@ export class Constant {
                 ],
                 'long': [
                     '-115.177429'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'owner' : ['Building Systems Inc.'] ,
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'https': false,
@@ -326,7 +357,13 @@ export class Constant {
                 ],
                 'long': [
                     '-115.177429'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'owner' : ['Building Systems Inc.'] ,
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'https': false,
@@ -413,7 +450,13 @@ export class Constant {
                 ],
                 'long': [
                     '-105.1698694'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'owner' : ['Building Systems Inc.'] ,
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'https': true,
@@ -484,7 +527,12 @@ export class Constant {
                 ],
                 'long': [
                     '-83.0199385'
-                ]
+                ],
+                'name' : ['Noah Place' ],
+                'address' : ['385 Noah Place Suite 878'],
+                'tel' : ['875-255-7945'],
+                'email' : ['info@form.com'],
+                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'port': 80,
