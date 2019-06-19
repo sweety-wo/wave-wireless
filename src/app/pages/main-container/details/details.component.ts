@@ -197,6 +197,9 @@ export class DetailsComponent implements OnInit {
         } else if (!this.telemetrySearch) {
             this.filteredGhosts = this.ghosts;
         }
+        if (_.isEmpty(this.filteredGhosts)) {
+            this.filteredGhosts = null;
+        }
     }
 
 

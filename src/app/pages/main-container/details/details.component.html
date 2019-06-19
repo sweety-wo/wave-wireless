@@ -177,9 +177,12 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="h-100 d-flex align-items-center justify-content-center">
-                        <app-loader *ngIf="isIssueLoading"></app-loader>
-                        <span *ngIf="!isIssueLoading && issues && !issues.length">No records found</span>
+                    <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isIssueLoading">
+                        <app-loader></app-loader>
+                    </div>
+                    <div class="h-100 d-flex align-items-center justify-content-center"
+                         *ngIf="!isIssueLoading && issues && !issues.length">
+                        <span>No records found</span>
                     </div>
                 </div>
             </div>
@@ -219,9 +222,12 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div class="h-100 d-flex align-items-center justify-content-center">
-                        <app-loader *ngIf="isGhostLoading"></app-loader>
-                        <span *ngIf="!isGhostLoading && filteredGhosts && !filteredGhosts.length">No records found</span>
+                    <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isGhostLoading">
+                        <app-loader></app-loader>
+                    </div>
+                    <div class="h-100 d-flex align-items-center justify-content-center"
+                         *ngIf="!isGhostLoading && !filteredGhosts">
+                        <span>No records found</span>
                     </div>
                 </div>
             </div>
