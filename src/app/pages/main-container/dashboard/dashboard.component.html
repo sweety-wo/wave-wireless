@@ -1,205 +1,282 @@
 <!-- main-container -->
 <div class="d-flex flex-grow-1 p-3">
 
-  <!-- left-container -->
-  <div class="d-flex flex-column flex-grow-1 mr-2 container-card">
-    <!-- Header -->
-    <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
-      <label class="m-0 h3">City Health<sup class="text-primary">
-          <small>Live</small>
-        </sup></label>
-      <div class="d-flex justify-content-end align-items-center">
-        <div class="input-group search-group mr-3">
-          <input type="text" class="form-control" placeholder="Search Washington DC">
-          <div class="input-group-append">
-            <span class="input-group-text">
-              <svg-icon src="assets/images/icons/magnifying-glass.svg"
-                [svgStyle]="{ 'height.px':24, 'width.px':24, 'fill':'#bbbbbb' }"></svg-icon>
-            </span>
-          </div>
+    <!-- left-container -->
+    <div class="d-flex flex-column flex-grow-1 mr-2 container-card">
+        <!-- Header -->
+        <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
+            <label class="m-0 h3">City Health<sup class="text-primary">
+                <small>Live</small>
+            </sup></label>
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="input-group search-group mr-3">
+                    <input type="text" class="form-control"
+                           (keyup)="fnSearchDevices($event)"
+                           [(ngModel)]="searchText"
+                           [disabled]="isDataLoading" placeholder="Search Washington DC">
+                    <div class="input-group-append">
+                        <span class="input-group-text">
+                          <svg-icon src="assets/images/icons/magnifying-glass.svg"
+                                    [svgStyle]="{ 'height.px':24, 'width.px':24, 'fill':'#bbbbbb' }"></svg-icon>
+                        </span>
+                    </div>
+                </div>
+                <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                          *ngIf="!isDataLoading"
+                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+            </div>
         </div>
-        <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
-          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
-      </div>
-    </div>
-    <!-- Body -->
-    <div class="header-acc bg-dark">
-      <div class="d-flex">
-        <div class="d-flex align-items-center w-75">
-          <label [for]="'all'" class="check-input mr-3">
-            <input type="checkbox" [id]="'all'" name="all" [checked]="isAllChecked()" (change)="checkAll($event)">
-          </label>
-        </div>
-        <div class="d-flex align-items-center justify-content-between w-30">
-          <label class="m-0 d-flex align-items-center cursor-pointer">
-            <svg-icon src="assets/images/icons/verified.svg" class="fill-primary"
-              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-            <span class="text-white ml-2">2000</span>
-          </label>
-          <label class="m-0 d-flex align-items-center cursor-pointer">
-            <svg-icon src="assets/images/icons/round-error-symbol.svg" class="fill-red"
-              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-            <span class="text-white ml-2">2000</span>
-          </label>
-          <label class="m-0 d-flex align-items-center cursor-pointer">
-            <svg-icon src="assets/images/icons/cancel.svg" class="fill-orange"
-              [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-            <span class="text-white ml-2">2000</span>
-          </label>
-          <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light" key="isTrue" [(dataArr)]="deviceData"
-            type="true"></app-toggle-switch>
-        </div>
-      </div>
-
-    </div>
-    <div class="flex-wrapper overflow-auto">
-      <div class="d-flex flex-column">
-        <div class="overflow-auto" style="flex: 1">
-          <ngb-accordion #acc="ngbAccordion" class="custom-acc">
-            <ng-container *ngFor="let obj of deviceData; let i = index">
-              <ngb-panel [id]="'custom-panel-' + i">
-                <ng-template ngbPanelHeader let-opened="opened">
-                  <div class="d-flex align-items-center">
-                    <label [for]="'rowCheck' + i" class="check-input mr-3">
-                      <input type="checkbox" [id]="'rowCheck' + i" name="rowCheck" [(ngModel)]="obj.state">
+        <!-- Body -->
+        <div class="header-acc bg-dark">
+            <div class="d-flex">
+                <div class="d-flex align-items-center w-75" *ngIf="!isDataLoading">
+                    <label [for]="'all'" class="check-input mr-3">
+                        <input type="checkbox" [id]="'all'" name="all" [checked]="isAllChecked()"
+                               (change)="checkAll($event)">
                     </label>
-                    <svg-icon src="assets/images/icons/round-error-symbol.svg"
-                              *ngIf="!(obj.data && obj.data.photo)"
-                              class="cursor-pointer fill-red mr-3"
-                      [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                </div>
+                <div class="d-flex align-items-center justify-content-between w-30" *ngIf="!isDataLoading">
+                    <label class="m-0 d-flex align-items-center cursor-pointer">
+                        <svg-icon src="assets/images/icons/verified.svg" class="fill-primary"
+                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                        <span class="text-white ml-2">{{okCount}}</span>
+                    </label>
+                    <label class="m-0 d-flex align-items-center cursor-pointer">
+                        <svg-icon src="assets/images/icons/round-error-symbol.svg" class="fill-orange"
+                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                        <span class="text-white ml-2">{{attentionCount}}</span>
+                    </label>
+                    <label class="m-0 d-flex align-items-center cursor-pointer">
+                        <svg-icon src="assets/images/icons/cancel.svg" class="fill-red"
+                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                        <span class="text-white ml-2">{{criticalCount}}</span>
+                    </label>
+                    <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light" key="isTrue"
+                                       [(dataArr)]="deviceData"
+                                       type="true"></app-toggle-switch>
+                </div>
+            </div>
 
-                    <button ngbPanelToggle class="btn-toggle d-flex btn btn-link mr-3 p-0">
-                      <svg-icon src="assets/images/icons/right-arrow.svg" class="right-arrow"
-                        [svgStyle]="{ 'height.px':14, 'width.px':14}"></svg-icon>
-                      <svg-icon src="assets/images/icons/down-arrow.svg" class="down-arrow"
-                        [svgStyle]="{ 'height.px':14, 'width.px':14}"></svg-icon>
-                    </button>
-                    <label class="m-0 w-25 pl-1">{{obj.name}}</label>
-                      <div class="d-flex w-25 align-items-center">
-                          <svg-icon src="assets/images/icons/signal.svg" class="cursor-pointer mr-3"
-                                    [svgStyle]="{ 'height.px':14, 'width.px':14, 'fill':'#bbbbbb'}"></svg-icon>
-                          <label class="m-0">{{obj.gateway.name}} {{obj.gateway.oem}} ({{obj.gateway.version}})</label>
-                      </div>
-                    <label class="m-0 w-25 pl-1">{{obj.description}}</label>
-                    <div class="d-flex w-25 justify-content-end align-items-center">
-                      <svg-icon src="assets/images/icons/bar-chart.svg" class="cursor-pointer mr-3"
-                        [svgStyle]="{ 'height.px':24, 'width.px':24}"></svg-icon>
-                      <app-toggle-switch [(toggled)]="obj.isTrue" size="small"></app-toggle-switch>
-                    </div>
-                  </div>
-                </ng-template>
-                <ng-template ngbPanelContent>
-                  <div class="d-flex expand-panel" style="color: #bbbbbb">
-                    <div class="d-flex w-30">
-                      <div class="avatar-container mr-2">
-                        <img src="assets/images/icons/round-error-symbol.svg" width="100%">
-                      </div>
-                      <div class="d-flex flex-column w-100">
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/pin.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.data && obj.data.address) ? obj.data.address[0] : '-'}}</small>
-                        </label>
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/hotel-with-three-floors.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.data && obj.data.owner) ? obj.data.owner[0] : '-'}}</small>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-column w-25">
-                      <div class="d-flex flex-column align-content-center w-100">
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/phone-call.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.data && obj.data.tel) ? obj.data.tel[0] : '-'}}</small>
-                        </label>
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/envelope.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.data && obj.data.email) ? obj.data.email[0] : '-'}}</small>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="d-flex flex-column w-25">
-                      <div class="d-flex flex-column align-content-center w-100">
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/fingerprint.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.properties && obj.properties.vaultId) ? obj.properties.vaultId : '-'}}</small>
-                        </label>
-                        <label class="m-0">
-                          <svg-icon src="assets/images/icons/placeholder.svg" class="cursor-pointer mr-1"
-                            [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
-                          <small class="font-italic">{{(obj.properties && obj.properties.ip) ? obj.properties.ip : '-'}}</small>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="d-flex w-25">
-                      <div class="d-flex mr-2 mt-2">
-                        <svg-icon src="assets/images/icons/earth-globe.svg" class="cursor-pointer mr-1"
-                          [svgStyle]="{ 'height.px':32, 'width.px':32, 'fill':'#bbbbbb'}"></svg-icon>
-                      </div>
-                      <div class="d-flex flex-column align-content-center w-100">
-                        <label class="m-0">
-                          <small class="font-italic">Latitude: </small>
-                          <small class="font-italic">{{(obj.data && obj.data.lat) ? obj.data.lat[0] : '-'}}</small>
-                        </label>
-                        <label class="m-0">
-                          <small class="font-italic">Longitude: </small>
-                          <small class="font-italic">{{(obj.data && obj.data.long) ? obj.data.long[0] : '-'}}</small>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </ng-template>
-              </ngb-panel>
-            </ng-container>
-          </ngb-accordion>
         </div>
-      </div>
-    </div>
-    <!-- Footer -->
-    <div class="footer px-3 py-2">
-      Footer
-    </div>
-  </div>
+        <div class="flex-wrapper overflow-auto">
+            <div class="d-flex flex-column"
+                 [ngClass]="{'h-100': isDataLoading}">
+                <div class="overflow-auto" style="flex: 1">
+                    <div class="align-items-center justify-content-center d-flex h-100" *ngIf="isDataLoading">
+                        <app-loader></app-loader>
+                    </div>
+                    <ngb-accordion #acc="ngbAccordion" class="custom-acc" *ngIf="!isDataLoading">
+                        <ng-container *ngFor="let obj of deviceData; let i = index">
+                            <ngb-panel [id]="'custom-panel-' + i">
+                                <ng-template ngbPanelHeader let-opened="opened">
+                                    <div class="d-flex align-items-center">
+                                        <label [for]="'rowCheck' + i" class="check-input mr-3">
+                                            <input type="checkbox" [id]="'rowCheck' + i" name="rowCheck"
+                                                   (change)="checkDevice()"
+                                                   [(ngModel)]="obj.state">
+                                        </label>
+                                        <svg-icon src="assets/images/icons/round-error-symbol.svg"
+                                                  *ngIf="obj.health === 300"
+                                                  class="cursor-pointer fill-orange mr-3"
+                                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                                        <svg-icon src="assets/images/icons/verified.svg"
+                                                  *ngIf="obj.health === 200"
+                                                  class="cursor-pointer fill-primary mr-3"
+                                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
+                                        <svg-icon src="assets/images/icons/cancel.svg"
+                                                  *ngIf="obj.health === 500"
+                                                  class="cursor-pointer fill-red mr-3"
+                                                  [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
 
-  <!-- right-container -->
-  <div class="d-flex w-25 flex-column">
-
-    <!-- right-top-container -->
-    <div class="d-flex flex-column flex-grow-1 ml-2 mb-2 container-card">
-      <!-- Header -->
-      <div class="header px-3 py-2">
-        Header
-      </div>
-      <!-- Body -->
-      <div class="body px-3 py-2 overflow-auto">
-        Body
-      </div>
-      <!-- Footer -->
-      <div class="footer px-3 py-2">
-        Footer
-        Footer
-      </div>
+                                        <button ngbPanelToggle class="btn-toggle d-flex btn btn-link mr-3 p-0">
+                                            <svg-icon src="assets/images/icons/right-arrow.svg" class="right-arrow"
+                                                      [svgStyle]="{ 'height.px':14, 'width.px':14}"></svg-icon>
+                                            <svg-icon src="assets/images/icons/down-arrow.svg" class="down-arrow"
+                                                      [svgStyle]="{ 'height.px':14, 'width.px':14}"></svg-icon>
+                                        </button>
+                                        <label class="m-0 w-25 pl-1">{{obj.name}}</label>
+                                        <div class="d-flex w-30 align-items-center">
+                                            <svg-icon src="assets/images/icons/signal.svg" class="cursor-pointer mr-3"
+                                                      [svgStyle]="{ 'height.px':14, 'width.px':14, 'fill':'#bbbbbb'}"></svg-icon>
+                                            <label class="m-0" *ngIf="obj.gateway">{{obj.gateway.name}}
+                                                {{obj.gateway.oem}} ({{obj.gateway.version}})</label>
+                                            <label class="m-0" *ngIf="!obj.gateway">-</label>
+                                        </div>
+                                        <div class="d-flex w-30 pl-1">
+                                            <label class="m-0 font-italic" *ngFor="let clusterObj of obj.clusters; let i = index">
+                                                {{clusterObj.name}}<span *ngIf="i !== obj.clusters.length - 1">,</span>
+                                            </label>
+                                        </div>
+                                        <div class="d-flex w-15 justify-content-end align-items-center">
+                                            <svg-icon src="assets/images/icons/bar-chart.svg"
+                                                      class="cursor-pointer mr-3"
+                                                      routerLink="/device/{{obj.id}}"
+                                                      [svgStyle]="{ 'height.px':24, 'width.px':24}"></svg-icon>
+                                            <app-toggle-switch [(toggled)]="obj.isTrue"
+                                                               size="small"></app-toggle-switch>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template ngbPanelContent>
+                                    <div class="d-flex expand-panel" style="color: #bbbbbb">
+                                        <div class="d-flex w-30">
+                                            <div class="avatar-container mr-2">
+                                                <img src="assets/images/icons/round-error-symbol.svg" width="100%">
+                                            </div>
+                                            <div class="d-flex flex-column w-100">
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/pin.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.data && obj.data.address) ?
+                                                        obj.data.address[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/hotel-with-three-floors.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.data && obj.data.owner) ?
+                                                        obj.data.owner[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column w-25">
+                                            <div class="d-flex flex-column align-content-center w-100">
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/phone-call.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.data && obj.data.tel) ?
+                                                        obj.data.tel[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/envelope.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.data && obj.data.email) ?
+                                                        obj.data.email[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column w-25">
+                                            <div class="d-flex flex-column align-content-center w-100">
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/fingerprint.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.properties &&
+                                                        obj.properties.vaultId) ? obj.properties.vaultId : '-'}}
+                                                    </small>
+                                                </label>
+                                                <label class="m-0">
+                                                    <svg-icon src="assets/images/icons/placeholder.svg"
+                                                              class="cursor-pointer mr-1"
+                                                              [svgStyle]="{ 'height.px':16, 'width.px':16, 'fill':'#bbbbbb'}"></svg-icon>
+                                                    <small class="font-italic">{{(obj.properties && obj.properties.ip) ?
+                                                        obj.properties.ip : '-'}}
+                                                    </small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex w-25">
+                                            <div class="d-flex mr-2 mt-2">
+                                                <svg-icon src="assets/images/icons/earth-globe.svg"
+                                                          class="cursor-pointer mr-1"
+                                                          [svgStyle]="{ 'height.px':32, 'width.px':32, 'fill':'#bbbbbb'}"></svg-icon>
+                                            </div>
+                                            <div class="d-flex flex-column align-content-center w-100">
+                                                <label class="m-0">
+                                                    <small class="font-italic">Latitude:</small>
+                                                    <small class="font-italic">{{(obj.data && obj.data.lat) ?
+                                                        obj.data.lat[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                                <label class="m-0">
+                                                    <small class="font-italic">Longitude:</small>
+                                                    <small class="font-italic">{{(obj.data && obj.data.long) ?
+                                                        obj.data.long[0] : '-'}}
+                                                    </small>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ngb-panel>
+                        </ng-container>
+                    </ngb-accordion>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <div class="footer px-3 py-2">
+            <div class="btn-group">
+                <button type="button" class="btn btn-dark" style="margin-right: 2px">
+                    <small>Add to Group</small>
+                </button>
+                <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                    <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
+                    <div class="dropdown-menu dropup" ngbDropdownMenu>
+                        <button ngbDropdownItem>One</button>
+                        <button ngbDropdownItem>Two</button>
+                        <button ngbDropdownItem>Four!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- right-bottom-container -->
-    <div class="d-flex flex-column flex-grow-1 ml-2 mt-2 container-card">
-      <!-- Header -->
-      <div class="header px-3 py-2">
-        Header
-      </div>
-      <!-- Body -->
-      <div class="body px-3 py-2 overflow-auto">
-        Body
-      </div>
-      <!-- Footer -->
-      <div class="footer px-3 py-2">
-        Footer
-        Footer
-      </div>
+    <!-- right-container -->
+    <div class="d-flex w-25 flex-column">
+
+        <!-- right-top-container -->
+        <div class="d-flex flex-column flex-grow-1 ml-2 mb-2 container-card">
+            <!-- Header -->
+            <div class="header px-3 py-2 font-weight-bold d-flex justify-content-between">
+                <h2 class="m-0">Geolocation</h2>
+                <svg-icon src="assets/images/icons/full-size.svg"
+                          routerLink="/map"
+                          class="cursor-pointer d-flex align-items-center"
+                          [svgStyle]="{ 'height.px':18, 'width.px':18}"></svg-icon>
+            </div>
+            <!-- Body -->
+            <div class="body overflow-auto">
+                <app-custom-map [mapData]="[selectedDevices]"
+                                [centerLat]="centerLat"
+                                [centerLong]="centerLong"
+                                [hideZoomControls]="true"
+                ></app-custom-map>
+            </div>
+        </div>
+
+        <!-- right-bottom-container -->
+        <div class="d-flex flex-column flex-grow-1 ml-2 mt-2 container-card">
+            <!-- Header -->
+            <div class="header px-3 py-2 font-weight-bold d-flex justify-content-between">
+                <h2 class="m-0">Selected</h2>
+                <div class="btn-group d-flex align-items-center">
+                    <button type="button" class="btn btn-dark" style="margin-right: 2px">
+                        <small>Last 1hr</small>
+                    </button>
+                    <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                        <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
+                        <div class="dropdown-menu" ngbDropdownMenu>
+                            <button ngbDropdownItem>One</button>
+                            <button ngbDropdownItem>Two</button>
+                            <button ngbDropdownItem>Four!</button>
+                        </div>
+                    </div>
+                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                              [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                </div>
+            </div>
+            <!-- Body -->
+            <div class="body px-3 py-2 overflow-auto">
+                Body
+            </div>
+        </div>
     </div>
-  </div>
 </div>

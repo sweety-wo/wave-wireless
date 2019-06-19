@@ -94,7 +94,6 @@ export class LoginComponent implements OnInit {
                 this._router.navigate(['/map']);
                 this.isLoading = false;
             }, (err) => {
-                console.log('err', err);
                 if (err && err.error && err.error.message) {
                     this._toastr.error(err.error.message);
                 }

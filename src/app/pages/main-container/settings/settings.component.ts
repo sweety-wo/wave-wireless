@@ -31,7 +31,6 @@ export class SettingsComponent implements OnInit {
       this._auth.loggedInUser.subscribe((user) => {
           if (user) {
               this.loggedInUser = user;
-              console.log('this.loggedInUser', this.loggedInUser);
           }
       });
   }

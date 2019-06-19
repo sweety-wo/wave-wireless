@@ -24,6 +24,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     @Input() centerLat: any;
     @Input() centerLong: any;
     @Input() isGeoSearch: any;
+    @Input() hideZoomControls: any;
     options: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
@@ -42,7 +43,9 @@ export class CustomMapComponent implements OnInit, OnChanges {
 
     mapReady(map: L.Map) {
         this.map = map;
-        this.map.addControl(L.control.zoom({position: 'bottomleft'}));
+        if (!this.hideZoomControls) {
+            this.map.addControl(L.control.zoom({position: 'bottomleft'}));
+        }
     }
 
     ngOnChanges(change: any) {

@@ -15,9 +15,9 @@
             </ng-container>
 
             <!-- Body -->
-            <div class="body px-3 py-2 overflow-auto">
+            <div class="body overflow-auto">
                 <app-custom-map [mapData]="[device]" [centerLat]="centerLat" [centerLong]="centerLong"
-                                *ngIf="device"></app-custom-map>
+                                *ngIf="device" [hideZoomControls]="true"></app-custom-map>
                 <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
                     <app-loader></app-loader>
                 </div>
