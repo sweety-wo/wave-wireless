@@ -70,3 +70,8 @@ svg-icon {
 .flex-wrapper {
      flex: 1 0 1px;
 }
+
+.form-control:focus {
+    border: 1px solid #ced4da;
+    box-shadow: none;
+}

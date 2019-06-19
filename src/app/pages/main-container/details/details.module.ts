@@ -4,9 +4,10 @@ import {DetailsComponent} from './details.component';
 import {RouterModule} from '@angular/router';
 import {ToggleSwitchModule} from '../../../shared/toggle-switch/toggle-switch.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
-import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AngularSvgIconModule} from 'angular-svg-icon';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
+import {LoaderModule} from '../../../shared/loader/loader.module';
+import {FormsModule} from '@angular/forms';
 
 const routes = [
     {path: '', component: DetailsComponent}
@@ -20,7 +21,9 @@ const routes = [
         ToggleSwitchModule,
         NgbDropdownModule,
         AngularSvgIconModule,
-        CustomMapModule
+        CustomMapModule,
+        LoaderModule,
+        FormsModule
     ],
     exports: [DetailsComponent]
 })

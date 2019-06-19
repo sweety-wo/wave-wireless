@@ -7,88 +7,105 @@
         <!-- left-top-container -->
         <div class="d-flex flex-column flex-grow-1 mr-2 mb-2 container-card">
             <!-- Header -->
-            <div class="header px-3 py-2 d-flex justify-content-between align-items-center bg-orange">
-                <label class="m-0 h3 text-white">Noah Place</label>
-                <app-toggle-switch [(toggled)]="test"></app-toggle-switch>
-            </div>
+            <ng-container *ngIf="device">
+                <div class="header px-3 py-2 d-flex justify-content-between align-items-center bg-orange">
+                    <label class="m-0 h5 text-white">{{device.name}}</label>
+                    <app-toggle-switch [(toggled)]="test"></app-toggle-switch>
+                </div>
+            </ng-container>
+
             <!-- Body -->
             <div class="body px-3 py-2 overflow-auto">
-                <app-custom-map [mapData]="[device]" [centerLat]="centerLat" [centerLong]="centerLong"></app-custom-map>
+                <app-custom-map [mapData]="[device]" [centerLat]="centerLat" [centerLong]="centerLong"
+                                *ngIf="device"></app-custom-map>
+                <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
+                    <app-loader></app-loader>
+                </div>
             </div>
         </div>
 
         <!-- left-bottom-container -->
-        <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card" *ngIf="device">
+        <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card">
             <!-- Header -->
-            <div class="header px-3 py-2">
+            <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
                 <label class="m-0 h3">Details</label>
+                <div *ngIf="device && device.data && device.data.photo && device.data.photo[0]">
+                    <img [src]="device.data.photo[0]" class="rounded-circle pull-right" width="30" height="30">
+                </div>
             </div>
             <!-- Body -->
             <div class="body px-3 py-2 overflow-auto">
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.properties && device.properties.vaultId">
-                    <svg-icon src="assets/images/icons/fingerprint.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.properties.vaultId}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.properties && device.properties.ip">
-                    <svg-icon src="assets/images/icons/placeholder.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.properties.ip}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.gateway && device.gateway.name && device.gateway.oem">
-                    <svg-icon src="assets/images/icons/antenna.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.gateway.name}} {{device.gateway.oem}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.gateway && device.gateway.version">
-                    <svg-icon src="assets/images/icons/microchip.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.gateway.version}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.data && device.data.owner && device.data.owner[0]">
-                    <svg-icon src="assets/images/icons/hotel-with-three-floors.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.data.owner[0]}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.data && device.data.address && device.data.address[0]">
-                    <svg-icon src="assets/images/icons/pin.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.data.address[0]}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-3"
-                     *ngIf="device.data && device.data.tel && device.data.tel[0]">
-                    <svg-icon src="assets/images/icons/phone-call.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.data.tel[0]}}</small>
-                </div>
-                <div class="d-flex align-items-center mb-2"
-                     *ngIf="device.data && device.data.email && device.data.email[0]">
-                    <svg-icon src="assets/images/icons/envelope.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>{{device.data.email[0]}}</small>
-                </div>
-                <div class="d-flex align-items-center mt-auto justify-content-end">
-                    <div class="d-flex align-items-center">
-                        <svg-icon src="assets/images/icons/earth-globe.svg" class="fill-dark mr-2"
-                                  [svgStyle]="{ 'height.px':30, 'width.px':30 }"></svg-icon>
+                <ng-container *ngIf="device">
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.properties && device.properties.vaultId">
+                        <svg-icon src="assets/images/icons/fingerprint.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.properties.vaultId}}</small>
                     </div>
-                    <div class="d-flex flex-column">
-                        <div *ngIf="device.data && device.data.lat && device.data.lat[0]">
-                            <small>Latitude: {{device.data.lat[0]}}</small>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.properties && device.properties.ip">
+                        <svg-icon src="assets/images/icons/placeholder.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.properties.ip}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.gateway && device.gateway.name && device.gateway.oem">
+                        <svg-icon src="assets/images/icons/antenna.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.gateway.name}} {{device.gateway.oem}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.gateway && device.gateway.version">
+                        <svg-icon src="assets/images/icons/microchip.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.gateway.version}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.data && device.data.owner && device.data.owner[0]">
+                        <svg-icon src="assets/images/icons/hotel-with-three-floors.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.data.owner[0]}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.data && device.data.address && device.data.address[0]">
+                        <svg-icon src="assets/images/icons/pin.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.data.address[0]}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-3"
+                         *ngIf="device.data && device.data.tel && device.data.tel[0]">
+                        <svg-icon src="assets/images/icons/phone-call.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.data.tel[0]}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mb-2"
+                         *ngIf="device.data && device.data.email && device.data.email[0]">
+                        <svg-icon src="assets/images/icons/envelope.svg" class="fill-dark mr-2"
+                                  [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
+                        <small>{{device.data.email[0]}}</small>
+                    </div>
+                    <div class="d-flex align-items-center mt-auto justify-content-end">
+                        <div class="d-flex align-items-center">
+                            <svg-icon src="assets/images/icons/earth-globe.svg" class="fill-dark mr-2"
+                                      [svgStyle]="{ 'height.px':30, 'width.px':30 }"></svg-icon>
                         </div>
-                        <div *ngIf="device.data && device.data.long && device.data.long[0]">
-                            <small>Longitude: {{device.data.long[0]}}</small>
+                        <div class="d-flex flex-column">
+                            <div *ngIf="device.data && device.data.lat && device.data.lat[0]">
+                                <small>Latitude: {{device.data.lat[0]}}</small>
+                            </div>
+                            <div *ngIf="device.data && device.data.long && device.data.long[0]">
+                                <small>Longitude: {{device.data.long[0]}}</small>
+                            </div>
                         </div>
                     </div>
+                </ng-container>
+                <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
+                    <app-loader></app-loader>
                 </div>
+
             </div>
         </div>
+
     </div>
 
     <!-- right-container -->
@@ -129,7 +146,9 @@
                     <label class="m-0 h3">Alarms</label>
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="input-group search-group mr-3">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control border-right-0" placeholder="Search"
+                                   [(ngModel)]="alarmSearch"
+                                   (keyup)="search($event)">
                             <div class="input-group-append">
                             <span class="input-group-text">
                               <svg-icon src="assets/images/icons/magnifying-glass.svg"
@@ -143,23 +162,24 @@
                 </div>
                 <!-- Body -->
                 <div class="body px-3 py-2 overflow-auto">
-                    <div class="d-flex align-items-center flex-grow-1 mb-3">
-                        <span class="badge badge-orange font-weight-normal p-2 mr-3">ATTENTION</span>
-                        <label class="w-50 m-0 mr-2">Over Temp Alarm</label>
-                        <small class="w-25 m-0 mr-2">Created 2 min ago</small>
-                        <div class="flex-grow-1 text-right">
-                            <svg-icon src="assets/images/icons/chat.svg" class="cursor-pointer"
-                                      [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                    <ng-container *ngFor="let issue of issues">
+                        <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="!isIssueLoading">
+                            <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
+                                  *ngIf="issue && issue.labels"
+                                  [ngStyle]="getIssuesLabelColor(issue.labels[0])">{{issue.labels[0].title.toUpperCase()}}</span>
+                            <span class="badge font-weight-normal p-2 mr-3 d-block"
+                                  *ngIf="!(issue && issue.labels)"></span>
+                            <label class="w-50 m-0 mr-2">{{issue && issue.title}}</label>
+                            <small class="w-25 m-0 mr-2">{{issue && issue.createdAt}}</small>
+                            <div class="flex-grow-1 text-right">
+                                <svg-icon src="assets/images/icons/chat.svg" class="cursor-pointer"
+                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center flex-grow-1 mb-3">
-                        <span class="badge badge-orange font-weight-normal p-2 mr-3">ATTENTION</span>
-                        <label class="w-50 m-0 mr-2">Over Temp temp Alarm</label>
-                        <small class="w-25 m-0 mr-2">Created 20 min ago</small>
-                        <div class="flex-grow-1 text-right">
-                            <svg-icon src="assets/images/icons/chat.svg" class="cursor-pointer"
-                                      [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
-                        </div>
+                    </ng-container>
+                    <div class="h-100 d-flex align-items-center justify-content-center">
+                        <app-loader *ngIf="isIssueLoading"></app-loader>
+                        <span *ngIf="!isIssueLoading && issues && !issues.length">No records found</span>
                     </div>
                 </div>
             </div>
@@ -170,7 +190,8 @@
                     <label class="m-0 h3">Telemetry</label>
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="input-group search-group mr-3">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control border-right-0" placeholder="Search" [(ngModel)]="telemetrySearch"
+                                   (keyup)="customSearch($event)">
                             <div class="input-group-append">
                             <span class="input-group-text">
                               <svg-icon src="assets/images/icons/magnifying-glass.svg"
@@ -184,23 +205,23 @@
                 </div>
                 <!-- Body -->
                 <div class="body px-3 py-2 overflow-auto">
-                    <div class="d-flex align-items-center flex-grow-1 mb-3">
-                        <span class="badge badge-orange font-weight-normal p-2 mr-3">ATTENTION</span>
-                        <label class="w-50 m-0 mr-2">Over Temp Alarm</label>
-                        <small class="w-25 m-0 mr-2">Created 2 min ago</small>
-                        <div class="flex-grow-1 text-right">
-                            <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
-                                      [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                    <ng-container *ngFor="let ghost of filteredGhosts | keyvalue">
+                        <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="ghost">
+                            <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
+                                  *ngIf="ghost && ghost.value.health"
+                                  [ngClass]="getGhostHealthDetail(ghost.value.health).className">
+                                {{getGhostHealthDetail(ghost.value.health).title}}</span>
+                            <label class="w-50 m-0 mr-2">{{ghost && ghost.value.name}}</label>
+                            <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
+                            <div class="flex-grow-1 text-right">
+                                <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
+                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                            </div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center flex-grow-1 mb-3">
-                        <span class="badge badge-primary font-weight-normal p-2 mr-3">OK</span>
-                        <label class="w-50 m-0 mr-2">Over Temp temp Alarm</label>
-                        <small class="w-25 m-0 mr-2">Created 20 min ago</small>
-                        <div class="flex-grow-1 text-right">
-                            <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
-                                      [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
-                        </div>
+                    </ng-container>
+                    <div class="h-100 d-flex align-items-center justify-content-center">
+                        <app-loader *ngIf="isGhostLoading"></app-loader>
+                        <span *ngIf="!isGhostLoading && filteredGhosts && !filteredGhosts.length">No records found</span>
                     </div>
                 </div>
             </div>

@@ -28,5 +28,12 @@ export class DeviceService {
         return this._http.get(environment.API_URL + `node/devices/${deviceId}`);
     }
 
+    /**
+     * Get device ghost.
+     * */
+    getDeviceGhosts(deviceId) {
+        return this._http.get(environment.API_URL + `node/devices/${deviceId}/ghosts`);
+    }
+
 
 }
