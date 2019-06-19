@@ -13,93 +13,81 @@
             </div>
             <!-- Body -->
             <div class="body px-3 py-2 overflow-auto">
-                Body
+                <app-custom-map [mapData]="[device]" [centerLat]="centerLat" [centerLong]="centerLong"></app-custom-map>
             </div>
         </div>
 
         <!-- left-bottom-container -->
-        <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card">
+        <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card" *ngIf="device">
             <!-- Header -->
             <div class="header px-3 py-2">
                 <label class="m-0 h3">Details</label>
             </div>
             <!-- Body -->
             <div class="body px-3 py-2 overflow-auto">
-                <!--<div class="d-flex flex-column">-->
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.properties && device.properties.vaultId">
                     <svg-icon src="assets/images/icons/fingerprint.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>12345678-abcdefgh</small>
+                    <small>{{device.properties.vaultId}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.properties && device.properties.ip">
                     <svg-icon src="assets/images/icons/placeholder.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>10.0.6.99</small>
+                    <small>{{device.properties.ip}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.gateway && device.gateway.name && device.gateway.oem">
                     <svg-icon src="assets/images/icons/antenna.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>Comba CriticalPoint PS 700 800 BDA</small>
+                    <small>{{device.gateway.name}} {{device.gateway.oem}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.gateway && device.gateway.version">
                     <svg-icon src="assets/images/icons/microchip.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>v 1.1</small>
+                    <small>{{device.gateway.version}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.data && device.data.owner && device.data.owner[0]">
                     <svg-icon src="assets/images/icons/hotel-with-three-floors.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>Building Systems Inc.</small>
+                    <small>{{device.data.owner[0]}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.data && device.data.address && device.data.address[0]">
                     <svg-icon src="assets/images/icons/pin.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>385 Noah Place Suite 878</small>
+                    <small>{{device.data.address[0]}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3"
+                     *ngIf="device.data && device.data.tel && device.data.tel[0]">
                     <svg-icon src="assets/images/icons/phone-call.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>877-255-7945</small>
+                    <small>{{device.data.tel[0]}}</small>
                 </div>
-                <div class="d-flex align-items-center mb-2">
+                <div class="d-flex align-items-center mb-2"
+                     *ngIf="device.data && device.data.email && device.data.email[0]">
                     <svg-icon src="assets/images/icons/envelope.svg" class="fill-dark mr-2"
                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                    <small>info@from.com</small>
+                    <small>{{device.data.email[0]}}</small>
                 </div>
                 <div class="d-flex align-items-center mt-auto justify-content-end">
-                    <div class="d-flex align-items-cente">
+                    <div class="d-flex align-items-center">
                         <svg-icon src="assets/images/icons/earth-globe.svg" class="fill-dark mr-2"
                                   [svgStyle]="{ 'height.px':30, 'width.px':30 }"></svg-icon>
                     </div>
                     <div class="d-flex flex-column">
-                        <div>
-                            <small>Latitude: 37.38928392</small>
+                        <div *ngIf="device.data && device.data.lat && device.data.lat[0]">
+                            <small>Latitude: {{device.data.lat[0]}}</small>
                         </div>
-                        <div>
-                            <small>Longitude: -88.450829329</small>
+                        <div *ngIf="device.data && device.data.long && device.data.long[0]">
+                            <small>Longitude: {{device.data.long[0]}}</small>
                         </div>
                     </div>
-                    <!-- <svg-icon src="assets/images/icons/envelope.svg" class="fill-dark mr-2"
-                               [svgStyle]="{ 'height.px':18, 'width.px':18 }"></svg-icon>
-                     <small>info@from.com</small>-->
                 </div>
             </div>
-
-            <!-- Header -->
-           <!-- <div class="footer border-0 px-3 py-2 d-flex align-items-center justify-content-end">
-                <div class="d-flex align-items-cente">
-                    <svg-icon src="assets/images/icons/earth-globe.svg" class="fill-dark mr-2"
-                              [svgStyle]="{ 'height.px':30, 'width.px':30 }"></svg-icon>
-                </div>
-                <div class="d-flex flex-column">
-                    <div>
-                        <small>Latitude: 37.38928392</small>
-                    </div>
-                    <div>
-                        <small>Longitude: -88.450829329</small>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>
 

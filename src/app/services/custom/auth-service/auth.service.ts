@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {BehaviorSubject, Subject} from 'rxjs';
 import {UniversalStorageService} from '../universal-storage-service/universal-storage.service';
-import {UserService} from '../access/user/user.service';
+import {UserService} from '../../access/user/user.service';
 
 @Injectable({
     providedIn: 'root'

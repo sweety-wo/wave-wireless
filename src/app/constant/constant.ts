@@ -10,7 +10,7 @@ export class Constant {
             'phase': 'PRODUCTION',
             'connection': 'CONNECTED',
             'typeId': 'd9cd02a2',
-            'gatewayId': 'a7504eb0-04ffb381',
+            'gatewayId': '00000000-04714477',
             'oem': 'SOLiD',
             'model': 'R6',
             'version': '6.3',
@@ -26,11 +26,12 @@ export class Constant {
                 'long': [
                     '-81.4289348'
                 ],
-                'name' : ['Noah Place'],
-                'address' : ['385 Noah Place Suite 878'],
-                'tel' : ['875-255-7945'],
-                'email' : ['info@form.com'],
-                'photo' : ['assets/images/pexels-photo-374023.jpeg'],
+                'name': ['Noah Place'],
+                'owner': ['Building Systems Inc'],
+                'address': ['385 Noah Place Suite 878'],
+                'tel': ['875-255-7945'],
+                'email': ['info@form.com'],
+                'photo': ['assets/images/pexels-photo-374023.jpeg'],
             },
             'properties': {
                 'https': false,

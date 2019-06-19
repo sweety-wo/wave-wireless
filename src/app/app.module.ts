@@ -9,11 +9,11 @@ import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {FooterComponent} from './shared/footer/footer.component';
-import {UniversalStorageService} from './services/universal-storage-service/universal-storage.service';
-import {InterceptorService} from './services/interceptor-service/interceptor.service';
-import {NotAuthGuardService} from './services/not-auth-guard-service/not-auth-guard.service';
-import {AuthGuardService} from './services/auth-guard-service/auth-guard.service';
-import {StartupService} from './services/startup-service/startup.service';
+import {UniversalStorageService} from './services/custom/universal-storage-service/universal-storage.service';
+import {InterceptorService} from './services/custom/interceptor-service/interceptor.service';
+import {NotAuthGuardService} from './services/custom/not-auth-guard-service/not-auth-guard.service';
+import {AuthGuardService} from './services/custom/auth-guard-service/auth-guard.service';
+import {StartupService} from './services/custom/startup-service/startup.service';
 
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();

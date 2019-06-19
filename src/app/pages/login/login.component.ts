@@ -3,10 +3,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Constant} from '../../constant/constant';
 
-import {AuthService} from '../../services/auth-service/auth.service';
+import {AuthService} from '../../services/custom/auth-service/auth.service';
 import {UserService} from '../../services/access/user/user.service';
 import {SecurityService} from '../../services/access/security/security.service';
-import {ToastrService} from '../../services/toastr-service/toastr.service';
+import {ToastrService} from '../../services/custom/toastr-service/toastr.service';
 
 @Component({
     selector: 'app-login',

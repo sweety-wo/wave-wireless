@@ -12,11 +12,19 @@ export class GatewayService {
     /**
      * Get gateways.
      * */
-    getGateways(query) {
+    getGateways(query?: any) {
         let url = environment.API_URL + `node/gateways?perPage=0`;
         if (query) {
             url = url + '&filter=' + encodeURIComponent(query);
         }
         return this._http.get(url);
     }
+
+    /**
+     * Get gateway by id.
+     * */
+    getGateway(gatewayId) {
+        return this._http.get(environment.API_URL + `node/gateways/${gatewayId}`);
+    }
+
 }

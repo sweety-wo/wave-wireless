@@ -10,11 +10,10 @@ export class DeviceService {
     constructor(private _http: HttpClient) {
     }
 
-
     /**
      * Get devices.
      * */
-    getDevices(query) {
+    getDevices(query?: any) {
         let url = environment.API_URL + `node/devices?perPage=0`;
         if (query) {
             url = url + '&filter=' + encodeURIComponent(query);

@@ -5,8 +5,8 @@ import {OpenStreetMapProvider} from 'leaflet-geosearch';
 import * as _ from 'lodash';
 import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
-import {CommonService} from '../../../services/common/common.service';
-import {AuthService} from '../../../services/auth-service/auth.service';
+import {CommonService} from '../../../services/custom/common-service/common.service';
+import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
     selector: 'app-map',
@@ -26,6 +26,7 @@ export class MapComponent implements OnInit, OnDestroy {
     constructor(private _device: DeviceService,
                 private _common: CommonService,
                 private _auth: AuthService) {
+        // ToDo: Remove once API gives proper data
         this.deviceData = Constant.deviceData;
         this.isDeviceLoading = true;
         this.centerLat = 38.89511;
@@ -37,12 +38,19 @@ export class MapComponent implements OnInit, OnDestroy {
         this.filteredData = _.filter(this.deviceData, (device: any) => {
             return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
         });
-        this.setLatLng(this.filteredData);
+        this.fnGetCoordinates(this.filteredData);
         this.fnInitializeWebSockets();
+    }
+
+    fnGetCoordinates(data) {
+        const coordinates = this._common.setLatLng(data);
+        this.centerLat = coordinates.centerLat;
+        this.centerLong = coordinates.centerLong;
     }
 
     getDevices(query?: string) {
         this.isDeviceLoading = false;
+        // ToDo: Uncomment once API gives proper data
         /*this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
             this.filteredData = devices;
@@ -59,22 +67,6 @@ export class MapComponent implements OnInit, OnDestroy {
         }
     }
 
-    setLatLng(data) {
-        if (data && data.length) {
-            _.forEach(data, (o) => {
-                if (o.data && o.data.lat && o.data.long && o.data.long[0] && o.data.lat[0]) {
-                    this.centerLat = o.data.lat[0];
-                    this.centerLong = o.data.long[0];
-                    if (this.centerLat && this.centerLong) {
-                        return false;
-                    }
-                }
-            });
-        } else {
-            this.centerLat = 38.89511;
-            this.centerLong = -77.03637;
-        }
-    }
 
     onConnectionLost(responseObject) {
         if (responseObject.errorCode !== 0) {
@@ -168,7 +160,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 }
                 // search reset
             } else if (!res.isGeoSearch && !res.isFromFilter) {
-                this.setLatLng(this.filteredData);
+                this.fnGetCoordinates(this.filteredData);
             }
         }
 

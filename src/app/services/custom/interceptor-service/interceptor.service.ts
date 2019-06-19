@@ -5,7 +5,7 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {tap} from 'rxjs/operators';
 
 import {AuthService} from '../auth-service/auth.service';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../../../environments/environment';
 import {UniversalStorageService} from '../universal-storage-service/universal-storage.service';
 
 

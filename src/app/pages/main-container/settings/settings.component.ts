@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SecurityService} from '../../../services/access/security/security.service';
-import {AuthService} from '../../../services/auth-service/auth.service';
+import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
   selector: 'app-settings',

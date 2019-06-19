@@ -1,8 +1,7 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {NotAuthGuardService} from './services/not-auth-guard-service/not-auth-guard.service';
-import {AuthService} from './services/auth-service/auth.service';
-import {AuthGuardService} from './services/auth-guard-service/auth-guard.service';
+import {NotAuthGuardService} from './services/custom/not-auth-guard-service/not-auth-guard.service';
+import {AuthGuardService} from './services/custom/auth-guard-service/auth-guard.service';
 
 const routes: Routes = [
   {path: '', redirectTo: '/map', pathMatch: 'full'},

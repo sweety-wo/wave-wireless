@@ -25,12 +25,10 @@ export class CustomMapComponent implements OnInit, OnChanges {
     @Input() centerLong: any;
     @Input() isGeoSearch: any;
     options: any;
-    componentRef: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
     map: L.Map;
-    LatLng: any;
 
     constructor(private _router: Router) {
     }
@@ -163,7 +161,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     img +
                 `</div>` +
                 `<div class="px-3 pb-3">` +
-                `       <a class="pull-right" data-link="/device/${o.id}">View Details</a>` +
+                `       <a class="pull-right cursor-pointer" data-link="/device/${o.id}">View Details</a>` +
                 `</div>` +
                 `</div>`;
             if (o.data && o.data.long[0] && o.data.lat[0]) {

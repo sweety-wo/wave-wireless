@@ -6,6 +6,7 @@ import {ToggleSwitchModule} from '../../../shared/toggle-switch/toggle-switch.mo
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {DashboardComponent} from '../dashboard/dashboard.component';
 import {AngularSvgIconModule} from 'angular-svg-icon';
+import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 
 const routes = [
     {path: '', component: DetailsComponent}
@@ -18,7 +19,8 @@ const routes = [
         RouterModule.forChild(routes),
         ToggleSwitchModule,
         NgbDropdownModule,
-        AngularSvgIconModule
+        AngularSvgIconModule,
+        CustomMapModule
     ],
     exports: [DetailsComponent]
 })
