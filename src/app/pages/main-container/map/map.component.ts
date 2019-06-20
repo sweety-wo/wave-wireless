@@ -8,6 +8,7 @@ import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
+
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -19,6 +20,7 @@ export class MapComponent implements OnInit, OnDestroy {
     centerLat: any;
     centerLong: any;
     geoResult: any;
+    pieData = [];
     isDeviceLoading: boolean;
     private _client: Paho.MQTT.Client;
     isGeoSearch: boolean;
@@ -39,7 +41,36 @@ export class MapComponent implements OnInit, OnDestroy {
             return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
         });
         this.fnGetCoordinates(this.filteredData);
+        this.fnCreatePieChartData(this.filteredData);
         this.fnInitializeWebSockets();
+    }
+
+    fnCreatePieChartData(deviceData) {
+        const attention = deviceData.reduce(function (n, device) {
+            return n + (device.health === 300);
+        }, 0);
+        const critical = deviceData.reduce(function (n, device) {
+            return n + (device.health === 500);
+        }, 0);
+        const ok = deviceData.reduce(function (n, device) {
+            return n + (device.health === 200);
+        }, 0);
+        this.pieData = [
+            {
+                name: this._common.getHealthDetail(300).title,
+                color: this._common.getHealthDetail(300).color,
+                y: attention,
+            },
+            {
+                name: this._common.getHealthDetail(500).title,
+                color: this._common.getHealthDetail(500).color,
+                y: critical,
+            },
+            {
+                name: this._common.getHealthDetail(200).title,
+                color: this._common.getHealthDetail(200).color,
+                y: ok,
+            }];
     }
 
     fnGetCoordinates(data) {
@@ -176,6 +207,8 @@ export class MapComponent implements OnInit, OnDestroy {
             this.filteredData = _.filter(this.deviceData, (device: any) => {
                 return (healthArr.includes(device.health));
             });
+
+            this.fnCreatePieChartData(this.filteredData);
         }
     }
 }

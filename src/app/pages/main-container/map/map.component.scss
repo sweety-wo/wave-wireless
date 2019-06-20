@@ -1,6 +1,18 @@
+@import '../../../../scss/variables';
+
 :host {
   flex-grow: 1;
   display: flex;
+}
+
+.chart-div {
+    bottom: 10%;
+    right: 3%;
+    width: 20%;
+    height: 25%;
+    z-index: 500;
+    border-radius: 0.25rem;
+    background-color: $gray-100;
 }
 
 

@@ -6,6 +6,7 @@ import {SearchBarModule} from '../../../shared/search-bar/search-bar.module';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 import {LoaderModule} from '../../../shared/loader/loader.module';
 import {AngularSvgIconModule} from 'angular-svg-icon';
+import {PieChartModule} from '../../../shared/pie-chart/pie-chart.module';
 
 const routes = [
     {path: '', component: MapComponent}
@@ -19,7 +20,8 @@ const routes = [
         LoaderModule,
         SearchBarModule,
         CustomMapModule,
-        AngularSvgIconModule
+        AngularSvgIconModule,
+        PieChartModule
     ],
     exports: [MapComponent]
 })

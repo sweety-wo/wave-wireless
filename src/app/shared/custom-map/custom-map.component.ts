@@ -19,7 +19,6 @@ import {Router} from '@angular/router';
 })
 export class CustomMapComponent implements OnInit, OnChanges {
 
-
     @Input() mapData: any;
     @Input() centerLat: any;
     @Input() centerLong: any;

@@ -36,4 +36,25 @@ export class CommonService {
         }
         return {centerLat, centerLong};
     }
+
+    getHealthDetail(health) {
+        let color = '';
+        let title = '';
+        switch (health) {
+            case 500:
+                color = '#fb0d1c';
+                title = 'CRITICAL';
+                break;
+            case 300:
+                color = '#fc5425';
+                title = 'ATTENTION';
+                break;
+            case 200:
+                color = '#199b8a';
+                title = 'OK';
+                break;
+            default:
+        }
+        return {color, title};
+    }
 }
