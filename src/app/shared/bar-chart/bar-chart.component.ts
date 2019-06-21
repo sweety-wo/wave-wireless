@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import {CommonService} from '../../services/custom/common-service/common.service';
 
@@ -144,41 +144,6 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
                 tickInterval: 100,
             },
         };
-        /* const opts: any = {
-             title: {
-                 text: 'Candidate Skills'
-             },
-
-             legend: {
-                 enabled: false
-             },
-             yAxis: {
-                 categories: ['N/A', 'Never', 'Seldom', 'Mostly', 'Always'],
-
-                 labels: {
-                     formatter: function () {
-                         return this.value;
-                     }
-                 }
-             },
-
-             plotOptions: {
-                 area: {
-                     fillOpacity: 0.2
-                 }
-             },
-             credits: {
-                 enabled: false
-             },
-             tooltip: {
-                 enabled: false,
-             },
-             series: [{
-                 data: [0, 1, 2, 3, 4, 4, 3, 4],
-             }]
-         }*/
-
-
         if (this.barChartEl && this.barChartEl.nativeElement) {
             opts.chart = {
                 type: 'column',

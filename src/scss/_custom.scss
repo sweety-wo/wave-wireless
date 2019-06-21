@@ -75,3 +75,22 @@ svg-icon {
     border: 1px solid #ced4da;
     box-shadow: none;
 }
+.badge{
+    width: 82px;
+}
+
+.ellipsis-badge {
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 55%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-open .modal {
+    display: flex !important;
+    align-items: center !important;
+    .modal-dialog {
+        flex-grow: 1;
+    }
+}

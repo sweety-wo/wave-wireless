@@ -2,10 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {GatewayService} from '../../../services/node/gateway.service';
 import {IssueService} from '../../../services/tracker/issue/issue.service';
+import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics/telemetry-statistics.component';
 
 @Component({
     selector: 'app-details',
@@ -32,7 +35,8 @@ export class DetailsComponent implements OnInit {
                 private _device: DeviceService,
                 private _common: CommonService,
                 private _gateway: GatewayService,
-                private _issue: IssueService) {
+                private _issue: IssueService,
+                private _modalService: NgbModal) {
         // ToDo: Remove all lines below once API gives proper data
         this.device = {
             'id': 'a7504eb0-04ffb381-5e363c9b',
@@ -200,6 +204,12 @@ export class DetailsComponent implements OnInit {
         if (_.isEmpty(this.filteredGhosts)) {
             this.filteredGhosts = null;
         }
+    }
+
+    openTelemetryStatisticsModal(ghost) {
+        const modal: NgbModalRef = this._modalService.open(TelemetryStatisticsComponent, { size: 'lg', backdrop: 'static' });
+        modal.componentInstance.ghost = ghost;
+
     }
 
 

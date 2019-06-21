@@ -221,7 +221,7 @@
                             <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
                             <div class="flex-grow-1 text-right">
                                 <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
-                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }" (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
                             </div>
                         </div>
                     </ng-container>

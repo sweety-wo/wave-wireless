@@ -9,6 +9,7 @@ import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 import {LoaderModule} from '../../../shared/loader/loader.module';
 import {FormsModule} from '@angular/forms';
 import {BarChartModule} from '../../../shared/bar-chart/bar-chart.module';
+import {TelemetryStatisticsModule} from '../../../modals/telemetry-statistics/telemetry-statistics.module';
 
 const routes = [
     {path: '', component: DetailsComponent}
@@ -25,7 +26,8 @@ const routes = [
         CustomMapModule,
         LoaderModule,
         FormsModule,
-        BarChartModule
+        BarChartModule,
+        TelemetryStatisticsModule
     ],
     exports: [DetailsComponent]
 })

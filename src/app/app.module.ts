@@ -5,6 +5,7 @@ import {FormlyModule} from '@ngx-formly/core';
 import {FormlyBootstrapModule} from '@ngx-formly/bootstrap';
 import {CookieModule, CookieService} from 'ngx-cookie';
 import {LeafletModule} from '@asymmetrik/ngx-leaflet';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -14,6 +15,9 @@ import {InterceptorService} from './services/custom/interceptor-service/intercep
 import {NotAuthGuardService} from './services/custom/not-auth-guard-service/not-auth-guard.service';
 import {AuthGuardService} from './services/custom/auth-guard-service/auth-guard.service';
 import {StartupService} from './services/custom/startup-service/startup.service';
+import {TelemetryStatisticsComponent} from './modals/telemetry-statistics/telemetry-statistics.component';
+import {TelemetryStatisticsModule} from './modals/telemetry-statistics/telemetry-statistics.module';
+
 
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();
@@ -31,7 +35,9 @@ export function init(startup: StartupService): Function {
         CookieModule.forRoot(),
         LeafletModule.forRoot(),
         FormlyModule.forRoot(),
-        FormlyBootstrapModule
+        NgbModule,
+        FormlyBootstrapModule,
+        TelemetryStatisticsModule
     ],
     providers: [
         CookieService,
@@ -41,6 +47,7 @@ export function init(startup: StartupService): Function {
         AuthGuardService,
         NotAuthGuardService
     ],
+    entryComponents: [TelemetryStatisticsComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

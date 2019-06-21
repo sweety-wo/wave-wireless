@@ -1,0 +1,33 @@
+<div class="modal-header">
+    <div class="d-flex align-items-center ju flex-grow-1 mb-3" *ngIf="ghost">
+        <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
+              *ngIf="ghost && ghost.health"
+              [ngClass]="getGhostHealthDetail(ghost.health).className">
+            {{getGhostHealthDetail(ghost.health).title}}</span>
+        <h4 class="modal-title">{{ghost.name}}</h4>
+        <div class="btn-group mr-3 ml-auto">
+            <button type="button" class="btn btn-dark" style="margin-right: 2px">Split me</button>
+            <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
+                <div class="dropdown-menu" ngbDropdownMenu>
+                    <button ngbDropdownItem>One</button>
+                    <button ngbDropdownItem>Two</button>
+                    <button ngbDropdownItem>Four!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="h-100 w-100 d-flex flex-column">
+        <div class="h-50">
+            <app-bar-chart></app-bar-chart>
+        </div>
+        <div>
+            <app-line-chart></app-line-chart>
+        </div>
+    </div>
+</div>
