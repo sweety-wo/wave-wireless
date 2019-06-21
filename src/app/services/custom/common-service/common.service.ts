@@ -34,6 +34,10 @@ export class CommonService {
             centerLat = 38.89511;
             centerLong = -77.03637;
         }
+        if (!centerLat || !centerLong) {
+            centerLat = 38.89511;
+            centerLong = -77.03637;
+        }
         return {centerLat, centerLong};
     }
 

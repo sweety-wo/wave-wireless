@@ -120,8 +120,11 @@
                                 <ng-template ngbPanelContent>
                                     <div class="d-flex expand-panel" style="color: #bbbbbb">
                                         <div class="d-flex w-30">
-                                            <div class="avatar-container mr-2">
+                                            <div class="avatar-container mr-2" *ngIf="!obj.photo">
                                                 <img src="assets/images/icons/round-error-symbol.svg" width="100%">
+                                            </div>
+                                            <div class="avatar-container mr-2 d-flex" *ngIf="obj.photo">
+                                                <img [src]="obj.photo" height="50px" width="100%" style="border-radius: 50%">
                                             </div>
                                             <div class="d-flex flex-column w-100">
                                                 <label class="m-0">
@@ -244,7 +247,7 @@
             </div>
             <!-- Body -->
             <div class="body overflow-auto">
-                <app-custom-map [mapData]="[selectedDevices]"
+                <app-custom-map [(mapData)]="selectedDevices"
                                 [centerLat]="centerLat"
                                 [centerLong]="centerLong"
                                 [hideZoomControls]="true"
@@ -255,21 +258,23 @@
         <!-- right-bottom-container -->
         <div class="d-flex flex-column flex-grow-1 ml-2 mt-2 container-card">
             <!-- Header -->
-            <div class="header px-3 py-2 font-weight-bold d-flex justify-content-between">
+            <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
                 <h2 class="m-0">Selected</h2>
-                <div class="btn-group d-flex align-items-center">
-                    <button type="button" class="btn btn-dark" style="margin-right: 2px">
-                        <small>Last 1hr</small>
-                    </button>
-                    <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
-                        <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
-                        <div class="dropdown-menu" ngbDropdownMenu>
-                            <button ngbDropdownItem>One</button>
-                            <button ngbDropdownItem>Two</button>
-                            <button ngbDropdownItem>Four!</button>
+                <div class="d-flex align-items-center">
+                    <div class="btn-group mr-2">
+                        <button type="button" class="btn btn-dark" style="margin-right: 2px">
+                            <small>Last 1hr</small>
+                        </button>
+                        <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                            <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <button ngbDropdownItem>One</button>
+                                <button ngbDropdownItem>Two</button>
+                                <button ngbDropdownItem>Four!</button>
+                            </div>
                         </div>
                     </div>
-                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer align-items-center"
                               [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
                 </div>
             </div>

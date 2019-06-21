@@ -6,6 +6,7 @@ import {ToastrService} from '../../../services/custom/toastr-service/toastr.serv
 import {ClusterService} from '../../../services/node/cluster.service';
 import {Constant} from '../../../constant/constant';
 import {CommonService} from '../../../services/custom/common-service/common.service';
+import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -32,6 +33,7 @@ export class DashboardComponent implements OnInit {
                 private _gateway: GatewayService,
                 private _cluster: ClusterService,
                 private _common: CommonService,
+                private _deviceImageService: DeviceImageService,
                 private _toastr: ToastrService) {
         this.toogleAll = true;
         this.isDataLoading = true;
@@ -51,7 +53,6 @@ export class DashboardComponent implements OnInit {
     fnSearchDevices(e) {
         if (this.searchText.length) {
             if (e.keyCode === 13) {
-                console.log('called search');
                 const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) or contains(#{phase}, ${' + this.searchText + '}) or contains(#{typeId}, ${' + this.searchText + '}) or contains(#{health}, ${' + this.searchText + '}) or contains(#{defaultHealth}, ${' + this.searchText + '})';
                 this.isDataLoading = true;
                 this.getDevices(query);
@@ -71,6 +72,7 @@ export class DashboardComponent implements OnInit {
     getDevices(query?: string) {
         this._device.getDevices(query).subscribe((devices: any) => {
             _.forEach(devices, (device) => {
+                console.log('device', device);
                 if (device.gatewayId) {
                     device.gateway = _.find(this.gatewayData, {'id': device.gatewayId});
                 } else {
@@ -82,6 +84,7 @@ export class DashboardComponent implements OnInit {
                 device.clusters = clusterArr.length ? clusterArr : [];
             });
             this.deviceData = devices;
+            this.fnInitDeviceImages(this.deviceData);
             this.okCount = this.fnGetHealthCounts(200);
             this.attentionCount = this.fnGetHealthCounts(300);
             this.criticalCount = this.fnGetHealthCounts(500);
@@ -92,6 +95,40 @@ export class DashboardComponent implements OnInit {
             }
             this.isDataLoading = false;
         });
+    }
+
+    fnInitDeviceImages(deviceData) {
+        const count = 0;
+        if (count < deviceData.length) {
+            this.fnGetDeviceImages(count, deviceData);
+        } else {
+            console.log('end true');
+            console.log('this.deviceData', this.deviceData);
+        }
+    }
+
+    fnGetDeviceImages(count, deviceData) {
+        if (deviceData[count].data && deviceData[count].data.photo && deviceData[count].data.photo[0]) {
+            this._deviceImageService.getDeviceImage(deviceData[count].data.photo[0]).subscribe((imageUrl: any) => {
+                console.log('imageUrl', imageUrl);
+                deviceData[count].photo = imageUrl.url;
+                count++;
+                if (count < deviceData.length) {
+                    this.fnGetDeviceImages(count, deviceData);
+                } else {
+                    console.log('end');
+                    console.log('this.deviceData', this.deviceData);
+                }
+            });
+        } else {
+            count++;
+            if (count < deviceData.length) {
+                this.fnGetDeviceImages(count, deviceData);
+            } else {
+                console.log('end');
+                console.log('this.deviceData', this.deviceData);
+            }
+        }
     }
 
     getGateways(query?: string) {
@@ -132,12 +169,15 @@ export class DashboardComponent implements OnInit {
             return device.state;
         });
         this.fnGetCoordinates(this.selectedDevices);
-        console.log('this.selectedDevices', this.selectedDevices);
     }
 
     checkAll(event?) {
         this.deviceData.forEach(x => x.state = event.target.checked);
-        this.selectedDevices = _.cloneDeepWith(this.deviceData);
+        if (event.target.checked) {
+            this.selectedDevices = _.cloneDeepWith(this.deviceData);
+        } else {
+            this.selectedDevices = [];
+        }
         this.fnGetCoordinates(this.selectedDevices);
     }
 

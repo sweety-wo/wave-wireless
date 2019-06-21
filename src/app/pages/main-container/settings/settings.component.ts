@@ -88,7 +88,6 @@ export class SettingsComponent implements OnInit {
                 this._auth.fnGetAuthUser();
                 this.isSecurityMode = false;
             }, (err) => {
-                console.log('err', err);
                 this.changePasswordForm.reset();
                 this.form.reset(this.form.value);
                 this.isLoading = false;
