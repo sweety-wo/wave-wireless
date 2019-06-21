@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import * as _ from 'lodash';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class CommonService {
 

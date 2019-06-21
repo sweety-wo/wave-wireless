@@ -133,8 +133,10 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="body px-3 py-2 overflow-auto">
-                Body
+            <div class="body px-3 py-2 overflow-auto position-relative">
+                <div class="w-75 h-100">
+                    <app-bar-chart></app-bar-chart>
+                </div>
             </div>
         </div>
 
@@ -193,7 +195,8 @@
                     <label class="m-0 h3">Telemetry</label>
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="input-group search-group mr-3">
-                            <input type="text" class="form-control border-right-0" placeholder="Search" [(ngModel)]="telemetrySearch"
+                            <input type="text" class="form-control border-right-0" placeholder="Search"
+                                   [(ngModel)]="telemetrySearch"
                                    (keyup)="customSearch($event)">
                             <div class="input-group-append">
                             <span class="input-group-text">

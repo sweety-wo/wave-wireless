@@ -8,6 +8,7 @@ import {AngularSvgIconModule} from 'angular-svg-icon';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 import {LoaderModule} from '../../../shared/loader/loader.module';
 import {FormsModule} from '@angular/forms';
+import {BarChartModule} from '../../../shared/bar-chart/bar-chart.module';
 
 const routes = [
     {path: '', component: DetailsComponent}
@@ -23,7 +24,8 @@ const routes = [
         AngularSvgIconModule,
         CustomMapModule,
         LoaderModule,
-        FormsModule
+        FormsModule,
+        BarChartModule
     ],
     exports: [DetailsComponent]
 })

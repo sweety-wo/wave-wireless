@@ -85,6 +85,7 @@ export class MapComponent implements OnInit, OnDestroy {
         /*this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
             this.filteredData = devices;
+            this.fnCreatePieChartData(this.filteredData);
             this.isDeviceLoading = false;
         }, (err) => {
             this.isDeviceLoading = false;
