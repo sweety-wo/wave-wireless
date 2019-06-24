@@ -10,6 +10,7 @@ import {CommonService} from '../../services/custom/common-service/common.service
 export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
 
     @ViewChild('barChart', {static: false}) barChartEl: ElementRef;
+    @Input() isModal: boolean;
 
     private chart: any;
     private healthArr: any;
@@ -27,20 +28,6 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
-        this.healthArr = [
-            {
-                label: 'CRITICAL',
-                value: 500
-            },
-            {
-                label: 'ATTENTION',
-                value: 300
-            },
-            {
-                label: 'OK',
-                value: 200
-            },
-        ];
     }
 
     ngAfterViewInit() {
@@ -101,9 +88,14 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
             ]
         }];
 
-
         const opts: any = {
+            title: {
+                text : ' '
+            },
             credits: {
+                enabled: false,
+            },
+            legend: {
                 enabled: false,
             },
             series: seriesData,
@@ -139,9 +131,13 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
                 title: {
                     text: ''
                 },
-                min: 0,
-                max: 500,
+                tickPositions: [0, 200, 300, 500],
                 tickInterval: 100,
+                showFirstLabel: false,
+                tickmarkPlacement: 'on'
+            },
+            tooltip: {
+                xDateFormat: '<span>'  + '%l:%M %p' + '</span>'
             },
         };
         if (this.barChartEl && this.barChartEl.nativeElement) {
@@ -152,6 +148,10 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
             };
 
             this.chart = new Highcharts.Chart(opts);
+            if (this.isModal) {
+                this.chart.setSize(750, 300);
+            }
+
         }
     }
 }

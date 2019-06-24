@@ -19,6 +19,26 @@ export class LineChartComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         const opts: any = {
+            title: {
+                text : ' '
+            },
+            credits: {
+                enabled: false,
+            },
+            legend: {
+                enabled: false,
+            },
+            xAxis: {
+                title: {
+                    text: ''
+                },
+                type: 'datetime',
+                dateTimeLabelFormats: {
+                    'hour': '%l:%M %p',
+                    'minute': '%I:%M %p'
+                },
+                tickInterval: 24 * 3600 * 1000 * 5, // tickinterval for 5 days
+            },
             yAxis: {
                 title: {
                     text: ''
@@ -27,6 +47,9 @@ export class LineChartComponent implements OnInit, AfterViewInit {
             },
             min: 1,
             max : 2,
+            tooltip: {
+                xDateFormat: '%Y-%m-%d',
+            },
             series: [{
                data: [
                    {
@@ -179,6 +202,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
                 marker: {
                     symbol: 'diamond'
                 }
+
             }],
         };
 
@@ -190,6 +214,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
             };
 
             this.chart = new Highcharts.Chart(opts);
+            this.chart.setSize(750, 300);
         }
     }
 

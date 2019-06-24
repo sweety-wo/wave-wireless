@@ -22,12 +22,8 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="h-100 w-100 d-flex flex-column">
-        <div class="h-50">
-            <app-bar-chart></app-bar-chart>
-        </div>
-        <div>
-            <app-line-chart></app-line-chart>
-        </div>
+    <div class="h-100 w-100 d-flex flex-column telemetry">
+        <app-bar-chart [isModal]="true"></app-bar-chart>
+        <app-line-chart></app-line-chart>
     </div>
 </div>
