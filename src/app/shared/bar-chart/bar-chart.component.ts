@@ -133,8 +133,21 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
                 },
                 tickPositions: [0, 200, 300, 500],
                 tickInterval: 100,
+                labels: {
+                    formatter: function () {
+                        const label = this.axis.defaultLabelFormatter.call(this);
+                        if (label  === '200') {
+                            return 'OK';
+                        }
+                        if (label === '300') {
+                            return 'ATTENTION';
+                        }
+                        if (label === '500') {
+                            return 'CRITICAL';
+                        }
+                    }
+                },
                 showFirstLabel: false,
-                tickmarkPlacement: 'on'
             },
             tooltip: {
                 xDateFormat: '<span>'  + '%l:%M %p' + '</span>'

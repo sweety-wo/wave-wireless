@@ -43,7 +43,21 @@ export class LineChartComponent implements OnInit, AfterViewInit {
                 title: {
                     text: ''
                 },
-                tickInterval: 1
+                tickInterval: 1,
+                tickPositions: [0, 1, 2, 3],
+                labels: {
+                    formatter: function () {
+                        const label = this.axis.defaultLabelFormatter.call(this);
+                        if (label  === '1') {
+                            return 'OFF';
+                        }
+                        if (label === '2') {
+                            return 'ON';
+                        }
+                    },
+                },
+                showFirstLabel: false,
+                showLastLabel: false,
             },
             min: 1,
             max : 2,
@@ -200,6 +214,7 @@ export class LineChartComponent implements OnInit, AfterViewInit {
                ],
                 step: true,
                 marker: {
+                   enabled: true,
                     symbol: 'diamond'
                 }
 
