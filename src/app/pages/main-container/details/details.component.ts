@@ -9,6 +9,8 @@ import {CommonService} from '../../../services/custom/common-service/common.serv
 import {GatewayService} from '../../../services/node/gateway.service';
 import {IssueService} from '../../../services/tracker/issue/issue.service';
 import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics/telemetry-statistics.component';
+import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
+import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 
 @Component({
     selector: 'app-details',
@@ -36,61 +38,18 @@ export class DetailsComponent implements OnInit {
                 private _common: CommonService,
                 private _gateway: GatewayService,
                 private _issue: IssueService,
+                private _deviceImageService: DeviceImageService,
                 private _modalService: NgbModal) {
-        // ToDo: Remove all lines below once API gives proper data
-        this.device = {
-            'id': 'a7504eb0-04ffb381-5e363c9b',
-            'phase': 'PRODUCTION',
-            'connection': 'CONNECTED',
-            'typeId': 'd9cd02a2',
-            'gatewayId': '00000000-04714477',
-            'oem': 'SOLiD',
-            'model': 'R6',
-            'version': '6.3',
-            'mode': 'DUPLEX',
-            'name': 'TIC - Park Place Irvine SOLiD Rel 6 DMS1200',
-            'description': 'The Irvine Company - Park Place Aparments SOLiD Rel6 DMS1200',
-            'health': 300,
-            'defaultHealth': 200,
-            'data': {
-                'lat': [
-                    '28.4170294'
-                ],
-                'long': [
-                    '-81.4289348'
-                ],
-                'name': ['Noah Place'],
-                'owner': ['Building Systems Inc'],
-                'address': ['385 Noah Place Suite 878'],
-                'tel': ['875-255-7945'],
-                'email': ['info@form.com'],
-                'photo': ['assets/images/pexels-photo-374023.jpeg'],
-            },
-            'properties': {
-                'https': false,
-                'port': 80,
-                'vaultId': 'a7504eb0-0a91d17b',
-                'ip': '192.168.1.3'
-            }
-        };
-        this.gatewayId = this.device.gatewayId;
-        this.getGateway(this.gatewayId);
-        this.fnGetCoordinates([this.device]);
     }
 
     ngOnInit() {
         this._route.params.subscribe((params: any) => {
             if (params.hasOwnProperty('id')) {
                 this.deviceId = params['id'];
-                // ToDo: Uncomment once API gives proper data
-                // this.getDevice(this.deviceId);
-                // ToDo: Remove from below once API gives proper data
-                this.getIssues();
-                this.getDeviceGhosts('00000000-0a628d7c-a97077d0');
+                 this.getDevice(this.deviceId);
             }
         });
     }
-
 
     fnGetCoordinates(data) {
         const coordinates = this._common.setLatLng(data);
@@ -100,16 +59,25 @@ export class DetailsComponent implements OnInit {
 
     getDevice(deviceId) {
         this.isDeviceLoading = true;
+        this.isIssueLoading = true;
+        this.isGhostLoading = true;
         this._device.getDevice(deviceId).subscribe((device) => {
             this.device = device;
+            this.getDeviceImage();
             this.gatewayId = this.device.gatewayId;
             this.getGateway(this.gatewayId);
             this.getIssues();
-            this.getDeviceGhosts(deviceId);
-            this.fnGetCoordinates(this.device);
+            this.getDeviceGhosts(this.deviceId);
+            this.fnGetCoordinates([this.device]);
         }, (err) => {
             this.isDeviceLoading = false;
         });
+    }
+
+    async getDeviceImage() {
+        if (this.device.data && this.device.data.photo && this.device.data.photo[0]) {
+            this.device.photo = await this._deviceImageService.getDeviceImage(this.device.data.photo[0]);
+        }
     }
 
     getGateway(gatewayId) {
@@ -117,11 +85,11 @@ export class DetailsComponent implements OnInit {
             this.device.gateway = gateway;
             this.isDeviceLoading = false;
         }, (err) => {
+            this.isDeviceLoading = false;
         });
     }
 
     getIssues(query?: string) {
-        this.isIssueLoading = true;
         this._issue.getIssues(query).subscribe((issues) => {
             this.isIssueLoading = false;
             this.issues = issues;
@@ -139,7 +107,6 @@ export class DetailsComponent implements OnInit {
 
 
     getDeviceGhosts(deviceId) {
-        this.isGhostLoading = true;
         this._device.getDeviceGhosts(deviceId).subscribe((ghosts) => {
             this.ghosts = ghosts;
             this.filteredGhosts = ghosts;
@@ -209,7 +176,12 @@ export class DetailsComponent implements OnInit {
     openTelemetryStatisticsModal(ghost) {
         const modal: NgbModalRef = this._modalService.open(TelemetryStatisticsComponent, { size: 'lg', backdrop: 'static' });
         modal.componentInstance.ghost = ghost;
+    }
 
+    openPhotoGalleryModal(photo, name) {
+        const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
+        modal.componentInstance.photoURL = photo;
+        modal.componentInstance.title = name;
     }
 
 

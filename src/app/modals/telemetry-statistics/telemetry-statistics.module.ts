@@ -5,7 +5,6 @@ import {BarChartModule} from '../../shared/bar-chart/bar-chart.module';
 import {LineChartModule} from '../../shared/line-chart/line-chart.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 
-
 @NgModule({
     declarations: [TelemetryStatisticsComponent],
     imports: [

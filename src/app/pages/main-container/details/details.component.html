@@ -27,15 +27,22 @@
         <!-- left-bottom-container -->
         <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card">
             <!-- Header -->
-            <div class="header px-3 py-2 d-flex justify-content-between align-items-center">
+            <div class="header px-3 py-2 d-flex justify-content-between align-items-center" *ngIf="device && !isDeviceLoading">
                 <label class="m-0 h3">Details</label>
-                <div *ngIf="device && device.data && device.data.photo && device.data.photo[0]">
-                    <img [src]="device.data.photo[0]" class="rounded-circle pull-right" width="30" height="30">
+                <div>
+                    <img src="assets/images/icons/round-error-symbol.svg" width="30" height="30"
+                         class="event-none rounded-circle"
+                         *ngIf="!device.photo">
+                    <img [src]="device.photo" width="30" height="30"
+                         *ngIf="device.photo"
+                         class="cursor-pointer pull-right rounded-circle"
+                         (click)="openPhotoGalleryModal(device.photo, device.name)">
                 </div>
             </div>
             <!-- Body -->
             <div class="body px-3 py-2 overflow-auto">
-                <ng-container *ngIf="device">
+                <ng-container *ngIf="device && !isDeviceLoading">
+
                     <div class="d-flex align-items-center mb-3"
                          *ngIf="device.properties && device.properties.vaultId">
                         <svg-icon src="assets/images/icons/fingerprint.svg" class="fill-dark mr-2"
@@ -221,7 +228,8 @@
                             <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
                             <div class="flex-grow-1 text-right">
                                 <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
-                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }" (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
+                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                                          (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
                             </div>
                         </div>
                     </ng-container>

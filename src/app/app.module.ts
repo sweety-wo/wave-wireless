@@ -17,6 +17,8 @@ import {AuthGuardService} from './services/custom/auth-guard-service/auth-guard.
 import {StartupService} from './services/custom/startup-service/startup.service';
 import {TelemetryStatisticsComponent} from './modals/telemetry-statistics/telemetry-statistics.component';
 import {TelemetryStatisticsModule} from './modals/telemetry-statistics/telemetry-statistics.module';
+import {PhotoGalleryComponent} from './modals/photo-gallery/photo-gallery.component';
+import {PhotoGalleryModule} from './modals/photo-gallery/photo-gallery.module';
 
 
 export function init(startup: StartupService): Function {
@@ -26,7 +28,8 @@ export function init(startup: StartupService): Function {
 @NgModule({
     declarations: [
         AppComponent,
-        FooterComponent
+        FooterComponent,
+        PhotoGalleryComponent
     ],
     imports: [
         BrowserModule,
@@ -37,7 +40,8 @@ export function init(startup: StartupService): Function {
         FormlyModule.forRoot(),
         NgbModule,
         FormlyBootstrapModule,
-        TelemetryStatisticsModule
+        TelemetryStatisticsModule,
+        PhotoGalleryModule
     ],
     providers: [
         CookieService,
@@ -47,7 +51,7 @@ export function init(startup: StartupService): Function {
         AuthGuardService,
         NotAuthGuardService
     ],
-    entryComponents: [TelemetryStatisticsComponent],
+    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

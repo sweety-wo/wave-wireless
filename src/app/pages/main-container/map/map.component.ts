@@ -28,8 +28,6 @@ export class MapComponent implements OnInit, OnDestroy {
     constructor(private _device: DeviceService,
                 private _common: CommonService,
                 private _auth: AuthService) {
-        // ToDo: Remove once API gives proper data
-        this.deviceData = Constant.deviceData;
         this.isDeviceLoading = true;
         this.centerLat = 38.89511;
         this.centerLong = -77.03637;
@@ -81,15 +79,14 @@ export class MapComponent implements OnInit, OnDestroy {
 
     getDevices(query?: string) {
         this.isDeviceLoading = false;
-        // ToDo: Uncomment once API gives proper data
-        /*this._device.getDevices(query).subscribe((devices) => {
+        this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
             this.filteredData = devices;
             this.fnCreatePieChartData(this.filteredData);
             this.isDeviceLoading = false;
         }, (err) => {
             this.isDeviceLoading = false;
-        });*/
+        });
     }
 
 

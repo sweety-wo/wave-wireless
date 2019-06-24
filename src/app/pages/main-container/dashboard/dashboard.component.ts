@@ -7,6 +7,9 @@ import {ClusterService} from '../../../services/node/cluster.service';
 import {Constant} from '../../../constant/constant';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
+import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics/telemetry-statistics.component';
+import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -34,7 +37,8 @@ export class DashboardComponent implements OnInit {
                 private _cluster: ClusterService,
                 private _common: CommonService,
                 private _deviceImageService: DeviceImageService,
-                private _toastr: ToastrService) {
+                private _toastr: ToastrService,
+                private _modalService: NgbModal) {
         this.toogleAll = true;
         this.isDataLoading = true;
         this.centerLat = 38.89511;
@@ -71,8 +75,7 @@ export class DashboardComponent implements OnInit {
 
     getDevices(query?: string) {
         this._device.getDevices(query).subscribe((devices: any) => {
-            _.forEach(devices, (device) => {
-                console.log('device', device);
+            _.forEach(devices, (async (device) => {
                 if (device.gatewayId) {
                     device.gateway = _.find(this.gatewayData, {'id': device.gatewayId});
                 } else {
@@ -82,9 +85,12 @@ export class DashboardComponent implements OnInit {
                     return cluster.deviceIds.includes(device.id);
                 });
                 device.clusters = clusterArr.length ? clusterArr : [];
-            });
+                if (device.data && device.data.photo && device.data.photo[0]) {
+                    device.photo = await this._deviceImageService.getDeviceImage(device.data.photo[0]);
+                    return device;
+                }
+            }));
             this.deviceData = devices;
-            this.fnInitDeviceImages(this.deviceData);
             this.okCount = this.fnGetHealthCounts(200);
             this.attentionCount = this.fnGetHealthCounts(300);
             this.criticalCount = this.fnGetHealthCounts(500);
@@ -97,39 +103,6 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    fnInitDeviceImages(deviceData) {
-        const count = 0;
-        if (count < deviceData.length) {
-            this.fnGetDeviceImages(count, deviceData);
-        } else {
-            console.log('end true');
-            console.log('this.deviceData', this.deviceData);
-        }
-    }
-
-    fnGetDeviceImages(count, deviceData) {
-        if (deviceData[count].data && deviceData[count].data.photo && deviceData[count].data.photo[0]) {
-            this._deviceImageService.getDeviceImage(deviceData[count].data.photo[0]).subscribe((imageUrl: any) => {
-                console.log('imageUrl', imageUrl);
-                deviceData[count].photo = imageUrl.url;
-                count++;
-                if (count < deviceData.length) {
-                    this.fnGetDeviceImages(count, deviceData);
-                } else {
-                    console.log('end');
-                    console.log('this.deviceData', this.deviceData);
-                }
-            });
-        } else {
-            count++;
-            if (count < deviceData.length) {
-                this.fnGetDeviceImages(count, deviceData);
-            } else {
-                console.log('end');
-                console.log('this.deviceData', this.deviceData);
-            }
-        }
-    }
 
     getGateways(query?: string) {
         this._gateway.getGateways(query).subscribe((gateways) => {
@@ -183,6 +156,12 @@ export class DashboardComponent implements OnInit {
 
     isAllChecked() {
         return this.deviceData.every(o => o.state);
+    }
+
+    openPhotoGalleryModal(photo, name) {
+        const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
+        modal.componentInstance.photoURL = photo;
+        modal.componentInstance.title = name;
     }
 
 }
