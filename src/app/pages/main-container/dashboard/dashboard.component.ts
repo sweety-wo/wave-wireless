@@ -9,6 +9,7 @@ import {CommonService} from '../../../services/custom/common-service/common.serv
 import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
+import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -93,7 +94,12 @@ export class DashboardComponent implements OnInit {
             this.okCount = this.fnGetHealthCounts(200);
             this.attentionCount = this.fnGetHealthCounts(300);
             this.criticalCount = this.fnGetHealthCounts(500);
-            this.isDataLoading = false;
+            if (this.deviceData.length > 0) {
+                const deviceAttrCount = 0;
+                this.fnGetDeviceAttributes(this.deviceData, deviceAttrCount);
+            } else {
+                this.isDataLoading = false;
+            }
         }, (err) => {
             if (err && err.error && err.error.message) {
                 this._toastr.error(err.error.message);
@@ -102,6 +108,39 @@ export class DashboardComponent implements OnInit {
         });
     }
 
+    fnGetDeviceAttributes(deviceData, deviceAttrCount) {
+        if (deviceAttrCount < deviceData.length) {
+            this._device.getDeviceGhosts(deviceData[deviceAttrCount].id).subscribe((ghostObj) => {
+                const enabledObj = {
+                    both: false,
+                    one: false,
+                    none: false,
+                    missingAttr: false,
+                };
+                if (ghostObj['700_rf_switch'] || ghostObj['800_rf_switch']) {
+                    if (ghostObj['700_rf_switch'].reported === 'OFF' && ghostObj['800_rf_switch'].reported === 'OFF') {
+                        enabledObj.none = true;
+                    } else if (ghostObj['700_rf_switch'].reported === 'ON' && ghostObj['800_rf_switch'].reported === 'ON') {
+                        enabledObj.both = true;
+                    } else {
+                        enabledObj.one = true;
+                    }
+                } else {
+                    enabledObj.missingAttr = true;
+                }
+                deviceData[deviceAttrCount].deviceEnabledObj = enabledObj;
+                deviceAttrCount++;
+                if (deviceAttrCount < deviceData.length) {
+                    this.fnGetDeviceAttributes(deviceData, deviceAttrCount);
+                } else {
+                    this.isDataLoading = false;
+                    console.log('this.deviceData', this.deviceData);
+                }
+            });
+        } else {
+            this.isDataLoading = false;
+        }
+    }
 
     getGateways(query?: string) {
         this._gateway.getGateways(query).subscribe((gateways) => {
@@ -161,6 +200,19 @@ export class DashboardComponent implements OnInit {
         const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
         modal.componentInstance.photoURL = photo;
         modal.componentInstance.title = name;
+    }
+
+    openAttributeToggleConfirmationModal(event) {
+        console.log('called function', event);
+        const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent, { size: 'sm', backdrop: 'static', centered: true });
+        modal.result.then((result) => {
+            console.log(`Closed with: ${result}`);
+        }, (reason) => {
+            console.log(`Dismissed ${reason}`);
+        });
+        modal.componentInstance.doEnable = event.doEnable;
+        modal.componentInstance.dataId = event.dataObj.id;
+
     }
 
 }

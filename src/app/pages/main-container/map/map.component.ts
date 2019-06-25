@@ -98,8 +98,9 @@ export class MapComponent implements OnInit, OnDestroy {
 
 
     onConnectionLost(responseObject) {
+        const self = this;
         if (responseObject.errorCode !== 0) {
-            this.fnInitializeWebSockets();
+            self.fnInitializeWebSockets();
         }
     }
 

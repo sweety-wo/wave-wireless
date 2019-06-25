@@ -3,12 +3,13 @@ import {CommonModule} from '@angular/common';
 import {RouterModule} from '@angular/router';
 
 import {DashboardComponent} from './dashboard.component';
-import {ToggleSwitchModule} from '../../../shared/toggle-switch/toggle-switch.module';
 import {NgbAccordionModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {AngularSvgIconModule} from 'angular-svg-icon';
 import {FormsModule} from '@angular/forms';
 import {LoaderModule} from '../../../shared/loader/loader.module';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
+import {BtnGroupToggleModule} from '../../../shared/btn-group-toggle/btn-group-toggle.module';
+import {AttributeToggleConfirmationModule} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.module';
 
 const routes = [
     {path: '', component: DashboardComponent}
@@ -22,10 +23,11 @@ const routes = [
         FormsModule,
         LoaderModule,
         CustomMapModule,
-        ToggleSwitchModule,
+        BtnGroupToggleModule,
         NgbDropdownModule,
         NgbAccordionModule,
-        AngularSvgIconModule
+        AngularSvgIconModule,
+        AttributeToggleConfirmationModule
     ],
     exports: [DashboardComponent]
 })

@@ -35,5 +35,12 @@ export class DeviceService {
         return this._http.get(environment.API_URL + `node/devices/${deviceId}/ghosts`);
     }
 
+    /**
+     * modify device ghost.
+     * */
+    modifyDeviceGhost(deviceId, payload) {
+        return this._http.patch(environment.API_URL + `node/devices/${deviceId}/ghosts`, payload);
+    }
+
 
 }

@@ -1,0 +1,23 @@
+<div class="btn-group btn-group-toggle" *ngIf="type !== 'header'"
+     data-toggle="buttons">
+    <label class="btn btn-sm btn-primary"
+           *ngFor="let btnGroup of btnGroupArr"
+           [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}">
+        <input type="radio" name="options" autocomplete="off"
+               (click)="fnToggle(btnGroup)"
+               [checked]="selectedIndex === btnGroup.itemIndex"> {{btnGroup.fieldTitle}}
+    </label>
+</div>
+
+<div class="btn-group btn-group-toggle headerToggle" *ngIf="type === 'header'"
+     data-toggle="buttons">
+    <label class="btn btn-primary">
+        <input type="radio" name="options" autocomplete="off" (click)="fnToggleAll(true)"> ON
+    </label>
+    <label class="btn btn-primary neutral active">
+        <input type="radio" class="neutral" name="options" autocomplete="off" checked> N/A
+    </label>
+    <label class="btn btn-primary">
+        <input type="radio" name="options" autocomplete="off" (click)="fnToggleAll(false)"> OFF
+    </label>
+</div>
