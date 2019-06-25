@@ -11,6 +11,7 @@ import {IssueService} from '../../../services/tracker/issue/issue.service';
 import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics/telemetry-statistics.component';
 import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
+import {TimelineComponent} from '../../../modals/timeline/timeline.component';
 
 @Component({
     selector: 'app-details',
@@ -182,6 +183,11 @@ export class DetailsComponent implements OnInit {
         const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
         modal.componentInstance.photoURL = photo;
         modal.componentInstance.title = name;
+    }
+
+    openTimelineModal(issue) {
+        const modal: NgbModalRef = this._modalService.open(TimelineComponent, { size: 'lg', backdrop: 'static' });
+        modal.componentInstance.issue = issue;
     }
 
 

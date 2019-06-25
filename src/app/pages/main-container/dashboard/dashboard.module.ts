@@ -8,7 +8,7 @@ import {NgbAccordionModule, NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap'
 import {AngularSvgIconModule} from 'angular-svg-icon';
 import {FormsModule} from '@angular/forms';
 import {LoaderModule} from '../../../shared/loader/loader.module';
-import {CustomMapModule} from "../../../shared/custom-map/custom-map.module";
+import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 
 const routes = [
     {path: '', component: DashboardComponent}

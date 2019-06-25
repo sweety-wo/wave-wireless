@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, View
 import {DropdownOptions} from '../../constant/dropdown-options';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
-import {Constant} from '../../constant/constant';
 
 @Component({
     selector: 'app-search-bar',
@@ -13,7 +12,7 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
     @ViewChild('searchInput', {static: false}) searchInput: ElementRef;
     @Output() searchChangeEvent = new EventEmitter<any>();
 
-    filterObj = {};
+    filterObj: any;
     searchObj: any;
     selectedSearchOption: string;
     searchOptions: any;

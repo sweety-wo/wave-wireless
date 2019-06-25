@@ -8,7 +8,6 @@ import {Constant} from '../../../constant/constant';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics/telemetry-statistics.component';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 
 @Component({

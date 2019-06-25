@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, HostListener, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as Highcharts from 'highcharts';
 import {CommonService} from '../../services/custom/common-service/common.service';
 
@@ -13,7 +13,6 @@ export class BarChartComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() isModal: boolean;
 
     private chart: any;
-    private healthArr: any;
 
     constructor(private _common: CommonService) {
     }

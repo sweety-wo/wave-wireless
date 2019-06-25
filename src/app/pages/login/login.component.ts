@@ -69,6 +69,7 @@ export class LoginComponent implements OnInit {
         this._security.getAuthenticationParameters(this.payloadObj.type, this.payloadObj.identifier)
             .subscribe((res: any) => {
                 res.fields.forEach((fieldObj) => {
+                    fieldObj.templateOptions.placeholder = fieldObj.templateOptions.label;
                     fieldObj.templateOptions.label = '';
                     fieldObj.templateOptions.description = '';
                 });

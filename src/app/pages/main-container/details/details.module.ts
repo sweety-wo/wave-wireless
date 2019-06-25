@@ -10,6 +10,8 @@ import {LoaderModule} from '../../../shared/loader/loader.module';
 import {FormsModule} from '@angular/forms';
 import {BarChartModule} from '../../../shared/bar-chart/bar-chart.module';
 import {TelemetryStatisticsModule} from '../../../modals/telemetry-statistics/telemetry-statistics.module';
+import {PhotoGalleryModule} from '../../../modals/photo-gallery/photo-gallery.module';
+import {TimelineModule} from '../../../modals/timeline/timeline.module';
 
 const routes = [
     {path: '', component: DetailsComponent}
@@ -27,7 +29,9 @@ const routes = [
         LoaderModule,
         FormsModule,
         BarChartModule,
-        TelemetryStatisticsModule
+        TelemetryStatisticsModule,
+        PhotoGalleryModule,
+        TimelineModule
     ],
     exports: [DetailsComponent]
 })

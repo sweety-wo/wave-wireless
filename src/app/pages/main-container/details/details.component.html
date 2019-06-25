@@ -182,7 +182,7 @@
                             <small class="w-25 m-0 mr-2">{{issue && issue.createdAt}}</small>
                             <div class="flex-grow-1 text-right">
                                 <svg-icon src="assets/images/icons/chat.svg" class="cursor-pointer"
-                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }" (click)="openTimelineModal(issue)"></svg-icon>
                             </div>
                         </div>
                     </ng-container>

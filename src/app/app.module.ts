@@ -19,6 +19,8 @@ import {TelemetryStatisticsComponent} from './modals/telemetry-statistics/teleme
 import {TelemetryStatisticsModule} from './modals/telemetry-statistics/telemetry-statistics.module';
 import {PhotoGalleryComponent} from './modals/photo-gallery/photo-gallery.component';
 import {PhotoGalleryModule} from './modals/photo-gallery/photo-gallery.module';
+import {TimelineComponent} from './modals/timeline/timeline.component';
+import {TimelineModule} from './modals/timeline/timeline.module';
 
 
 export function init(startup: StartupService): Function {
@@ -41,7 +43,8 @@ export function init(startup: StartupService): Function {
         NgbModule,
         FormlyBootstrapModule,
         TelemetryStatisticsModule,
-        PhotoGalleryModule
+        PhotoGalleryModule,
+        TimelineModule
     ],
     providers: [
         CookieService,
@@ -51,7 +54,7 @@ export function init(startup: StartupService): Function {
         AuthGuardService,
         NotAuthGuardService
     ],
-    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent],
+    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent, TimelineComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
