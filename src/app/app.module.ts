@@ -22,7 +22,6 @@ import {PhotoGalleryModule} from './modals/photo-gallery/photo-gallery.module';
 import {TimelineComponent} from './modals/timeline/timeline.component';
 import {TimelineModule} from './modals/timeline/timeline.module';
 
-
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();
 }
@@ -44,7 +43,7 @@ export function init(startup: StartupService): Function {
         FormlyBootstrapModule,
         TelemetryStatisticsModule,
         PhotoGalleryModule,
-        TimelineModule
+        TimelineModule,
     ],
     providers: [
         CookieService,

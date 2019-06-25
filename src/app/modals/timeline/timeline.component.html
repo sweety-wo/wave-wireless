@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <div class="d-flex align-items-center ju flex-grow-1 mb-3" *ngIf="issue">
+    <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="issue">
         <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
               *ngIf="issue && issue.labels"
               [ngStyle]="getIssuesLabelColor(issue.labels[0])">{{issue.labels[0].title.toUpperCase()}}</span>
@@ -9,28 +9,107 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div class="modal-body">
-    <div class="py-2 mt-4 mb-4">
-        <div class="row no-gutters">
-            <div class="col-sm-1 text-center flex-column d-none d-sm-flex">
+<div class="modal-body timeline-modal-body">
+    <div class="py-2 mt-4 mb-4" *ngIf="!isCommentLoading">
+        <div *ngIf="firstComment" class="d-flex flex-column">
+            <div class="d-flex flex-grow-1 align-items-center" (click)="firstComment.isDetailClicked=true" >
+                <div class="flex-column d-none d-sm-flex">
+                    <div class="row h-50">
+                        <div class="col border-right">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <h5 class="m-2">
+                        <i class="fa fa-fw fa-clock-o"></i>
+                    </h5>
+                    <div class="row h-50">
+                        <div class="col border-right">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-grow-1">
+                    <span class="text-muted">{{firstComment.createdAt}}</span>
+                    <span class="text-muted ml-auto">{{firstComment.humanDateCreated}}</span>
+                </div>
+            </div>
+            <div *ngIf="firstComment">
+                <md-editor name="Content"
+                           [(ngModel)]="firstComment.mdBody"
+                           [height]="'200px'"
+                           [mode]="preview"
+                           hideToolbar="true"
+                           required
+                           maxlength="500">
+                </md-editor>
+            </div>
+        </div>
+        <div class="d-flex flex-grow-1 align-items-center" (click)="isCommentSectionClicked = true"
+             *ngIf="totalComments && !isCommentSectionClicked">
+            <div class="flex-column d-none d-sm-flex">
                 <div class="row h-50">
                     <div class="col border-right">&nbsp;</div>
                     <div class="col">&nbsp;</div>
                 </div>
                 <h5 class="m-2">
-                    <i class="fa fa-clock-o"></i>
+                    <i class="fa fa-fw fa-comments"></i>
                 </h5>
                 <div class="row h-50">
                     <div class="col border-right">&nbsp;</div>
                     <div class="col">&nbsp;</div>
                 </div>
             </div>
-            <div class="col d-flex align-items-center">
-                <span class="mr-5 text-muted">1 hour ago</span>
-                <span>The 700 Mhz donor input changed to  -20dbm</span>
-
+            <div class="d-flex flex-grow-1">
+                <span class="text-muted">{{totalComments}} more comments</span>
             </div>
         </div>
+        <ng-container  *ngIf="comments && isCommentSectionClicked">
+            <div class="d-flex flex-grow-1 align-items-center" *ngFor="let comment of comments">
+                <div class="flex-column d-none d-sm-flex">
+                    <div class="row h-50">
+                        <div class="col border-right">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                    <h5 class="m-2">
+                        <i class="fa fa-fw fa-clock-o"></i>
+                    </h5>
+                    <div class="row h-50">
+                        <div class="col border-right">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-grow-1">
+                    <span class="text-muted">{{comment.createdAt}}</span>
+                    <span class="text-muted ml-auto">{{comment.humanDateCreated}}</span>
+                </div>
+            </div>
+        </ng-container>
+        <div class="d-flex flex-grow-1 align-items-center" *ngIf="lastComment">
+            <div class="flex-column d-none d-sm-flex">
+                <div class="row h-50">
+                    <div class="col border-right">&nbsp;</div>
+                    <div class="col">&nbsp;</div>
+                </div>
+                <h5 class="m-2">
+                    <i class="fa fa-fw fa-clock-o"></i>
+                </h5>
+                <div class="row h-50">
+                    <div class="col border-right">&nbsp;</div>
+                    <div class="col">&nbsp;</div>
+                </div>
+            </div>
+            <div class="d-flex flex-grow-1">
+                <span class="text-muted">{{lastComment.createdAt}}</span>
+                <span class="text-muted ml-auto">{{lastComment.humanDateCreated}}</span>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isCommentLoading" class="d-flex align-items-center w-100 h-100 justify-content-center">
+        <app-loader></app-loader>
+    </div>
+</div>
+<div class="modal-footer timeline-modal-footer">
+    <div class="d-flex w-100">
+        <input type="text" #commentInput class="form-control w-75">
+        <button class="btn btn-primary ml-auto w-20" type="button">Comment</button>
     </div>
 </div>
 

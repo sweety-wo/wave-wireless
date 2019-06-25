@@ -186,7 +186,7 @@ export class DetailsComponent implements OnInit {
     }
 
     openTimelineModal(issue) {
-        const modal: NgbModalRef = this._modalService.open(TimelineComponent, { size: 'lg', backdrop: 'static' });
+        const modal: NgbModalRef = this._modalService.open(TimelineComponent, { size: 'lg', backdrop: 'static'});
         modal.componentInstance.issue = issue;
     }
 

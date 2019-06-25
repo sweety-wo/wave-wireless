@@ -20,4 +20,11 @@ export class IssueService {
         }
         return this._http.get(url);
     }
+
+    /**
+     * Get issue comments.
+     * */
+    getIssueComments(issueId: string) {
+        return this._http.get(environment.API_URL + `tracker/issues/${issueId}/comments?perPage=0&state=open`);
+    }
 }
