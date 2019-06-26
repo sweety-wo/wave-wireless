@@ -21,6 +21,8 @@ import {PhotoGalleryComponent} from './modals/photo-gallery/photo-gallery.compon
 import {PhotoGalleryModule} from './modals/photo-gallery/photo-gallery.module';
 import {TimelineComponent} from './modals/timeline/timeline.component';
 import {TimelineModule} from './modals/timeline/timeline.module';
+import { AttributeToggleConfirmationComponent } from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
+import {AttributeToggleConfirmationModule} from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.module';
 
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();
@@ -44,6 +46,7 @@ export function init(startup: StartupService): Function {
         TelemetryStatisticsModule,
         PhotoGalleryModule,
         TimelineModule,
+        AttributeToggleConfirmationModule
     ],
     providers: [
         CookieService,
@@ -53,7 +56,7 @@ export function init(startup: StartupService): Function {
         AuthGuardService,
         NotAuthGuardService
     ],
-    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent, TimelineComponent],
+    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent, TimelineComponent, AttributeToggleConfirmationComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

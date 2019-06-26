@@ -51,9 +51,9 @@
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                         <span class="text-white ml-2">{{criticalCount}}</span>
                     </label>
-                    <app-toggle-switch [(toggled)]="toogleAll" size="large" theme="light" key="isTrue"
-                                       [(dataArr)]="deviceData"
-                                       type="true"></app-toggle-switch>
+                    <app-btn-group-toggle *ngIf="selectedDevices.length"
+                                          type="header"
+                                          [dataObj]="{}"></app-btn-group-toggle>
                 </div>
             </div>
 
@@ -112,8 +112,9 @@
                                                       class="cursor-pointer mr-3"
                                                       routerLink="/device/{{obj.id}}"
                                                       [svgStyle]="{ 'height.px':24, 'width.px':24}"></svg-icon>
-                                            <app-toggle-switch [(toggled)]="obj.isTrue"
-                                                               size="small"></app-toggle-switch>
+                                            <app-btn-group-toggle *ngIf="!obj.deviceEnabledObj.missingAttr"
+                                                                  (toggledChange)="openAttributeToggleConfirmationModal($event)"
+                                                              [(dataObj)]="obj"></app-btn-group-toggle>
                                         </div>
                                     </div>
                                 </ng-template>

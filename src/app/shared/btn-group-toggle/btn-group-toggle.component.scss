@@ -1,0 +1,26 @@
+.btn-group-toggle {
+    label {
+        background: transparent;
+        color: black;
+        font-weight: 700;
+    }
+
+    label.neutral {
+        cursor: not-allowed;
+        input {
+            pointer-events: none;
+        }
+    }
+}
+
+.btn-group-toggle:not(.headerToggle) {
+    label {
+        font-size: 12px;
+    }
+}
+
+.btn-group-toggle.headerToggle {
+    label {
+        color: white;
+    }
+}

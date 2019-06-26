@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <div class="d-flex align-items-center ju flex-grow-1 mb-3">
+        <h4 class="modal-title">{{doEnable ? 'Enable' : 'Disable'}} Switch</h4>
+    </div>
+    <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="h-100 w-100 d-flex flex-column">
+        <label>Please select which switch do you want to {{doEnable ? 'enable' : 'disable'}}?</label>
+        <div class="my-2" *ngFor="let switchObj of switchArr">
+            <label [for]="switchObj.label" class="check-input">
+                <input type="radio" [id]="switchObj.label" class="mr-2"
+                       name="switch" [value]="switchObj.value"
+                       [(ngModel)]="selectedSwitch">
+                {{switchObj.label}}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-link pull-right" (click)="activeModal.dismiss('Cross click')">Cancel</button>
+    <button class="btn btn-primary pull-right"
+            [disabled]="selectedSwitch === null"
+            (click)="fnToggleAttribute()">{{doEnable ? 'Enable' : 'Disable'}}</button>
+</div>
