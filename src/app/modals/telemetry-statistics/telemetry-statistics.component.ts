@@ -14,8 +14,6 @@ export class TelemetryStatisticsComponent implements OnInit {
     }
 
     ngOnInit() {
-
-
     }
 
     getGhostHealthDetail(health) {

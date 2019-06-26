@@ -1,9 +1,13 @@
 <div class="modal-header">
-    <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="issue">
+    <div class="d-flex align-items-center flex-grow-1" *ngIf="issue">
         <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
               *ngIf="issue && issue.labels"
               [ngStyle]="getIssuesLabelColor(issue.labels[0])">{{issue.labels[0].title.toUpperCase()}}</span>
-        <h4 class="modal-title">{{issue.title}}</h4>
+        <h4 class="modal-title mr-2">{{issue.title}}</h4>
+        <span (click)="isCommentSectionClicked= !isCommentSectionClicked" *ngIf="comments"
+              [title]="isCommentSectionClicked ? 'Collapse all Comments': 'Expand all Comments' ">
+                    <i class="fa fa-2x" [ngClass]="isCommentSectionClicked ? 'fa-minus-circle': 'fa-plus-circle'"></i>
+        </span>
     </div>
     <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -11,37 +15,74 @@
 </div>
 <div class="modal-body timeline-modal-body">
     <div class="py-2 mt-4 mb-4" *ngIf="!isCommentLoading">
+
+        <!--First comment start-->
         <div *ngIf="firstComment" class="d-flex flex-column">
-            <div class="d-flex flex-grow-1 align-items-center" (click)="firstComment.isDetailClicked=true" >
+            <div class="d-flex flex-grow-1 align-items-center"
+                 (click)="firstComment.isDetailClicked= !firstComment.isDetailClicked">
                 <div class="flex-column d-none d-sm-flex">
                     <div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                     <h5 class="m-2">
-                        <i class="fa fa-fw fa-clock-o"></i>
+                        <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(firstComment)"></i>
+                        <i class="fa fa-fw fa-tag" *ngIf="firstComment.commentHasLabels === true"></i>
+                        <i class="fa fa-fw fa-user" *ngIf="firstComment.commentHasParticipants === true"></i>
+                        <i class="fa fa-fw fa-user-circle-o" *ngIf="firstComment.commentHasAssignees === true"></i>
                     </h5>
                     <div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                 </div>
-                <div class="d-flex flex-grow-1">
+                <div class="d-flex flex-grow-1" *ngIf="checkComment(firstComment)">
                     <span class="text-muted">{{firstComment.createdAt}}</span>
                     <span class="text-muted ml-auto">{{firstComment.humanDateCreated}}</span>
                 </div>
+
+                <!--First Comment including label start-->
+                <div class="d-flex flex-grow-1" *ngIf="firstComment.commentHasLabels === true">
+                    <span>{{firstComment.mdBody}}</span>
+                    <span class="badge ellipsis-badge font-weight-normal p-2 ml-2 mr-2 text-white"
+                          *ngFor="let label of firstComment.commentLblsArr"
+                          [ngStyle]="getIssuesLabelColor(label)">{{label.title.toUpperCase()}}</span>
+                    <span [textContent]="firstComment.commentLblsArr.length === 1 ? 'label' : 'labels'"></span>
+                    <span class="ml-1">{{firstComment.createdAt}}</span>
+                    <span class="ml-auto">{{firstComment.humanDateCreated}}</span>
+                </div>
+                <!--First Comment including label end-->
+
+                <!-- First Comment including participants start-->
+                <div class="d-flex flex-grow-1" *ngIf="firstComment.commentHasParticipants === true">
+                    <span>{{firstComment.mdBody}}</span>
+                    <span class="ml-1">{{firstComment.createdAt}}</span>
+                    <span class="ml-auto">{{firstComment.humanDateCreated}}</span>
+                </div>
+                <!-- First Comment including participants end-->
+
+                <!-- First Comment including assignees start-->
+                <div class="d-flex flex-grow-1" *ngIf="firstComment.commentHasAssignees === true">
+                    <md-editor name="Content"
+                               [(ngModel)]="firstComment.mdBody"
+                               mode="preview"
+                               enablePreviewContentClick="true">
+                    </md-editor>
+                    <span class="ml-1">{{firstComment.createdAt}}</span>
+                </div>
+                <!-- First Comment including assignees end-->
             </div>
-            <div *ngIf="firstComment">
+            <div *ngIf="firstComment.isDetailClicked && checkComment(firstComment)">
                 <md-editor name="Content"
                            [(ngModel)]="firstComment.mdBody"
-                           [height]="'200px'"
-                           [mode]="preview"
-                           hideToolbar="true"
-                           required
-                           maxlength="500">
+                           mode="preview"
+                           enablePreviewContentClick="true">
                 </md-editor>
             </div>
         </div>
+        <!--First comment end-->
+
+        <!--Multiple comments start-->
         <div class="d-flex flex-grow-1 align-items-center" (click)="isCommentSectionClicked = true"
              *ngIf="totalComments && !isCommentSectionClicked">
             <div class="flex-column d-none d-sm-flex">
@@ -61,46 +102,141 @@
                 <span class="text-muted">{{totalComments}} more comments</span>
             </div>
         </div>
-        <ng-container  *ngIf="comments && isCommentSectionClicked">
-            <div class="d-flex flex-grow-1 align-items-center" *ngFor="let comment of comments">
+        <ng-container *ngIf="comments && isCommentSectionClicked">
+            <div class="d-flex flex-column" *ngFor="let comment of comments">
+                <div class="d-flex flex-grow-1 align-items-center"
+                     (click)="comment.isDetailClicked= !comment.isDetailClicked">
+                    <div class="flex-column d-none d-sm-flex">
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                        <h5 class="m-2">
+                            <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(comment)"></i>
+                            <i class="fa fa-fw fa-tag" *ngIf="comment.commentHasLabels === true"></i>
+                            <i class="fa fa-fw fa-user" *ngIf="comment.commentHasParticipants === true"></i>
+                            <i class="fa fa-fw fa-user-circle-o" *ngIf="comment.commentHasAssignees === true"></i>
+                        </h5>
+                        <div class="row h-50">
+                            <div class="col border-right">&nbsp;</div>
+                            <div class="col">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-grow-1" *ngIf="checkComment(comment)">
+                        <span class="text-muted">{{comment.createdAt}}</span>
+                        <span class="text-muted ml-auto">{{comment.humanDateCreated}}</span>
+                    </div>
+
+                    <!--Comment including label  start-->
+                    <div class="d-flex flex-grow-1" *ngIf="comment.commentHasLabels === true">
+                        <span>{{comment.mdBody}}</span>
+                        <span class="badge ellipsis-badge font-weight-normal p-2 ml-2 mr-2 text-white"
+                              *ngFor="let label of comment.commentLblsArr"
+                              [ngStyle]="getIssuesLabelColor(label)">{{label.title.toUpperCase()}} </span>
+                        <span [textContent]="comment.commentLblsArr.length === 1 ? 'label' : 'labels'"></span>
+                        <span class="ml-1">{{comment.createdAt}}</span>
+                        <span class="ml-auto">{{comment.humanDateCreated}}</span>
+                    </div>
+                    <!--Comment including label end-->
+
+                    <!--Comment including participants start-->
+                    <div class="d-flex flex-grow-1" *ngIf="comment.commentHasParticipants === true">
+                        <span>{{comment.mdBody}}</span>
+                        <span class="ml-1">{{comment.createdAt}}</span>
+                        <span class="ml-auto">{{comment.humanDateCreated}}</span>
+                    </div>
+                    <!--Comment including participants end-->
+
+                    <!-- Comment including assignees start-->
+                    <div class="d-flex flex-grow-1" *ngIf="comment.commentHasAssignees === true">
+                        <md-editor name="Content"
+                                   [(ngModel)]="comment.mdBody"
+                                   mode="preview"
+                                   enablePreviewContentClick="true">
+                        </md-editor>
+                        <span class="ml-1">{{comment.createdAt}}</span>
+                    </div>
+                    <!-- Comment including assignees end-->
+
+                </div>
+                <div *ngIf="comment.isDetailClicked && checkComment(comment)">
+                    <md-editor name="Content"
+                               [(ngModel)]="comment.mdBody"
+                               mode="preview"
+                               enablePreviewContentClick="true">
+                    </md-editor>
+                </div>
+            </div>
+        </ng-container>
+        <!--Multiple comments end-->
+
+        <!--Last comment start-->
+        <div *ngIf="lastComment" class="d-flex flex-column">
+            <div class="d-flex flex-grow-1 align-items-center"
+                 (click)="lastComment.isDetailClicked= !lastComment.isDetailClicked">
                 <div class="flex-column d-none d-sm-flex">
                     <div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                     <h5 class="m-2">
-                        <i class="fa fa-fw fa-clock-o"></i>
+                        <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(lastComment)"></i>
+                        <i class="fa fa-fw fa-tag" *ngIf="lastComment.commentHasLabels === true"></i>
+                        <i class="fa fa-fw fa-user" *ngIf="lastComment.commentHasParticipants === true"></i>
+                        <i class="fa fa-fw fa-user-circle-o" *ngIf="lastComment.commentHasAssignees === true"></i>
                     </h5>
                     <div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                 </div>
-                <div class="d-flex flex-grow-1">
-                    <span class="text-muted">{{comment.createdAt}}</span>
-                    <span class="text-muted ml-auto">{{comment.humanDateCreated}}</span>
+                <div class="d-flex flex-grow-1" *ngIf="checkComment(lastComment)">
+                    <span class="text-muted">{{lastComment.createdAt}}</span>
+                    <span class="text-muted ml-auto">{{lastComment.humanDateCreated}}</span>
                 </div>
+
+                <!--Last Comment including label  start-->
+                <div class="d-flex flex-grow-1" *ngIf="lastComment.commentHasLabels === true">
+                    <span>{{lastComment.mdBody}}</span>
+                    <span class="badge ellipsis-badge font-weight-normal p-2  ml-2 mr-2 text-white"
+                          *ngFor="let label of lastComment.commentLblsArr"
+                          [ngStyle]="getIssuesLabelColor(label)">{{label.title.toUpperCase()}} </span>
+                    <span [textContent]="lastComment.commentLblsArr.length === 1 ? 'label ' : 'labels '"></span>
+                    <span class="ml-1">{{lastComment.createdAt}}</span>
+                    <span class="ml-auto">{{lastComment.humanDateCreated}}</span>
+                </div>
+                <!--Last Comment including label  end-->
+
+                <!--Last Comment including participants start-->
+                <div class="d-flex flex-grow-1" *ngIf="lastComment.commentHasParticipants === true">
+                    <span>{{lastComment.mdBody}}</span>
+                    <span class="ml-1">{{lastComment.createdAt}}</span>
+                    <span class="ml-auto">{{lastComment.humanDateCreated}}</span>
+                </div>
+                <!--Last Comment including participants end-->
+
+                <!-- Last Comment including assignees start-->
+                <div class="d-flex flex-grow-1" *ngIf="lastComment.commentHasAssignees === true">
+                    <md-editor name="Content"
+                               [(ngModel)]="lastComment.mdBody"
+                               mode="preview"
+                               enablePreviewContentClick="true">
+                    </md-editor>
+                    <span class="ml-1">{{lastComment.createdAt}}</span>
+                </div>
+                <!-- Last Comment including assignees end-->
             </div>
-        </ng-container>
-        <div class="d-flex flex-grow-1 align-items-center" *ngIf="lastComment">
-            <div class="flex-column d-none d-sm-flex">
-                <div class="row h-50">
-                    <div class="col border-right">&nbsp;</div>
-                    <div class="col">&nbsp;</div>
-                </div>
-                <h5 class="m-2">
-                    <i class="fa fa-fw fa-clock-o"></i>
-                </h5>
-                <div class="row h-50">
-                    <div class="col border-right">&nbsp;</div>
-                    <div class="col">&nbsp;</div>
-                </div>
-            </div>
-            <div class="d-flex flex-grow-1">
-                <span class="text-muted">{{lastComment.createdAt}}</span>
-                <span class="text-muted ml-auto">{{lastComment.humanDateCreated}}</span>
+            <div
+                *ngIf="lastComment.isDetailClicked && checkComment(lastComment)">
+                <md-editor name="Content"
+                           [(ngModel)]="lastComment.mdBody"
+                           mode="preview"
+                           enablePreviewContentClick="true">
+                </md-editor>
             </div>
         </div>
+        <!--Last comment end-->
+
     </div>
     <div *ngIf="isCommentLoading" class="d-flex align-items-center w-100 h-100 justify-content-center">
         <app-loader></app-loader>
@@ -109,7 +245,9 @@
 <div class="modal-footer timeline-modal-footer">
     <div class="d-flex w-100">
         <input type="text" #commentInput class="form-control w-75">
-        <button class="btn btn-primary ml-auto w-20" type="button">Comment</button>
+        <button class="btn btn-primary ml-auto w-20" type="button" (click)="addComment()"
+                [disabled]="!commentInput.value">Comment
+        </button>
     </div>
 </div>
 
