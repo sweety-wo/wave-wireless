@@ -44,13 +44,11 @@ export class BtnGroupToggleComponent implements OnInit {
 
   fnToggle(btnGroupObj) {
       if (btnGroupObj.fieldValue !== null && this.selectedIndex !== btnGroupObj.itemIndex) {
-          console.log('called toggle', btnGroupObj.fieldValue);
           this.toggledChange.emit({doEnable: btnGroupObj.fieldValue, dataObj: this.dataObj});
       }
   }
 
   fnToggleAll(doEnable) {
-      console.log('called toggle', doEnable);
       this.toggledChange.emit(doEnable);
   }
 

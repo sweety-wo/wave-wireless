@@ -51,7 +51,7 @@
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                         <span class="text-white ml-2">{{criticalCount}}</span>
                     </label>
-                    <app-btn-group-toggle *ngIf="selectedDevices.length"
+                    <app-btn-group-toggle [ngClass]="{'pace': !selectedDevices.length}"
                                           type="header"
                                           [dataObj]="{}"></app-btn-group-toggle>
                 </div>
@@ -75,6 +75,9 @@
                                                    (change)="checkDevice()"
                                                    [(ngModel)]="obj.state">
                                         </label>
+                                        <img src="assets/images/icons/round-error-symbol.svg"
+                                             width="20px" height="20px" class="event-none mr-3"
+                                             *ngIf="!obj.health">
                                         <svg-icon src="assets/images/icons/round-error-symbol.svg"
                                                   *ngIf="obj.health === 300"
                                                   class="cursor-pointer fill-orange mr-3"

@@ -10,6 +10,8 @@ import {DeviceImageService} from '../../../services/custom/deviceImage-service/d
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
+import {Paho} from "ng2-mqtt/mqttws31";
+import {AuthService} from "../../../services/custom/auth-service/auth.service";
 
 @Component({
     selector: 'app-dashboard',
@@ -31,6 +33,7 @@ export class DashboardComponent implements OnInit {
     searchText: string;
     centerLat: any;
     centerLong: any;
+    private _client: Paho.MQTT.Client;
 
     constructor(private _device: DeviceService,
                 private _gateway: GatewayService,
@@ -38,7 +41,8 @@ export class DashboardComponent implements OnInit {
                 private _common: CommonService,
                 private _deviceImageService: DeviceImageService,
                 private _toastr: ToastrService,
-                private _modalService: NgbModal) {
+                private _modalService: NgbModal,
+                private _auth: AuthService) {
         this.toogleAll = true;
         this.isDataLoading = true;
         this.centerLat = 38.89511;
@@ -134,7 +138,6 @@ export class DashboardComponent implements OnInit {
                     this.fnGetDeviceAttributes(deviceData, deviceAttrCount);
                 } else {
                     this.isDataLoading = false;
-                    console.log('this.deviceData', this.deviceData);
                 }
             });
         } else {
@@ -196,6 +199,69 @@ export class DashboardComponent implements OnInit {
         return this.deviceData.every(o => o.state);
     }
 
+    onConnectionLost(responseObject) {
+        const self = this;
+        if (responseObject.errorCode !== 0) {
+            self.fnInitializeDeviceWebSockets();
+        }
+    }
+
+    onMessageArrived(message) {
+        const messageJson = JSON.parse(message.payloadString);
+        const index = _.findIndex(this.deviceData, (device: any) => {
+            return device.id === messageJson.id;
+        });
+        if (index !== -1) {
+            this.fnUpdateDevices(messageJson, index, this.deviceData);
+        }
+    }
+
+    fnUpdateDevices(messageJson, index, devicesArr) {
+        if (devicesArr[index]) {
+            if (messageJson.health) {
+                devicesArr[index].health = messageJson.health;
+            }
+            if (messageJson.phase) {
+                devicesArr[index].phase = messageJson.phase;
+            }
+            if (messageJson.connection) {
+                devicesArr[index].connection = messageJson.connection;
+            }
+        }
+    }
+
+    fnInitializeDeviceWebSockets() {
+        let loginUser: any;
+        const self = this;
+        this._auth.loggedInUser.subscribe((user) => {
+            if (user) {
+                loginUser = user;
+                const webSocketId = loginUser.id.split('-')[0];
+                this._common.getWebSocketUrl('wss/node/devices/' + webSocketId)
+                    .subscribe((res: any) => {
+                        self._client = new Paho.MQTT.Client(res.url, res.clientId);
+
+                        self._client.onConnectionLost = self.onConnectionLost;
+                        self._client.onMessageArrived = self.onMessageArrived;
+
+                        const connectOptions = {
+                            onSuccess: function () {
+                                // console.log('device websocket onConnect'); // eslint-disable-line
+                                self._client.subscribe(res.topic, '');
+                            },
+                            useSSL: true,
+                            timeout: 3,
+                            mqttVersion: 4,
+                            onFailure: function () {
+                                /*console.log("device websocket onFail"); //eslint-disable-line*/
+                            }
+                        };
+                        self._client.connect(connectOptions);
+                    });
+            }
+        });
+    }
+
     openPhotoGalleryModal(photo, name) {
         const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
         modal.componentInstance.photoURL = photo;
@@ -203,12 +269,32 @@ export class DashboardComponent implements OnInit {
     }
 
     openAttributeToggleConfirmationModal(event) {
-        console.log('called function', event);
         const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent, { size: 'sm', backdrop: 'static', centered: true });
         modal.result.then((result) => {
-            console.log(`Closed with: ${result}`);
+           const index  = _.findIndex(this.deviceData, {'id': result.deviceId});
+           if (index !== -1) {
+               const enabledObj = {
+                   both: false,
+                   one: false,
+                   none: false,
+                   missingAttr: false,
+               };
+               switch (result.selectedSwitch) {
+                   case '700':
+                   case '800':
+                       enabledObj.one = true;
+                       break;
+                   case 'both':
+                       if (result.doEnable) {
+                           enabledObj.both = true;
+                       } else {
+                           enabledObj.none = true;
+                       }
+                       break;
+               }
+               this.deviceData[index].deviceEnabledObj = enabledObj;
+           }
         }, (reason) => {
-            console.log(`Dismissed ${reason}`);
         });
         modal.componentInstance.doEnable = event.doEnable;
         modal.componentInstance.dataId = event.dataObj.id;

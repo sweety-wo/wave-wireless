@@ -38,8 +38,14 @@ export class DeviceService {
     /**
      * modify device ghost.
      * */
-    modifyDeviceGhost(deviceId, payload) {
-        return this._http.patch(environment.API_URL + `node/devices/${deviceId}/ghosts`, payload);
+    async modifyDeviceGhost(deviceId, payload): Promise<any> {
+        const url = environment.API_URL + `node/devices/${deviceId}/ghosts`;
+        return await this._http.patch(url, payload).toPromise()
+            .then(async (response: any) => {
+                return response;
+            })
+            .catch(async (error) => {
+            });
     }
 
 

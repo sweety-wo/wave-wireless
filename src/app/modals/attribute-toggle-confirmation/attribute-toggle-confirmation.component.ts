@@ -12,6 +12,7 @@ export class AttributeToggleConfirmationComponent implements OnInit {
     dataId: string;
     switchArr: any;
     selectedSwitch: string = null;
+    isValueChanging: boolean;
 
   constructor(public activeModal: NgbActiveModal,
               private _device: DeviceService) {
@@ -25,54 +26,44 @@ export class AttributeToggleConfirmationComponent implements OnInit {
           label: 'Both',
           value: 'both'
       }];
+      this.isValueChanging = false;
   }
 
   ngOnInit() {
-      console.log('init modal', this.doEnable);
-      console.log('init modal', this.dataId);
   }
 
-  fnToggleAttribute() {
-      console.log('called from modal', this.selectedSwitch);
-      const resultObj = {
-          doEnable: this.doEnable,
-          switch: this.selectedSwitch,
-          id: this.dataId
+  async fnToggleAttribute() {
+      this.isValueChanging = true;
+      const switch700Obj = {
+          name: '700_rf_switch',
+          desired: this.doEnable ? 'ON' : 'OFF'
       };
-      let tempObj = {};
+
+      const switch800Obj = {
+          name: '800_rf_switch',
+          desired: this.doEnable ? 'ON' : 'OFF'
+      };
+      const res = {
+          deviceId: this.dataId,
+          doEnable: this.doEnable,
+          selectedSwitch: this.selectedSwitch
+      };
       switch (this.selectedSwitch) {
           case '700':
-              tempObj = {
-                  name: '700_rf_switch',
-                  desired: this.doEnable ? 'ON' : 'OFF'
-              };
-              this._device.modifyDeviceGhost(this.dataId, tempObj).subscribe((res) => {
-                  this.activeModal.close(res);
-              });
+              await this._device.modifyDeviceGhost(this.dataId, switch700Obj);
+              this.isValueChanging = false;
+              this.activeModal.close(res);
               break;
           case '800':
-              tempObj = {
-                  name: '800_rf_switch',
-                  desired: this.doEnable ? 'ON' : 'OFF'
-              };
-              this._device.modifyDeviceGhost(this.dataId, tempObj).subscribe((res) => {
-                  this.activeModal.close(res);
-              });
+              await this._device.modifyDeviceGhost(this.dataId, switch800Obj);
+              this.isValueChanging = false;
+              this.activeModal.close(res);
               break;
           case 'both':
-              tempObj = {
-                  name: '700_rf_switch',
-                  desired: this.doEnable ? 'ON' : 'OFF'
-              };
-              this._device.modifyDeviceGhost(this.dataId, tempObj).subscribe((res) => {
-                  tempObj = {
-                      name: '800_rf_switch',
-                      desired: this.doEnable ? 'ON' : 'OFF'
-                  };
-                  this._device.modifyDeviceGhost(this.dataId, tempObj).subscribe((res1) => {
-                      this.activeModal.close(res1);
-                  });
-              });
+              await this._device.modifyDeviceGhost(this.dataId, switch700Obj);
+              await this._device.modifyDeviceGhost(this.dataId, switch800Obj);
+              this.isValueChanging = false;
+              this.activeModal.close(res);
               break;
       }
   }

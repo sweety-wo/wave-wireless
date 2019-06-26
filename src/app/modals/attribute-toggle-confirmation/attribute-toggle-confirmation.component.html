@@ -11,7 +11,7 @@
         <label>Please select which switch do you want to {{doEnable ? 'enable' : 'disable'}}?</label>
         <div class="my-2" *ngFor="let switchObj of switchArr">
             <label [for]="switchObj.label" class="check-input">
-                <input type="radio" [id]="switchObj.label" class="mr-2"
+                <input type="radio" [id]="switchObj.label" class="mr-2" [disabled]="isValueChanging"
                        name="switch" [value]="switchObj.value"
                        [(ngModel)]="selectedSwitch">
                 {{switchObj.label}}
@@ -20,8 +20,14 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-link pull-right" (click)="activeModal.dismiss('Cross click')">Cancel</button>
-    <button class="btn btn-primary pull-right"
+    <app-loader *ngIf="isValueChanging"></app-loader>
+    <button class="btn btn-link pull-right" *ngIf="!isValueChanging"
+            (click)="activeModal.dismiss('Cross click')">
+        Cancel
+    </button>
+    <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
             [disabled]="selectedSwitch === null"
-            (click)="fnToggleAttribute()">{{doEnable ? 'Enable' : 'Disable'}}</button>
+            (click)="fnToggleAttribute()">
+        {{doEnable ? 'Enable' : 'Disable'}}
+    </button>
 </div>
