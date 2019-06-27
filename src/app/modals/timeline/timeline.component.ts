@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import {IssueService} from '../../services/tracker/issue/issue.service';
 import {MdEditorOption} from 'ngx-markdown-editor';
 
-
 @Component({
     selector: 'app-timeline',
     templateUrl: './timeline.component.html',
@@ -22,8 +21,9 @@ export class TimelineComponent implements OnInit {
     firstComment: any;
     lastComment: any;
     isCommentSectionClicked = false;
-    showborder = false;
-    enablePreviewContentClick = true;
+    public options: MdEditorOption = {
+        enablePreviewContentClick: true
+    };
 
     constructor(public activeModal: NgbActiveModal,
                 private _issue: IssueService) {

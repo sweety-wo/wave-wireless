@@ -62,11 +62,12 @@
                 <!-- First Comment including participants end-->
 
                 <!-- First Comment including assignees start-->
-                <div class="d-flex flex-grow-1" *ngIf="firstComment.commentHasAssignees === true">
+                <div class="d-flex flex-grow-1 align-items-center" *ngIf="firstComment.commentHasAssignees === true">
                     <md-editor name="Content"
                                [(ngModel)]="firstComment.mdBody"
                                mode="preview"
-                               enablePreviewContentClick="true">
+                               [options]="options"
+                               >
                     </md-editor>
                     <span class="ml-1">{{firstComment.createdAt}}</span>
                 </div>
@@ -76,7 +77,8 @@
                 <md-editor name="Content"
                            [(ngModel)]="firstComment.mdBody"
                            mode="preview"
-                           enablePreviewContentClick="true">
+                           [options]="options"
+                           >
                 </md-editor>
             </div>
         </div>
@@ -148,22 +150,23 @@
                     <!--Comment including participants end-->
 
                     <!-- Comment including assignees start-->
-                    <div class="d-flex flex-grow-1" *ngIf="comment.commentHasAssignees === true">
+                    <div class="d-flex flex-grow-1 align-items-center" *ngIf="comment.commentHasAssignees === true">
                         <md-editor name="Content"
                                    [(ngModel)]="comment.mdBody"
                                    mode="preview"
-                                   enablePreviewContentClick="true">
+                                   [options]="options"
+                                   >
                         </md-editor>
                         <span class="ml-1">{{comment.createdAt}}</span>
                     </div>
                     <!-- Comment including assignees end-->
-
                 </div>
                 <div *ngIf="comment.isDetailClicked && checkComment(comment)">
                     <md-editor name="Content"
                                [(ngModel)]="comment.mdBody"
                                mode="preview"
-                               enablePreviewContentClick="true">
+                               [options]="options"
+                               >
                     </md-editor>
                 </div>
             </div>
@@ -216,11 +219,12 @@
                 <!--Last Comment including participants end-->
 
                 <!-- Last Comment including assignees start-->
-                <div class="d-flex flex-grow-1" *ngIf="lastComment.commentHasAssignees === true">
+                <div class="d-flex flex-grow-1 align-items-center" *ngIf="lastComment.commentHasAssignees === true">
                     <md-editor name="Content"
                                [(ngModel)]="lastComment.mdBody"
                                mode="preview"
-                               enablePreviewContentClick="true">
+                               [options]="options"
+                               >
                     </md-editor>
                     <span class="ml-1">{{lastComment.createdAt}}</span>
                 </div>
@@ -231,7 +235,8 @@
                 <md-editor name="Content"
                            [(ngModel)]="lastComment.mdBody"
                            mode="preview"
-                           enablePreviewContentClick="true">
+                           [options]="options"
+                           >
                 </md-editor>
             </div>
         </div>
