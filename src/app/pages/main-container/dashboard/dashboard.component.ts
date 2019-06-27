@@ -10,8 +10,8 @@ import {DeviceImageService} from '../../../services/custom/deviceImage-service/d
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
-import {Paho} from "ng2-mqtt/mqttws31";
-import {AuthService} from "../../../services/custom/auth-service/auth.service";
+import {Paho} from 'ng2-mqtt/mqttws31';
+import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit {
     searchText: string;
     centerLat: any;
     centerLong: any;
+    dashboardTableF
     private _client: Paho.MQTT.Client;
 
     constructor(private _device: DeviceService,
@@ -273,6 +274,7 @@ export class DashboardComponent implements OnInit {
         modal.result.then((result) => {
            const index  = _.findIndex(this.deviceData, {'id': result.deviceId});
            if (index !== -1) {
+               const deviceObj = Object.assign({}, this.deviceData[index]);
                const enabledObj = {
                    both: false,
                    one: false,
@@ -292,7 +294,8 @@ export class DashboardComponent implements OnInit {
                        }
                        break;
                }
-               this.deviceData[index].deviceEnabledObj = enabledObj;
+               deviceObj.deviceEnabledObj = enabledObj;
+               this.deviceData[index] = deviceObj;
            }
         }, (reason) => {
         });

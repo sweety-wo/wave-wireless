@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 
 @Component({
   selector: 'app-btn-group-toggle',
   templateUrl: './btn-group-toggle.component.html',
   styleUrls: ['./btn-group-toggle.component.scss']
 })
-export class BtnGroupToggleComponent implements OnInit {
+export class BtnGroupToggleComponent implements OnChanges {
     @Input() type: string;
 
     @Input() dataObj: any = {};
@@ -30,7 +30,7 @@ export class BtnGroupToggleComponent implements OnInit {
       }];
   }
 
-  ngOnInit() {
+  ngOnChanges() {
       if (this.type !== 'header') {
           if (this.dataObj.deviceEnabledObj.both) {
               this.selectedIndex = 1;
@@ -48,7 +48,7 @@ export class BtnGroupToggleComponent implements OnInit {
       }
   }
 
-  fnToggleAll(doEnable) {
+  fnToggleHeader(doEnable) {
       this.toggledChange.emit(doEnable);
   }
 

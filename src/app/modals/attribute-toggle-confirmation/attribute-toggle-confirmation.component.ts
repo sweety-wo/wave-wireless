@@ -13,6 +13,7 @@ export class AttributeToggleConfirmationComponent implements OnInit {
     switchArr: any;
     selectedSwitch: string = null;
     isValueChanging: boolean;
+    showDisableConfirmation: boolean;
 
   constructor(public activeModal: NgbActiveModal,
               private _device: DeviceService) {
@@ -27,12 +28,21 @@ export class AttributeToggleConfirmationComponent implements OnInit {
           value: 'both'
       }];
       this.isValueChanging = false;
+      this.showDisableConfirmation = false;
   }
 
   ngOnInit() {
   }
 
-  async fnToggleAttribute() {
+  fnToggleAttribute() {
+      if (this.doEnable) {
+          this.fnEnableDisableSwitch();
+      } else {
+          this.showDisableConfirmation = true;
+      }
+  }
+
+  async fnEnableDisableSwitch() {
       this.isValueChanging = true;
       const switch700Obj = {
           name: '700_rf_switch',

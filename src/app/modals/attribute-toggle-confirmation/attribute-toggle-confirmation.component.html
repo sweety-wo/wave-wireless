@@ -7,7 +7,7 @@
     </button>
 </div>
 <div class="modal-body">
-    <div class="h-100 w-100 d-flex flex-column">
+    <div class="h-100 w-100 d-flex flex-column" *ngIf="!showDisableConfirmation">
         <label>Please select which switch do you want to {{doEnable ? 'enable' : 'disable'}}?</label>
         <div class="my-2" *ngFor="let switchObj of switchArr">
             <label [for]="switchObj.label" class="check-input">
@@ -18,6 +18,9 @@
             </label>
         </div>
     </div>
+    <div class="h-100 w-100 d-flex flex-column" *ngIf="showDisableConfirmation">
+        <label>Are you sure? Disabling this will prevent it from being monitored.</label>
+    </div>
 </div>
 <div class="modal-footer">
     <app-loader *ngIf="isValueChanging"></app-loader>
@@ -25,9 +28,17 @@
             (click)="activeModal.dismiss('Cross click')">
         Cancel
     </button>
-    <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
-            [disabled]="selectedSwitch === null"
-            (click)="fnToggleAttribute()">
-        {{doEnable ? 'Enable' : 'Disable'}}
-    </button>
+    <div *ngIf="!showDisableConfirmation">
+        <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
+                [disabled]="selectedSwitch === null"
+                (click)="fnToggleAttribute()">
+            {{doEnable ? 'Enable' : 'Disable'}}
+        </button>
+    </div>
+    <div *ngIf="showDisableConfirmation">
+        <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
+                (click)="fnEnableDisableSwitch()">
+            {{doEnable ? 'Enable' : 'Disable'}}
+        </button>
+    </div>
 </div>
