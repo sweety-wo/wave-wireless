@@ -11,6 +11,9 @@ import {tileLayer} from 'leaflet';
 import {latLng} from 'leaflet';
 import '../../../scss/_variables.scss';
 import {Router} from '@angular/router';
+import {OpenStreetMapProvider} from 'leaflet-geosearch';
+import {Constant} from '../../constant/constant';
+import {ToastrService} from '../../services/custom/toastr-service/toastr.service';
 
 @Component({
     selector: 'app-custom-map',
@@ -23,14 +26,18 @@ export class CustomMapComponent implements OnInit, OnChanges {
     @Input() centerLat: any;
     @Input() centerLong: any;
     @Input() isGeoSearch: any;
+    @Input() geoResult: any;
     @Input() hideZoomControls: any;
+    @Input() isReset: any;
+    @Input() zone: any;
     options: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
     map: L.Map;
 
-    constructor(private _router: Router) {
+    constructor(private _router: Router,
+                private _toastr: ToastrService,) {
     }
 
     @HostListener('click', ['$event.target']) onClick($event) {
@@ -50,8 +57,12 @@ export class CustomMapComponent implements OnInit, OnChanges {
     ngOnChanges(change: any) {
         if (change.mapData && change.mapData.currentValue) {
             this.fnCreateMap(change.mapData.currentValue);
-        } else if (change.isGeoSearch || change.centerLat || change.centerLong) {
+        } else if (change.isGeoSearch && change.geoResult && change.geoResult.currentValue.length)  {
             this.fnCreateMap(this.mapData);
+        } else {
+            if (change.geoResult && !change.geoResult.currentValue.length) {
+                this._toastr.info('Couldn\'t find any matching places');
+            }
         }
     }
 
@@ -59,17 +70,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
-        if (this.map) {
-            // Move map to the latitude/longitude mentioned
-            this.map.panTo([this.centerLat, this.centerLong]);
-        }
-        const maxScreenDimension = window.innerHeight > window.innerWidth ? window.innerHeight : window.innerWidth;
-        const tileSize = 256;
-        const maxTiles = Math.floor(maxScreenDimension / tileSize);
-        let minZoom = Math.ceil(Math.log(maxTiles) / Math.log(2));
-        minZoom = minZoom < 2 ? 2 : minZoom;
-        const bounds = new L.LatLngBounds(new L.LatLng(85, -180), new L.LatLng(-85, 180));
-
         this.options = {
             layers: [
                 tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -77,14 +77,30 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     noWrap: true,
                 })
             ],
-            zoom: 5,
-            center: latLng([this.centerLat, this.centerLong]),
+            zoom: 4,
+            minZoom: 4,
+            center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
             attributionControl: false,
             zoomControl: false,
-            maxBounds: bounds,
-            minZoom: minZoom
         };
         this.markerClusterData = this.generateMarkers(mapData);
+
+
+        if (this.map) {
+            // Move map to the latitude/longitude mentioned
+                this.options.maxBounds = this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds;
+                if (this.isGeoSearch || this.zone !== 'USA') {
+                    setTimeout(() => {
+                        this.map.fitBounds(this.geoResult[0].bounds);
+                    }, 1000);
+                }
+                // If zone is USA and cross is clicked in search input move map back to USA with center
+                if (this.zone === 'USA' && this.isReset) {
+                    this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
+                    this.map.setZoom(4);
+                }
+        }
+
     }
 
     generateMarkers(dataArr: any) {
@@ -126,25 +142,25 @@ export class CustomMapComponent implements OnInit, OnChanges {
                                 ` </div>`);
                 }
                 if (o.data.address && o.data.address[0]) {
-                    address =    (`<div class="d-flex align-items-center mb-3">` +
+                    address = (`<div class="d-flex align-items-center mb-3">` +
                         `    <i class="fa fa-2x fa-map-marker mr-2"></i>` +
                         `        <span>${o.data.address[0]}</span>` +
                         ` </div>`);
                 }
                 if (o.data.tel && o.data.tel[0]) {
-                    tel =    (`<div class="d-flex align-items-center mb-3">` +
+                    tel = (`<div class="d-flex align-items-center mb-3">` +
                         `   <i class="fa fa-2x fa-phone mr-2"></i>` +
                         `        <span>${o.data.tel[0]}</span>` +
                         ` </div>`);
                 }
                 if (o.data.email && o.data.email[0]) {
-                    email =    (`<div class="d-flex align-items-center mb-3">` +
+                    email = (`<div class="d-flex align-items-center mb-3">` +
                         `    <i class="fa fa-2x fa-envelope-o mr-2"></i>` +
                         `        <span>${o.data.email[0]}</span>` +
                         ` </div>`);
                 }
                 if (o.data.photo && o.data.photo[0]) {
-                    img =    ( `<div class="w-25">` +
+                    img = (`<div class="w-25">` +
                         `<img src="${o.data.photo[0]}" class="rounded-circle pull-right" width="30" height="30">` +
                         `</div>`);
                 }
@@ -158,9 +174,9 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 `</div>` +
                 `<div class="body px-3 pt-3 overflow-auto d-flex">` +
                 `   <div class="w-75">` +
-                        owner + address + tel + email +
+                owner + address + tel + email +
                 `   </div>` +
-                    img +
+                img +
                 `</div>` +
                 `<div class="px-3 pb-3">` +
                 `       <a class="pull-right cursor-pointer" data-link="/device/${o.id}">View Details</a>` +

@@ -4,7 +4,7 @@
               *ngIf="ghost && ghost.health"
               [ngClass]="getGhostHealthDetail(ghost.health).className">
             {{getGhostHealthDetail(ghost.health).title}}</span>
-        <h4 class="modal-title">{{ghost.name}}</h4>
+        <h4 class="modal-title">{{alarmNameMappingOptions[ghost.name] ? alarmNameMappingOptions[ghost.name]: ghost.name }}</h4>
         <div class="btn-group mr-3 ml-auto">
             <button type="button" class="btn btn-dark" style="margin-right: 2px">Split me</button>
             <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">

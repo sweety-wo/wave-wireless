@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {DropdownOptions} from '../../constant/dropdown-options';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
@@ -11,6 +11,8 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 export class SearchBarComponent implements OnInit, AfterViewInit {
     @ViewChild('searchInput', {static: false}) searchInput: ElementRef;
     @Output() searchChangeEvent = new EventEmitter<any>();
+
+    @Input() zone: string;
 
     filterObj: any;
     searchObj: any;
@@ -43,7 +45,8 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
             this.searchObj = {
                 searchOption: this.selectedSearchOption,
                 searchText: text,
-                isGeoSearch: true
+                isGeoSearch: true,
+                isReset: false,
             };
             this.searchChangeEvent.next(this.searchObj);
         }
@@ -52,7 +55,7 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
 
 
     fnBindKeyUpEventForSearchInput() {
-        fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+        fromEvent(this.searchInput.nativeElement, 'blur').pipe(
             // get value
             map((event: any) => {
                 if (event.keyCode === 13) { // search on enter
@@ -67,7 +70,6 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
             // Time in milliseconds between key events
             , debounceTime(500)
             // If previous query is diffent from current
-            , distinctUntilChanged()
             // subscription for response
         ).subscribe((text: string) => {
             this.fnSearchChange(text);
@@ -79,7 +81,8 @@ export class SearchBarComponent implements OnInit, AfterViewInit {
         this.searchObj = {
             searchOption: this.selectedSearchOption,
             searchText: this.searchText,
-            isGeoSearch: false
+            isGeoSearch: false,
+            isReset: true,
         };
         this.searchChangeEvent.next(this.searchObj);
     }

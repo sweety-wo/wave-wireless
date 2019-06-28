@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {DropdownOptions} from '../../constant/dropdown-options';
 
 
 @Component({
@@ -9,8 +10,10 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class TelemetryStatisticsComponent implements OnInit {
     @Input() ghost: any;
+    alarmNameMappingOptions: any;
 
     constructor(public activeModal: NgbActiveModal) {
+        this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
     }
 
     ngOnInit() {

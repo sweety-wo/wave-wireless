@@ -12,6 +12,7 @@ import {TelemetryStatisticsComponent} from '../../../modals/telemetry-statistics
 import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {TimelineComponent} from '../../../modals/timeline/timeline.component';
+import {DropdownOptions} from '../../../constant/dropdown-options';
 
 @Component({
     selector: 'app-details',
@@ -28,6 +29,7 @@ export class DetailsComponent implements OnInit {
     issues: any;
     ghosts: any;
     filteredGhosts: any;
+    alarmNameMappingOptions: any;
     alarmSearch: string;
     telemetrySearch: string;
     isIssueLoading: boolean;
@@ -41,6 +43,7 @@ export class DetailsComponent implements OnInit {
                 private _issue: IssueService,
                 private _deviceImageService: DeviceImageService,
                 private _modalService: NgbModal) {
+        this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
     }
 
     ngOnInit() {

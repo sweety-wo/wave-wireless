@@ -7,6 +7,7 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
+import * as L from 'leaflet';
 
 
 @Component({
@@ -19,11 +20,14 @@ export class MapComponent implements OnInit, OnDestroy {
     filteredData: any;
     centerLat: any;
     centerLong: any;
-    geoResult: any;
+    geoResult: any = [];
     pieData = [];
     isDeviceLoading: boolean;
     private _client: Paho.MQTT.Client;
     isGeoSearch: boolean;
+    isReset: boolean;
+    zone: any;
+    maxBounds: any;
 
     constructor(private _device: DeviceService,
                 private _common: CommonService,
@@ -33,14 +37,24 @@ export class MapComponent implements OnInit, OnDestroy {
         this.centerLong = -77.03637;
     }
 
-    ngOnInit() {
-        this.getDevices();
-        this.filteredData = _.filter(this.deviceData, (device: any) => {
-            return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
+    async ngOnInit() {
+        this._auth.loggedInUser.subscribe(user => {
+            if (user && user.data && user.data.zone) {
+                this.zone =  user.data.zone[0];
+            } else {
+                this.zone = 'USA';
+            }
         });
-        this.fnGetCoordinates(this.filteredData);
-        this.fnCreatePieChartData(this.filteredData);
-        this.fnInitializeWebSockets();
+        if (this.zone) {
+            const provider = new OpenStreetMapProvider();
+            this.geoResult = await provider.search({query: this.zone});
+
+        }
+        this.getDevices();
+    }
+
+    setMaxBounds(geoResult) {
+
     }
 
     fnCreatePieChartData(deviceData) {
@@ -71,18 +85,15 @@ export class MapComponent implements OnInit, OnDestroy {
             }];
     }
 
-    fnGetCoordinates(data) {
-        const coordinates = this._common.setLatLng(data);
-        this.centerLat = coordinates.centerLat;
-        this.centerLong = coordinates.centerLong;
-    }
-
     getDevices(query?: string) {
         this.isDeviceLoading = false;
         this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
-            this.filteredData = devices;
+            this.filteredData = _.filter(this.deviceData, (device: any) => {
+                return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
+            });
             this.fnCreatePieChartData(this.filteredData);
+            this.fnInitializeWebSockets();
             this.isDeviceLoading = false;
         }, (err) => {
             this.isDeviceLoading = false;
@@ -167,7 +178,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     async fnSearch(res: any) {
-        this.isGeoSearch = res.isGeoSearch;
         if (res.searchOption === 'Custom' && res.searchText) {
             const text = res.searchText;
             const query = 'contains(#{id}, ${' + text + '}) or contains(#{name}, ${' + text + '}) or contains(#{description}, ${' + text + '}) or contains(#{phase}, ${' + text + '}) or contains(#{typeId}, ${' + text + '}) or contains(#{health}, ${' + text + '}) or contains(#{defaultHealth}, ${' + text + '})';
@@ -181,16 +191,14 @@ export class MapComponent implements OnInit, OnDestroy {
             if (res.isGeoSearch && res.searchText) {
                 const provider = new OpenStreetMapProvider();
                 this.geoResult = await provider.search({query: res.searchText});
-                if (this.geoResult && this.geoResult.length) {
-                    this.centerLat = this.geoResult && this.geoResult[0]['y'];
-                    this.centerLong = this.geoResult && this.geoResult[0]['x'];
-                } else {
-                    this.centerLat = 38.89511;
-                    this.centerLong = -77.03637;
-                }
+                this.isGeoSearch = res.isGeoSearch;
+                this.isReset = res.isReset;
                 // search reset
             } else if (!res.isGeoSearch && !res.isFromFilter) {
-                this.fnGetCoordinates(this.filteredData);
+                const provider = new OpenStreetMapProvider();
+                this.geoResult = await provider.search({query: this.zone});
+                this.isGeoSearch = res.isGeoSearch;
+                this.isReset = res.isReset;
             }
         }
 

@@ -2773,4 +2773,13 @@ export class Constant {
             }
         }
     ];
+
+    public static USA = {
+        maxBounds: [
+            [5.499550, -167.276413], //Southwest
+            [83.162102, -52.233040]  //Northeast
+        ],
+        centerLat: 41.850033,
+        centerLong: -87.6500523,
+    };
 }
