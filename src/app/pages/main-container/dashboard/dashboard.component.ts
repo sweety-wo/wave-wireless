@@ -20,7 +20,6 @@ import {AuthService} from '../../../services/custom/auth-service/auth.service';
 })
 export class DashboardComponent implements OnInit {
     toogleAll: boolean;
-    rowAll: boolean;
     isDataLoading: boolean;
 
     deviceData: any = Constant.deviceData; // Constant.deviceData
@@ -33,7 +32,14 @@ export class DashboardComponent implements OnInit {
     searchText: string;
     centerLat: any;
     centerLong: any;
-    dashboardTableF
+    selectedFooterDropDownOption: any;
+    dashboardFooterItemsArr = [{
+        id: 'AddToGroup',
+        name: 'Add to Group'
+    }, {
+        id: 'RemoveFromGroup',
+        name: 'Remove from Group'
+    }];
     private _client: Paho.MQTT.Client;
 
     constructor(private _device: DeviceService,
@@ -48,6 +54,7 @@ export class DashboardComponent implements OnInit {
         this.isDataLoading = true;
         this.centerLat = 38.89511;
         this.centerLong = -77.03637;
+        this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[0];
     }
 
     ngOnInit() {
@@ -200,6 +207,19 @@ export class DashboardComponent implements OnInit {
         return this.deviceData.every(o => o.state);
     }
 
+    fnSelectFooterItem(index) {
+        console.log('index', index);
+        this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[index];
+    }
+
+    fnTriggerFooterEvent() {
+        switch (this.selectedFooterDropDownOption.id) {
+            case 'addToGroup':
+            case 'removeFromGroup':
+                break;
+        }
+    }
+
     onConnectionLost(responseObject) {
         const self = this;
         if (responseObject.errorCode !== 0) {
@@ -272,35 +292,44 @@ export class DashboardComponent implements OnInit {
     openAttributeToggleConfirmationModal(event) {
         const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent, { size: 'sm', backdrop: 'static', centered: true });
         modal.result.then((result) => {
-           const index  = _.findIndex(this.deviceData, {'id': result.deviceId});
-           if (index !== -1) {
-               const deviceObj = Object.assign({}, this.deviceData[index]);
-               const enabledObj = {
-                   both: false,
-                   one: false,
-                   none: false,
-                   missingAttr: false,
-               };
-               switch (result.selectedSwitch) {
-                   case '700':
-                   case '800':
-                       enabledObj.one = true;
-                       break;
-                   case 'both':
-                       if (result.doEnable) {
-                           enabledObj.both = true;
-                       } else {
-                           enabledObj.none = true;
-                       }
-                       break;
-               }
-               deviceObj.deviceEnabledObj = enabledObj;
-               this.deviceData[index] = deviceObj;
-           }
-        }, (reason) => {
+            _.forEach(result.deviceIdArr, (deviceId) => {
+                const index  = _.findIndex(this.deviceData, {'id': deviceId});
+                if (index !== -1) {
+                    const deviceObj = Object.assign({}, this.deviceData[index]);
+                    const enabledObj = {
+                        both: false,
+                        one: false,
+                        none: false,
+                        missingAttr: false,
+                    };
+                    switch (result.selectedSwitch) {
+                        case '700':
+                        case '800':
+                            enabledObj.one = true;
+                            break;
+                        case 'both':
+                            if (result.doEnable) {
+                                enabledObj.both = true;
+                            } else {
+                                enabledObj.none = true;
+                            }
+                            break;
+                    }
+                    deviceObj.deviceEnabledObj = enabledObj;
+                    this.deviceData[index] = deviceObj;
+                }
+            });
+        }, () => {
         });
         modal.componentInstance.doEnable = event.doEnable;
-        modal.componentInstance.dataId = event.dataObj.id;
+        if (event.isCalledFromHeader) {
+            modal.componentInstance.dataIdArr = _.map(this.selectedDevices, (device) => {
+                return device.id;
+            });
+        } else {
+            modal.componentInstance.dataIdArr = [event.dataObj.id];
+        }
+        modal.componentInstance.isCalledFromHeader = event.isCalledFromHeader;
 
     }
 

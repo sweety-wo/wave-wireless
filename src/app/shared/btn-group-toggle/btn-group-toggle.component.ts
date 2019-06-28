@@ -44,12 +44,12 @@ export class BtnGroupToggleComponent implements OnChanges {
 
   fnToggle(btnGroupObj) {
       if (btnGroupObj.fieldValue !== null && this.selectedIndex !== btnGroupObj.itemIndex) {
-          this.toggledChange.emit({doEnable: btnGroupObj.fieldValue, dataObj: this.dataObj});
+          this.toggledChange.emit({doEnable: btnGroupObj.fieldValue, dataObj: this.dataObj, isCalledFromHeader: true});
       }
   }
 
   fnToggleHeader(doEnable) {
-      this.toggledChange.emit(doEnable);
+      this.toggledChange.emit({doEnable: doEnable, dataObj: {}, isCalledFromHeader: true});
   }
 
 }

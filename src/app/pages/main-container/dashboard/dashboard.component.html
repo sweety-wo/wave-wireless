@@ -52,6 +52,7 @@
                         <span class="text-white ml-2">{{criticalCount}}</span>
                     </label>
                     <app-btn-group-toggle [ngClass]="{'pace': !selectedDevices.length}"
+                                          (toggledChange)="openAttributeToggleConfirmationModal($event)"
                                           type="header"
                                           [dataObj]="{}"></app-btn-group-toggle>
                 </div>
@@ -80,15 +81,15 @@
                                              *ngIf="!obj.health">
                                         <svg-icon src="assets/images/icons/round-error-symbol.svg"
                                                   *ngIf="obj.health === 300"
-                                                  class="cursor-pointer fill-orange mr-3"
+                                                  class="fill-orange mr-3"
                                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                                         <svg-icon src="assets/images/icons/verified.svg"
                                                   *ngIf="obj.health === 200"
-                                                  class="cursor-pointer fill-primary mr-3"
+                                                  class="fill-primary mr-3"
                                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                                         <svg-icon src="assets/images/icons/cancel.svg"
                                                   *ngIf="obj.health === 500"
-                                                  class="cursor-pointer fill-red mr-3"
+                                                  class="fill-red mr-3"
                                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
 
                                         <button ngbPanelToggle class="btn-toggle d-flex btn btn-link mr-3 p-0">
@@ -221,14 +222,20 @@
         </div>
         <!-- Footer -->
         <div class="footer px-3 py-2">
-            <div class="btn-group">
-                <button type="button" class="btn btn-dark" style="margin-right: 2px">
-                    <small>Add to Group</small>
+            <div class="btn-group" [ngClass]="{'pace': !selectedDevices.length}">
+                <button type="button" class="btn btn-dark" style="margin-right: 2px"
+                        (click)="fnTriggerFooterEvent()">
+                    <small>{{selectedFooterDropDownOption.name}}</small>
                 </button>
-                <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
+                <div class="btn-group" ngbDropdown
+                     role="group"
+                     aria-label="Button group with nested dropdown">
                     <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
                     <div class="dropdown-menu dropup" ngbDropdownMenu>
-                        <button ngbDropdownItem>One</button>
+                        <button ngbDropdownItem *ngFor="let dashBoardItem of dashboardFooterItemsArr; let i = index"
+                                (click)="fnSelectFooterItem(i)">
+                            {{dashBoardItem.name}}
+                        </button>
                     </div>
                 </div>
             </div>

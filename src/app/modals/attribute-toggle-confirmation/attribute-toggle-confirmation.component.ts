@@ -9,7 +9,8 @@ import {DeviceService} from '../../services/node/device.service';
 })
 export class AttributeToggleConfirmationComponent implements OnInit {
     doEnable: boolean;
-    dataId: string;
+    dataIdArr: any;
+    isCalledFromHeader: string;
     switchArr: any;
     selectedSwitch: string = null;
     isValueChanging: boolean;
@@ -54,24 +55,30 @@ export class AttributeToggleConfirmationComponent implements OnInit {
           desired: this.doEnable ? 'ON' : 'OFF'
       };
       const res = {
-          deviceId: this.dataId,
+          deviceIdArr: this.dataIdArr,
           doEnable: this.doEnable,
           selectedSwitch: this.selectedSwitch
       };
       switch (this.selectedSwitch) {
           case '700':
-              await this._device.modifyDeviceGhost(this.dataId, switch700Obj);
+              await Promise.all(this.dataIdArr.map(async (dataId) => {
+                  await this._device.modifyDeviceGhost(dataId, switch700Obj);
+              }));
               this.isValueChanging = false;
               this.activeModal.close(res);
               break;
           case '800':
-              await this._device.modifyDeviceGhost(this.dataId, switch800Obj);
+              await Promise.all(this.dataIdArr.map(async (dataId) => {
+                  await this._device.modifyDeviceGhost(dataId, switch800Obj);
+              }));
               this.isValueChanging = false;
               this.activeModal.close(res);
               break;
           case 'both':
-              await this._device.modifyDeviceGhost(this.dataId, switch700Obj);
-              await this._device.modifyDeviceGhost(this.dataId, switch800Obj);
+              await Promise.all(this.dataIdArr.map(async (dataId) => {
+                  await this._device.modifyDeviceGhost(dataId, switch700Obj);
+                  await this._device.modifyDeviceGhost(dataId, switch800Obj);
+              }));
               this.isValueChanging = false;
               this.activeModal.close(res);
               break;

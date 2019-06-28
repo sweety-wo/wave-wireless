@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <div class="d-flex align-items-center ju flex-grow-1 mb-3">
+        <h4 class="modal-title">Clusters</h4>
+    </div>
+    <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="h-100 w-100 d-flex flex-column">
+        <label>Please select the clusters you want to add device to?</label>
+        <div class="my-2" *ngFor="let cluster of clustersArr">
+            <label [for]="cluster.name" class="check-input">
+                <input type="checkbox" [id]="cluster.name" class="mr-2" [disabled]="isValueChanging"
+                       name="switch" [value]="cluster.id">
+                {{cluster.name}}
+            </label>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <app-loader *ngIf="isValueChanging"></app-loader>
+    <button class="btn btn-link pull-right" *ngIf="!isValueChanging"
+            (click)="activeModal.dismiss('Cross click')">
+        Cancel
+    </button>
+    <button class="btn btn-primary pull-right" *ngIf="!isValueChanging">
+        Add
+    </button>
+</div>

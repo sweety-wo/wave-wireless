@@ -23,6 +23,7 @@ import {TimelineComponent} from './modals/timeline/timeline.component';
 import {TimelineModule} from './modals/timeline/timeline.module';
 import { AttributeToggleConfirmationComponent } from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
 import {AttributeToggleConfirmationModule} from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.module';
+import { SelectClustersModalComponent } from './modals/select-clusters-modal/select-clusters-modal.component';
 
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();
@@ -32,7 +33,8 @@ export function init(startup: StartupService): Function {
     declarations: [
         AppComponent,
         FooterComponent,
-        PhotoGalleryComponent
+        PhotoGalleryComponent,
+        SelectClustersModalComponent
     ],
     imports: [
         BrowserModule,
