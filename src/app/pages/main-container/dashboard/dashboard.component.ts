@@ -44,6 +44,7 @@ export class DashboardComponent implements OnInit {
     geoResult: any;
     zone: any;
     private _client: Paho.MQTT.Client;
+    common: any;
 
     constructor(private _device: DeviceService,
                 private _gateway: GatewayService,
@@ -53,6 +54,7 @@ export class DashboardComponent implements OnInit {
                 private _toastr: ToastrService,
                 private _modalService: NgbModal,
                 private _auth: AuthService) {
+        this.common = _common;
         this.toogleAll = true;
         this.isDataLoading = true;
         this.centerLat = 38.89511;

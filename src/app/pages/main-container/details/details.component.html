@@ -168,8 +168,9 @@
                             </span>
                             </div>
                         </div>
-                        <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
-                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                        <svg-icon *ngIf="!isIssueLoading" src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                                  (click)="common.exportToCsv(issues, 'Alarm')"></svg-icon>
                     </div>
                 </div>
                 <!-- Body -->
@@ -182,6 +183,7 @@
                             <span class="badge font-weight-normal p-2 mr-3 d-block"
                                   *ngIf="!(issue && issue.labels)"></span>
                             <label class="w-50 m-0 mr-2">{{issue && issue.title}}</label>
+                            <small class="w-25 m-0 mr-2">{{issue && issue.createdAt}}</small>
                             <small class="w-25 m-0 mr-2">{{issue && issue.createdAt}}</small>
                             <div class="flex-grow-1 text-right">
                                 <svg-icon src="assets/images/icons/chat.svg" class="cursor-pointer"
@@ -216,8 +218,9 @@
                             </span>
                             </div>
                         </div>
-                        <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
-                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                        <svg-icon *ngIf="!isGhostLoading" src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
+                                  [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                                  (click)="common.exportToCsv(filteredGhosts, 'Telemetry')"></svg-icon>
                     </div>
                 </div>
                 <!-- Body -->

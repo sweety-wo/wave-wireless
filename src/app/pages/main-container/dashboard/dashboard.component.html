@@ -23,7 +23,8 @@
                 </div>
                 <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer"
                           *ngIf="!isDataLoading"
-                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
+                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                          (click)="common.exportToCsv(selectedDevices, 'Device')"></svg-icon>
             </div>
         </div>
         <!-- Body -->
@@ -107,7 +108,8 @@
                                             <label class="m-0" *ngIf="!obj.gateway">-</label>
                                         </div>
                                         <div class="d-flex w-30 pl-1">
-                                            <label class="m-0 font-italic" *ngFor="let clusterObj of obj.clusters; let i = index">
+                                            <label class="m-0 font-italic"
+                                                   *ngFor="let clusterObj of obj.clusters; let i = index">
                                                 {{clusterObj.name}}<span *ngIf="i !== obj.clusters.length - 1">,</span>
                                             </label>
                                         </div>
@@ -118,7 +120,7 @@
                                                       [svgStyle]="{ 'height.px':24, 'width.px':24}"></svg-icon>
                                             <app-btn-group-toggle *ngIf="!obj.deviceEnabledObj.missingAttr"
                                                                   (toggledChange)="openAttributeToggleConfirmationModal($event)"
-                                                              [(dataObj)]="obj"></app-btn-group-toggle>
+                                                                  [(dataObj)]="obj"></app-btn-group-toggle>
                                         </div>
                                     </div>
                                 </ng-template>
@@ -126,11 +128,12 @@
                                     <div class="d-flex expand-panel" style="color: #bbbbbb">
                                         <div class="d-flex w-30">
                                             <div class="avatar-container mr-2 d-flex">
-                                                <img src="assets/images/icons/round-error-symbol.svg" width="100%" class="event-none"
+                                                <img src="assets/images/icons/round-error-symbol.svg" width="100%"
+                                                     class="event-none"
                                                      *ngIf="!obj.photo">
                                                 <img [src]="obj.photo" height="50px" width="100%"
                                                      class="rounded-circle cursor-pointer" *ngIf="obj.photo"
-                                                (click)="openPhotoGalleryModal(obj.photo, obj.name)">
+                                                     (click)="openPhotoGalleryModal(obj.photo, obj.name)">
                                             </div>
                                             <div class="d-flex flex-column w-100">
                                                 <label class="m-0">
@@ -284,7 +287,8 @@
                             </div>
                         </div>
                     </div>
-                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg" class="cursor-pointer align-items-center"
+                    <svg-icon src="assets/images/icons/csv-file-format-symbol.svg"
+                              class="cursor-pointer align-items-center"
                               [svgStyle]="{ 'height.px':26, 'width.px':26 }"></svg-icon>
                 </div>
             </div>

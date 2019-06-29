@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import * as _ from 'lodash';
+import * as json2csv from 'json2csv';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CommonService {
 
-  constructor(private _http: HttpClient) { }
+    constructor(private _http: HttpClient) {
+    }
 
     /**
      * Get Websocket Url.
@@ -17,29 +18,6 @@ export class CommonService {
         return this._http.post(`${environment.API_URL}node/websockets?topic=${topicId}`, null);
     }
 
-    setLatLng(data) {
-        let centerLat;
-        let centerLong;
-        if (data && data.length) {
-            _.forEach(data, (o) => {
-                if (o.data && o.data.lat && o.data.long && o.data.long[0] && o.data.lat[0]) {
-                    centerLat = o.data.lat[0];
-                    centerLong = o.data.long[0];
-                    if (centerLat && centerLong) {
-                        return false;
-                    }
-                }
-            });
-        } else {
-            centerLat = 38.89511;
-            centerLong = -77.03637;
-        }
-        if (!centerLat || !centerLong) {
-            centerLat = 38.89511;
-            centerLong = -77.03637;
-        }
-        return {centerLat, centerLong};
-    }
 
     getHealthDetail(health) {
         let color = '';
@@ -60,5 +38,20 @@ export class CommonService {
             default:
         }
         return {color, title};
+    }
+
+    exportToCsv(data, fileName) {
+        const csvData =
+            json2csv.parse(data, {
+                flatten: true
+            });
+        const a: any = document.createElement('a');
+        a.setAttribute('style', 'display:none;');
+        document.body.appendChild(a);
+        const blob = new Blob([csvData], {type: 'text/csv'});
+        const url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = fileName + '.csv';
+        a.click();
     }
 }
