@@ -7,7 +7,7 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
-import * as L from 'leaflet';
+
 
 
 @Component({
@@ -18,8 +18,6 @@ import * as L from 'leaflet';
 export class MapComponent implements OnInit, OnDestroy {
     deviceData: any;
     filteredData: any;
-    centerLat: any;
-    centerLong: any;
     geoResult: any = [];
     pieData = [];
     isDeviceLoading: boolean;
@@ -27,14 +25,12 @@ export class MapComponent implements OnInit, OnDestroy {
     isGeoSearch: boolean;
     isReset: boolean;
     zone: any;
-    maxBounds: any;
+    healthArr: any = [500, 300];
 
     constructor(private _device: DeviceService,
                 private _common: CommonService,
                 private _auth: AuthService) {
         this.isDeviceLoading = true;
-        this.centerLat = 38.89511;
-        this.centerLong = -77.03637;
     }
 
     async ngOnInit() {
@@ -51,10 +47,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
         }
         this.getDevices();
-    }
-
-    setMaxBounds(geoResult) {
-
     }
 
     fnCreatePieChartData(deviceData) {
@@ -85,13 +77,19 @@ export class MapComponent implements OnInit, OnDestroy {
             }];
     }
 
-    getDevices(query?: string) {
+    getDevices(query?: string, isCustomSearch?: boolean) {
         this.isDeviceLoading = false;
         this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
-            this.filteredData = _.filter(this.deviceData, (device: any) => {
-                return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
-            });
+            if (isCustomSearch) {
+                this.filteredData = _.filter(this.deviceData, (device: any) => {
+                    return (this.healthArr.includes(device.health));
+                });
+            } else {
+                this.filteredData = _.filter(this.deviceData, (device: any) => {
+                    return (device.health === Constant.CRITICAL_HEALTH || device.health === Constant.ATTENTION_HEALTH);
+                });
+            }
             this.fnCreatePieChartData(this.filteredData);
             this.fnInitializeWebSockets();
             this.isDeviceLoading = false;
@@ -181,7 +179,7 @@ export class MapComponent implements OnInit, OnDestroy {
         if (res.searchOption === 'Custom' && res.searchText) {
             const text = res.searchText;
             const query = 'contains(#{id}, ${' + text + '}) or contains(#{name}, ${' + text + '}) or contains(#{description}, ${' + text + '}) or contains(#{phase}, ${' + text + '}) or contains(#{typeId}, ${' + text + '}) or contains(#{health}, ${' + text + '}) or contains(#{defaultHealth}, ${' + text + '})';
-            this.getDevices(query);
+            this.getDevices(query, true);
         } else {
             // Get all device data when Geo Search option is selected after Custom option as device data will be only the one's that are filtered
             if (res.isDropdownChanged) {
@@ -204,17 +202,17 @@ export class MapComponent implements OnInit, OnDestroy {
 
         // Filters of health
         if (res.isFromFilter) {
-            const healthArr: any = [];
+            this.healthArr = [];
             _.forOwn(res, (value, key) => {
                 // Looping only over health keys
                 if (value === true && key !== 'isFromFilter') {
-                    healthArr.push(Constant[key]);
+                    this.healthArr.push(Constant[key]);
                 }
             });
-            this.filteredData = _.filter(this.deviceData, (device: any) => {
-                return (healthArr.includes(device.health));
-            });
 
+            this.filteredData = _.filter(this.deviceData, (device: any) => {
+                return (this.healthArr.includes(device.health));
+            });
             this.fnCreatePieChartData(this.filteredData);
         }
     }

@@ -256,11 +256,11 @@
                           [svgStyle]="{ 'height.px':18, 'width.px':18}"></svg-icon>
             </div>
             <!-- Body -->
-            <div class="body overflow-auto">
+            <div class="body overflow-auto" *ngIf="geoResult">
                 <app-custom-map [(mapData)]="selectedDevices"
-                                [centerLat]="centerLat"
-                                [centerLong]="centerLong"
                                 [hideZoomControls]="true"
+                                [geoResult]="geoResult"
+                                [zone]="zone"
                 ></app-custom-map>
             </div>
         </div>

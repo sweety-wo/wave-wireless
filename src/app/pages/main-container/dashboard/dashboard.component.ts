@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {OpenStreetMapProvider} from 'leaflet-geosearch';
+import * as _ from 'lodash';
+import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {GatewayService} from '../../../services/node/gateway.service';
-import * as _ from 'lodash';
 import {ToastrService} from '../../../services/custom/toastr-service/toastr.service';
 import {ClusterService} from '../../../services/node/cluster.service';
 import {Constant} from '../../../constant/constant';
@@ -10,7 +12,6 @@ import {DeviceImageService} from '../../../services/custom/deviceImage-service/d
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
-import {Paho} from 'ng2-mqtt/mqttws31';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
@@ -40,6 +41,8 @@ export class DashboardComponent implements OnInit {
         id: 'RemoveFromGroup',
         name: 'Remove from Group'
     }];
+    geoResult: any;
+    zone: any;
     private _client: Paho.MQTT.Client;
 
     constructor(private _device: DeviceService,
@@ -57,12 +60,23 @@ export class DashboardComponent implements OnInit {
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[0];
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         // Todo: Remove the boolean assignment and enable cluster call
         /*this.isDataLoading = false;
         this.okCount = this.fnGetHealthCounts(200);
         this.attentionCount = this.fnGetHealthCounts(300);
         this.criticalCount = this.fnGetHealthCounts(500);*/
+        this._auth.loggedInUser.subscribe(user => {
+            if (user && user.data && user.data.zone) {
+                this.zone =  user.data.zone[0];
+            } else {
+                this.zone = 'USA';
+            }
+        });
+        if (this.zone) {
+            const provider = new OpenStreetMapProvider();
+            this.geoResult = await provider.search({query: this.zone});
+        }
         this.getClusters();
     }
 
@@ -180,17 +194,10 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    fnGetCoordinates(data) {
-        const coordinates = this._common.setLatLng(data);
-        this.centerLat = coordinates.centerLat;
-        this.centerLong = coordinates.centerLong;
-    }
-
     checkDevice() {
         this.selectedDevices = _.filter(this.deviceData, (device: any) => {
             return device.state;
         });
-        this.fnGetCoordinates(this.selectedDevices);
     }
 
     checkAll(event?) {
@@ -200,7 +207,6 @@ export class DashboardComponent implements OnInit {
         } else {
             this.selectedDevices = [];
         }
-        this.fnGetCoordinates(this.selectedDevices);
     }
 
     isAllChecked() {

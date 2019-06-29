@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {OpenStreetMapProvider} from 'leaflet-geosearch';
 
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
@@ -13,6 +14,7 @@ import {DeviceImageService} from '../../../services/custom/deviceImage-service/d
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {TimelineComponent} from '../../../modals/timeline/timeline.component';
 import {DropdownOptions} from '../../../constant/dropdown-options';
+import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
     selector: 'app-details',
@@ -28,6 +30,8 @@ export class DetailsComponent implements OnInit {
     gateway: any;
     issues: any;
     ghosts: any;
+    geoResult: any;
+    zone: any;
     filteredGhosts: any;
     alarmNameMappingOptions: any;
     alarmSearch: string;
@@ -42,23 +46,29 @@ export class DetailsComponent implements OnInit {
                 private _gateway: GatewayService,
                 private _issue: IssueService,
                 private _deviceImageService: DeviceImageService,
-                private _modalService: NgbModal) {
+                private _modalService: NgbModal,
+                private _auth: AuthService) {
         this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         this._route.params.subscribe((params: any) => {
             if (params.hasOwnProperty('id')) {
                 this.deviceId = params['id'];
                  this.getDevice(this.deviceId);
             }
         });
-    }
-
-    fnGetCoordinates(data) {
-        const coordinates = this._common.setLatLng(data);
-        this.centerLat = coordinates.centerLat;
-        this.centerLong = coordinates.centerLong;
+        this._auth.loggedInUser.subscribe(user => {
+            if (user && user.data && user.data.zone) {
+                this.zone =  user.data.zone[0];
+            } else {
+                this.zone = 'USA';
+            }
+        });
+        if (this.zone) {
+            const provider = new OpenStreetMapProvider();
+            this.geoResult = await provider.search({query: this.zone});
+        }
     }
 
     getDevice(deviceId) {
@@ -72,7 +82,6 @@ export class DetailsComponent implements OnInit {
             this.getGateway(this.gatewayId);
             this.getIssues();
             this.getDeviceGhosts(this.deviceId);
-            this.fnGetCoordinates([this.device]);
         }, (err) => {
             this.isDeviceLoading = false;
         });

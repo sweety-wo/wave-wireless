@@ -37,7 +37,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     map: L.Map;
 
     constructor(private _router: Router,
-                private _toastr: ToastrService,) {
+                private _toastr: ToastrService) {
     }
 
     @HostListener('click', ['$event.target']) onClick($event) {
@@ -51,16 +51,21 @@ export class CustomMapComponent implements OnInit, OnChanges {
         this.map = map;
         if (!this.hideZoomControls) {
             this.map.addControl(L.control.zoom({position: 'bottomleft'}));
+        } else {
+            // To set zoom over user zone for dashboard and details component
+            if (this.zone !== 'USA') {
+                this.map.fitBounds(this.geoResult[0].bounds);
+            }
         }
     }
 
     ngOnChanges(change: any) {
         if (change.mapData && change.mapData.currentValue) {
             this.fnCreateMap(change.mapData.currentValue);
-        } else if (change.isGeoSearch && change.geoResult && change.geoResult.currentValue.length)  {
+        } else if (change.geoResult && change.geoResult.currentValue && change.geoResult.currentValue.length) {
             this.fnCreateMap(this.mapData);
         } else {
-            if (change.geoResult && !change.geoResult.currentValue.length) {
+            if (change.geoResult && change.geoResult.currentValue && !change.geoResult.currentValue.length) {
                 this._toastr.info('Couldn\'t find any matching places');
             }
         }
@@ -70,6 +75,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
+        console.log('this.mapData', this.mapData);
         this.options = {
             layers: [
                 tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -81,24 +87,25 @@ export class CustomMapComponent implements OnInit, OnChanges {
             minZoom: 4,
             center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
             attributionControl: false,
+            maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
             zoomControl: false,
         };
-        this.markerClusterData = this.generateMarkers(mapData);
-
 
         if (this.map) {
-            // Move map to the latitude/longitude mentioned
-                this.options.maxBounds = this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds;
-                if (this.isGeoSearch || this.zone !== 'USA') {
-                    setTimeout(() => {
-                        this.map.fitBounds(this.geoResult[0].bounds);
-                    }, 1000);
-                }
-                // If zone is USA and cross is clicked in search input move map back to USA with center
-                if (this.zone === 'USA' && this.isReset) {
-                    this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
-                    this.map.setZoom(4);
-                }
+            if (this.isGeoSearch || this.zone !== 'USA') {
+                setTimeout(() => {
+                    this.map.fitBounds(this.geoResult[0].bounds);
+                }, 1000);
+            }
+            // If zone is USA and cross is clicked in search input move map back to USA with center
+            if (this.zone === 'USA' && this.isReset) {
+                this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
+                this.map.setZoom(4);
+            }
+        }
+
+        if (mapData && mapData.length) {
+            this.markerClusterData = this.generateMarkers(mapData);
         }
 
     }
@@ -136,10 +143,10 @@ export class CustomMapComponent implements OnInit, OnChanges {
             let img = '';
             if (o.data) {
                 if (o.data.owner && o.data.owner[0]) {
-                    owner =    (`<div class="d-flex align-items-center mb-3">` +
-                                `    <i class="fa fa-2x fa-building mr-2"></i>` +
-                                `        <span>${o.data.owner[0]}</span>` +
-                                ` </div>`);
+                    owner = (`<div class="d-flex align-items-center mb-3">` +
+                        `    <i class="fa fa-2x fa-building mr-2"></i>` +
+                        `        <span>${o.data.owner[0]}</span>` +
+                        ` </div>`);
                 }
                 if (o.data.address && o.data.address[0]) {
                     address = (`<div class="d-flex align-items-center mb-3">` +
