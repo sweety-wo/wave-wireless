@@ -241,7 +241,7 @@
                         <app-loader></app-loader>
                     </div>
                     <div class="h-100 d-flex align-items-center justify-content-center"
-                         *ngIf="!isGhostLoading && !filteredGhosts">
+                         *ngIf="!isGhostLoading && _.isEmpty(filteredGhosts)">
                         <span>No records found</span>
                     </div>
                 </div>

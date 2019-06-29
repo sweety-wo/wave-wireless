@@ -75,7 +75,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
-        console.log('this.mapData', this.mapData);
         this.options = {
             layers: [
                 tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -107,7 +106,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
         if (mapData && mapData.length) {
             this.markerClusterData = this.generateMarkers(mapData);
         }
-
     }
 
     generateMarkers(dataArr: any) {

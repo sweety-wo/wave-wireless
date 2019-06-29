@@ -32,6 +32,7 @@ export class DetailsComponent implements OnInit {
     ghosts: any;
     geoResult: any;
     zone: any;
+    _: any;
     filteredGhosts: any;
     alarmNameMappingOptions: any;
     alarmSearch: string;
@@ -49,6 +50,7 @@ export class DetailsComponent implements OnInit {
                 private _modalService: NgbModal,
                 private _auth: AuthService) {
         this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
+        this._ = _;
     }
 
     async ngOnInit() {
