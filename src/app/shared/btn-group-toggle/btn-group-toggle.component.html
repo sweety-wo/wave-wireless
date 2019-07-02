@@ -1,6 +1,6 @@
 <div class="btn-group btn-group-toggle" *ngIf="type !== 'header'"
      data-toggle="buttons">
-    <label class="btn btn-sm btn-primary"
+    <label class="btn btn-sm btn-primary cursor-pointer"
            *ngFor="let btnGroup of btnGroupArr"
            [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}">
         <input type="radio" name="options" autocomplete="off"

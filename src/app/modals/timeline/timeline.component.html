@@ -6,7 +6,7 @@
         <h4 class="modal-title mr-2">{{issue.title}}</h4>
         <span (click)="isCommentSectionClicked= !isCommentSectionClicked" *ngIf="comments"
               [title]="isCommentSectionClicked ? 'Collapse all Comments': 'Expand all Comments' ">
-                    <i class="fa fa-2x" [ngClass]="isCommentSectionClicked ? 'fa-minus-circle': 'fa-plus-circle'"></i>
+                    <i class="fa fa-2x cursor-pointer" [ngClass]="isCommentSectionClicked ? 'fa-minus-circle': 'fa-plus-circle'"></i>
         </span>
     </div>
     <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
@@ -25,7 +25,7 @@
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
-                    <h5 class="m-2">
+                    <h5 class="m-2 cursor-pointer">
                         <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(firstComment)"></i>
                         <i class="fa fa-fw fa-tag" *ngIf="firstComment.commentHasLabels === true"></i>
                         <i class="fa fa-fw fa-user" *ngIf="firstComment.commentHasParticipants === true"></i>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-grow-1" *ngIf="checkComment(firstComment)">
-                    <span class="text-muted">{{firstComment.createdAt}}</span>
+                    <span class="text-muted cursor-pointer">{{firstComment.createdAt}}</span>
                     <span class="text-muted ml-auto">{{firstComment.humanDateCreated}}</span>
                 </div>
 
@@ -92,7 +92,7 @@
                     <div class="col border-right">&nbsp;</div>
                     <div class="col">&nbsp;</div>
                 </div>
-                <h5 class="m-2">
+                <h5 class="m-2 cursor-pointer">
                     <i class="fa fa-fw fa-comments"></i>
                 </h5>
                 <div class="row h-50">
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div class="d-flex flex-grow-1">
-                <span class="text-muted">{{totalComments}} more comments</span>
+                <span class="text-muted cursor-pointer">{{totalComments}} more comments</span>
             </div>
         </div>
         <ng-container *ngIf="comments && isCommentSectionClicked">
@@ -113,7 +113,7 @@
                             <div class="col border-right">&nbsp;</div>
                             <div class="col">&nbsp;</div>
                         </div>
-                        <h5 class="m-2">
+                        <h5 class="m-2 cursor-pointer">
                             <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(comment)"></i>
                             <i class="fa fa-fw fa-tag" *ngIf="comment.commentHasLabels === true"></i>
                             <i class="fa fa-fw fa-user" *ngIf="comment.commentHasParticipants === true"></i>
@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-grow-1" *ngIf="checkComment(comment)">
-                        <span class="text-muted">{{comment.createdAt}}</span>
+                        <span class="text-muted cursor-pointer">{{comment.createdAt}}</span>
                         <span class="text-muted ml-auto">{{comment.humanDateCreated}}</span>
                     </div>
 
@@ -182,7 +182,7 @@
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
-                    <h5 class="m-2">
+                    <h5 class="m-2 cursor-pointer">
                         <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(lastComment)"></i>
                         <i class="fa fa-fw fa-tag" *ngIf="lastComment.commentHasLabels === true"></i>
                         <i class="fa fa-fw fa-user" *ngIf="lastComment.commentHasParticipants === true"></i>
@@ -194,7 +194,7 @@
                     </div>
                 </div>
                 <div class="d-flex flex-grow-1" *ngIf="checkComment(lastComment)">
-                    <span class="text-muted">{{lastComment.createdAt}}</span>
+                    <span class="text-muted cursor-pointer">{{lastComment.createdAt}}</span>
                     <span class="text-muted ml-auto">{{lastComment.humanDateCreated}}</span>
                 </div>
 
