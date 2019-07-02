@@ -56,7 +56,7 @@ export class PieChartComponent implements OnInit, OnChanges, AfterViewInit {
                         },
                         formatter: function() {
                             if (this.y !== 0) {
-                                return '<b>' + Highcharts.numberFormat(this.percentage, 2) + '%</b><br>' + this.point.name;
+                                return '<b class="mr-1">' + Highcharts.numberFormat(this.percentage, 2) + '%</b>' + this.point.name;
                             }
                         }
                     },
@@ -70,10 +70,6 @@ export class PieChartComponent implements OnInit, OnChanges, AfterViewInit {
             },
             series: [{
                 data: this.data,
-                dataLabels: {
-                    connectorShape: 'crookedLine',
-                    crookDistance: '50%'
-                }
             }]
         };
         if (this.pieChartEl && this.pieChartEl.nativeElement) {

@@ -9,7 +9,6 @@ import {CommonService} from '../../../services/custom/common-service/common.serv
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 
-
 @Component({
     selector: 'app-map',
     templateUrl: './map.component.html',
@@ -78,7 +77,6 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     getDevices(query?: string, isCustomSearch?: boolean) {
-        this.isDeviceLoading = false;
         this._device.getDevices(query).subscribe((devices) => {
             this.deviceData = devices;
             if (isCustomSearch) {

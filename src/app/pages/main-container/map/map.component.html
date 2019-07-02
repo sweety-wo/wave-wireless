@@ -8,7 +8,7 @@
                         [isGeoSearch]="isGeoSearch" [geoResult]="geoResult" [isReset]="isReset"
                         class="w-100 h-100"></app-custom-map>
     </div>
-    <div class="position-absolute pull-right chart-div">
+    <div class="position-absolute chart-div" *ngIf="!isDeviceLoading">
         <app-pie-chart [data]="pieData"></app-pie-chart>
     </div>
 </div>
