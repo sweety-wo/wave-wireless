@@ -99,14 +99,14 @@
                                                       [svgStyle]="{ 'height.px':14, 'width.px':14}"></svg-icon>
                                         </button>
                                         <label class="m-0 flex-item-20 pl-1">{{obj.name}}</label>
-                                        <div class="d-flex flex-item-25 align-items-center">
+                                        <div class="d-flex flex-item-30 align-items-center">
                                             <svg-icon src="assets/images/icons/signal.svg" class="cursor-pointer mr-3"
                                                       [svgStyle]="{ 'height.px':14, 'width.px':14, 'fill':'#bbbbbb'}"></svg-icon>
                                             <label class="m-0" *ngIf="obj.gateway">{{obj.gateway.name}}
                                                 {{obj.gateway.oem}} ({{obj.gateway.version}})</label>
                                             <label class="m-0" *ngIf="!obj.gateway">-</label>
                                         </div>
-                                        <div class="d-flex flex-item-20 pl-1">
+                                        <div class="d-flex flex-item-25 pl-1">
                                             <label class="m-0 font-italic"
                                                    *ngFor="let clusterObj of obj.clusters; let i = index">
                                                 {{clusterObj.name}}<span *ngIf="i !== obj.clusters.length - 1">,</span>
@@ -123,7 +123,7 @@
                                         </div>
                                     </div>
                                 </ng-template>
-                                <!--<ng-template ngbPanelContent>
+                                <ng-template ngbPanelContent>
                                     <div class="d-flex expand-panel" style="color: #bbbbbb">
                                         <div class="d-flex w-30">
                                             <div class="avatar-container mr-2 d-flex">
@@ -215,7 +215,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </ng-template>-->
+                                </ng-template>
                             </ngb-panel>
                         </ng-container>
                     </ngb-accordion>
