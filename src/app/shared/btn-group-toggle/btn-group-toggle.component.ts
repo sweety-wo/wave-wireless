@@ -9,6 +9,7 @@ export class BtnGroupToggleComponent implements OnChanges {
     @Input() type: string;
 
     @Input() dataObj: any = {};
+    @Input() addBackground: boolean;
     @Output() toggledChange: EventEmitter<any> = new EventEmitter<any>();
 
     btnGroupArr: any = [];

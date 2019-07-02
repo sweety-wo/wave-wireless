@@ -2,7 +2,8 @@
      data-toggle="buttons">
     <label class="btn btn-sm btn-primary cursor-pointer"
            *ngFor="let btnGroup of btnGroupArr"
-           [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}">
+           [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}"
+            [ngStyle]="{'background-color': (selectedIndex !== btnGroup.itemIndex && addBackground) ? '#eeeeee' : ''}">
         <input type="radio" name="options" autocomplete="off"
                (click)="fnToggle(btnGroup)"
                [checked]="selectedIndex === btnGroup.itemIndex"> {{btnGroup.fieldTitle}}

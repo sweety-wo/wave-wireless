@@ -15,6 +15,7 @@ import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery
 import {TimelineComponent} from '../../../modals/timeline/timeline.component';
 import {DropdownOptions} from '../../../constant/dropdown-options';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
+import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
 
 @Component({
     selector: 'app-details',
@@ -54,6 +55,7 @@ export class DetailsComponent implements OnInit {
         this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
         this._ = _;
         this.common = _common;
+        this.isGhostLoading = true;
     }
 
     async ngOnInit() {
@@ -126,6 +128,24 @@ export class DetailsComponent implements OnInit {
 
     async getDeviceGhosts(deviceId) {
         const ghosts = await this._device.getDeviceGhosts(deviceId);
+        const enabledObj = {
+            both: false,
+            one: false,
+            none: false,
+            missingAttr: false,
+        };
+        if (ghosts['700_rf_switch'] || ghosts['800_rf_switch']) {
+            if (ghosts['700_rf_switch'].reported === 'OFF' && ghosts['800_rf_switch'].reported === 'OFF') {
+                enabledObj.none = true;
+            } else if (ghosts['700_rf_switch'].reported === 'ON' && ghosts['800_rf_switch'].reported === 'ON') {
+                enabledObj.both = true;
+            } else {
+                enabledObj.one = true;
+            }
+        } else {
+            enabledObj.missingAttr = true;
+        }
+        this.device.deviceEnabledObj = enabledObj;
         this.ghosts = ghosts;
         this.filteredGhosts = ghosts;
         this.isGhostLoading = false;
@@ -202,6 +222,40 @@ export class DetailsComponent implements OnInit {
     openTimelineModal(issue) {
         const modal: NgbModalRef = this._modalService.open(TimelineComponent, { size: 'lg', backdrop: 'static'});
         modal.componentInstance.issue = issue;
+    }
+
+    openAttributeToggleConfirmationModal(event) {
+        const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent,
+            { size: 'sm', backdrop: 'static', centered: true });
+        modal.result.then((result) => {
+            const deviceObj = Object.assign({}, this.device);
+            const enabledObj = {
+                both: false,
+                one: false,
+                none: false,
+                missingAttr: false,
+            };
+            switch (result.selectedSwitch) {
+                case '700':
+                case '800':
+                    enabledObj.one = true;
+                    break;
+                case 'both':
+                    if (result.doEnable) {
+                        enabledObj.both = true;
+                    } else {
+                        enabledObj.none = true;
+                    }
+                    break;
+            }
+            deviceObj.deviceEnabledObj = enabledObj;
+            this.device = deviceObj;
+        }, () => {
+        });
+        modal.componentInstance.doEnable = event.doEnable;
+        modal.componentInstance.dataIdArr = [this.device.id];
+        modal.componentInstance.isCalledFromHeader = false;
+
     }
 
 
