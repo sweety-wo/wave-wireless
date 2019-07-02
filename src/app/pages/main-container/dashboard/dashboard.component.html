@@ -68,7 +68,7 @@
                     </div>
                     <ngb-accordion #acc="ngbAccordion" class="custom-acc" *ngIf="!isDataLoading">
                         <ng-container *ngFor="let obj of deviceData; let i = index">
-                            <ngb-panel [id]="'custom-panel-' + i" *ngIf="i === 0">
+                            <ngb-panel [id]="'custom-panel-' + i">
                                 <ng-template ngbPanelHeader let-opened="opened">
                                     <div class="d-flex align-items-center">
                                         <label [for]="'rowCheck' + i" class="check-input mr-3">
