@@ -24,6 +24,7 @@ import {TimelineModule} from './modals/timeline/timeline.module';
 import { AttributeToggleConfirmationComponent } from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
 import {AttributeToggleConfirmationModule} from './modals/attribute-toggle-confirmation/attribute-toggle-confirmation.module';
 import { SelectClustersModalComponent } from './modals/select-clusters-modal/select-clusters-modal.component';
+import {SelectClustersModalModule} from './modals/select-clusters-modal/select-clusters-modal.module';
 
 export function init(startup: StartupService): Function {
     return (): Promise<any> => startup.init();
@@ -33,8 +34,7 @@ export function init(startup: StartupService): Function {
     declarations: [
         AppComponent,
         FooterComponent,
-        PhotoGalleryComponent,
-        SelectClustersModalComponent
+        PhotoGalleryComponent
     ],
     imports: [
         BrowserModule,
@@ -48,7 +48,8 @@ export function init(startup: StartupService): Function {
         TelemetryStatisticsModule,
         PhotoGalleryModule,
         TimelineModule,
-        AttributeToggleConfirmationModule
+        AttributeToggleConfirmationModule,
+        SelectClustersModalModule
     ],
     providers: [
         CookieService,
@@ -58,7 +59,9 @@ export function init(startup: StartupService): Function {
         AuthGuardService,
         NotAuthGuardService
     ],
-    entryComponents: [TelemetryStatisticsComponent, PhotoGalleryComponent, TimelineComponent, AttributeToggleConfirmationComponent],
+    entryComponents: [TelemetryStatisticsComponent,
+        PhotoGalleryComponent, TimelineComponent,
+        AttributeToggleConfirmationComponent, SelectClustersModalComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {

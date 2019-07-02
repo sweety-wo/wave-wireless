@@ -1,6 +1,8 @@
 <div class="modal-header">
     <div class="d-flex align-items-center ju flex-grow-1 mb-3">
-        <h4 class="modal-title">Clusters</h4>
+        <h4 class="modal-title">
+            {{isAdd ? 'Add Devices to Clusters' : 'Remove Devices from Clusters'}}
+        </h4>
     </div>
     <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -8,11 +10,12 @@
 </div>
 <div class="modal-body">
     <div class="h-100 w-100 d-flex flex-column">
-        <label>Please select the clusters you want to add device to?</label>
+        <label *ngIf="isAdd">Please select the clusters to which you want the selected device to be added to</label>
+        <label *ngIf="!isAdd">Please select the clusters from which you want the selected device to be removed from</label>
         <div class="my-2" *ngFor="let cluster of clustersArr">
             <label [for]="cluster.name" class="check-input">
                 <input type="checkbox" [id]="cluster.name" class="mr-2" [disabled]="isValueChanging"
-                       name="switch" [value]="cluster.id">
+                       name="switch" (click)="fnCheckUncheckClusters($event.target.checked, cluster)">
                 {{cluster.name}}
             </label>
         </div>
@@ -24,7 +27,7 @@
             (click)="activeModal.dismiss('Cross click')">
         Cancel
     </button>
-    <button class="btn btn-primary pull-right" *ngIf="!isValueChanging">
-        Add
+    <button class="btn btn-primary pull-right" *ngIf="!isValueChanging" [disabled]="!selectedClusters.length" (click)="fnSave()">
+        {{isAdd ? 'Add' : 'Remove'}}
     </button>
 </div>

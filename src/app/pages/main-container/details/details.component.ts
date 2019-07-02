@@ -124,14 +124,11 @@ export class DetailsComponent implements OnInit {
     }
 
 
-    getDeviceGhosts(deviceId) {
-        this._device.getDeviceGhosts(deviceId).subscribe((ghosts) => {
-            this.ghosts = ghosts;
-            this.filteredGhosts = ghosts;
-            this.isGhostLoading = false;
-        }, (err) => {
-            this.isGhostLoading = false;
-        });
+    async getDeviceGhosts(deviceId) {
+        const ghosts = await this._device.getDeviceGhosts(deviceId);
+        this.ghosts = ghosts;
+        this.filteredGhosts = ghosts;
+        this.isGhostLoading = false;
     }
 
     getIssuesLabelColor(label) {

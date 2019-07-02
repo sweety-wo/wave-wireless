@@ -31,8 +31,14 @@ export class DeviceService {
     /**
      * Get device ghost.
      * */
-    getDeviceGhosts(deviceId) {
-        return this._http.get(environment.API_URL + `node/devices/${deviceId}/ghosts`);
+    async getDeviceGhosts(deviceId): Promise<any> {
+        const url = environment.API_URL + `node/devices/${deviceId}/ghosts`;
+        return await this._http.get(url, {}).toPromise()
+            .then(async (response: any) => {
+                return response;
+            })
+            .catch(async (error) => {
+            });
     }
 
     /**
@@ -41,6 +47,32 @@ export class DeviceService {
     async modifyDeviceGhost(deviceId, payload): Promise<any> {
         const url = environment.API_URL + `node/devices/${deviceId}/ghosts`;
         return await this._http.patch(url, payload).toPromise()
+            .then(async (response: any) => {
+                return response;
+            })
+            .catch(async (error) => {
+            });
+    }
+
+    /**
+     * Add device to cluster.
+     * */
+    async addDeviceToCluster(deviceId, clusterId): Promise<any> {
+        const url = environment.API_URL + `node/clusters/${clusterId}/devices/${deviceId}`;
+        return await this._http.put(url, {}).toPromise()
+            .then(async (response: any) => {
+                return response;
+            })
+            .catch(async (error) => {
+            });
+    }
+
+    /**
+     * Remove device from cluster.
+     * */
+    async removeDeviceFromCluster(deviceId, clusterId): Promise<any> {
+        const url = environment.API_URL + `node/clusters/${clusterId}/devices/${deviceId}`;
+        return await this._http.delete(url).toPromise()
             .then(async (response: any) => {
                 return response;
             })

@@ -12,6 +12,7 @@ import {DeviceImageService} from '../../../services/custom/deviceImage-service/d
 import {NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery.component';
 import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
+import {SelectClustersModalComponent} from '../../../modals/select-clusters-modal/select-clusters-modal.component';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
 
 @Component({
@@ -35,10 +36,10 @@ export class DashboardComponent implements OnInit {
     centerLong: any;
     selectedFooterDropDownOption: any;
     dashboardFooterItemsArr = [{
-        id: 'AddToGroup',
+        id: 'addToGroup',
         name: 'Add to Group'
     }, {
-        id: 'RemoveFromGroup',
+        id: 'removeFromGroup',
         name: 'Remove from Group'
     }];
     geoResult: any;
@@ -85,7 +86,11 @@ export class DashboardComponent implements OnInit {
     fnSearchDevices(e) {
         if (this.searchText.length) {
             if (e.keyCode === 13) {
-                const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) or contains(#{phase}, ${' + this.searchText + '}) or contains(#{typeId}, ${' + this.searchText + '}) or contains(#{health}, ${' + this.searchText + '}) or contains(#{defaultHealth}, ${' + this.searchText + '})';
+                const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ' +
+                    '${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) ' +
+                    'or contains(#{phase}, ${' + this.searchText + '}) or contains(#{typeId}, ' +
+                    '${' + this.searchText + '}) or contains(#{health}, ${' + this.searchText + '}) ' +
+                    'or contains(#{defaultHealth}, ${' + this.searchText + '})';
                 this.isDataLoading = true;
                 this.getDevices(query);
             }
@@ -101,7 +106,7 @@ export class DashboardComponent implements OnInit {
         }).length;
     }
 
-    getDevices(query?: string) {
+    async getDevices(query?: string) {
         this._device.getDevices(query).subscribe((devices: any) => {
             _.forEach(devices, (async (device) => {
                 if (device.gatewayId) {
@@ -110,7 +115,7 @@ export class DashboardComponent implements OnInit {
                     device.gateway = {};
                 }
                 const clusterArr = _.filter(this.clustersData, (cluster: any) => {
-                    return cluster.deviceIds.includes(device.id);
+                    return cluster.deviceIds && cluster.deviceIds.includes(device.id);
                 });
                 device.clusters = clusterArr.length ? clusterArr : [];
                 if (device.data && device.data.photo && device.data.photo[0]) {
@@ -118,13 +123,13 @@ export class DashboardComponent implements OnInit {
                     return device;
                 }
             }));
+            devices[devices.length - 1].testingAttr = 'test';
             this.deviceData = devices;
             this.okCount = this.fnGetHealthCounts(200);
             this.attentionCount = this.fnGetHealthCounts(300);
             this.criticalCount = this.fnGetHealthCounts(500);
             if (this.deviceData.length > 0) {
-                const deviceAttrCount = 0;
-                this.fnGetDeviceAttributes(this.deviceData, deviceAttrCount);
+                this.fnGetDeviceAttributes();
             } else {
                 this.isDataLoading = false;
             }
@@ -136,37 +141,29 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    fnGetDeviceAttributes(deviceData, deviceAttrCount) {
-        if (deviceAttrCount < deviceData.length) {
-            this._device.getDeviceGhosts(deviceData[deviceAttrCount].id).subscribe((ghostObj) => {
-                const enabledObj = {
-                    both: false,
-                    one: false,
-                    none: false,
-                    missingAttr: false,
-                };
-                if (ghostObj['700_rf_switch'] || ghostObj['800_rf_switch']) {
-                    if (ghostObj['700_rf_switch'].reported === 'OFF' && ghostObj['800_rf_switch'].reported === 'OFF') {
-                        enabledObj.none = true;
-                    } else if (ghostObj['700_rf_switch'].reported === 'ON' && ghostObj['800_rf_switch'].reported === 'ON') {
-                        enabledObj.both = true;
-                    } else {
-                        enabledObj.one = true;
-                    }
+    async fnGetDeviceAttributes() {
+        await Promise.all(this.deviceData.map(async (device, index) => {
+            const ghostObj = await this._device.getDeviceGhosts(device.id);
+            const enabledObj = {
+                both: false,
+                one: false,
+                none: false,
+                missingAttr: false,
+            };
+            if (ghostObj['700_rf_switch'] || ghostObj['800_rf_switch']) {
+                if (ghostObj['700_rf_switch'].reported === 'OFF' && ghostObj['800_rf_switch'].reported === 'OFF') {
+                    enabledObj.none = true;
+                } else if (ghostObj['700_rf_switch'].reported === 'ON' && ghostObj['800_rf_switch'].reported === 'ON') {
+                    enabledObj.both = true;
                 } else {
-                    enabledObj.missingAttr = true;
+                    enabledObj.one = true;
                 }
-                deviceData[deviceAttrCount].deviceEnabledObj = enabledObj;
-                deviceAttrCount++;
-                if (deviceAttrCount < deviceData.length) {
-                    this.fnGetDeviceAttributes(deviceData, deviceAttrCount);
-                } else {
-                    this.isDataLoading = false;
-                }
-            });
-        } else {
-            this.isDataLoading = false;
-        }
+            } else {
+                enabledObj.missingAttr = true;
+            }
+            this.deviceData[index].deviceEnabledObj = enabledObj;
+        }));
+        this.isDataLoading = false;
     }
 
     getGateways(query?: string) {
@@ -216,7 +213,6 @@ export class DashboardComponent implements OnInit {
     }
 
     fnSelectFooterItem(index) {
-        console.log('index', index);
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[index];
     }
 
@@ -224,6 +220,21 @@ export class DashboardComponent implements OnInit {
         switch (this.selectedFooterDropDownOption.id) {
             case 'addToGroup':
             case 'removeFromGroup':
+                const modal: NgbModalRef = this._modalService.open(SelectClustersModalComponent,
+                    { size: 'sm', backdrop: 'static', centered: true });
+                modal.result.then((result) => {
+                    this.clustersData = result.clustersArr;
+                    _.forEach(this.deviceData, (device) => {
+                        const clusterArr = _.filter(this.clustersData, (cluster: any) => {
+                            return cluster.deviceIds && cluster.deviceIds.includes(device.id);
+                        });
+                        device.clusters = clusterArr.length ? clusterArr : [];
+                    });
+                }, () => {
+                });
+                modal.componentInstance.clustersArr = this.clustersData;
+                modal.componentInstance.selectedDevices = this.selectedDevices;
+                modal.componentInstance.isAdd = this.selectedFooterDropDownOption.id === 'addToGroup';
                 break;
         }
     }
@@ -298,7 +309,8 @@ export class DashboardComponent implements OnInit {
     }
 
     openAttributeToggleConfirmationModal(event) {
-        const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent, { size: 'sm', backdrop: 'static', centered: true });
+        const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent,
+            { size: 'sm', backdrop: 'static', centered: true });
         modal.result.then((result) => {
             _.forEach(result.deviceIdArr, (deviceId) => {
                 const index  = _.findIndex(this.deviceData, {'id': deviceId});
