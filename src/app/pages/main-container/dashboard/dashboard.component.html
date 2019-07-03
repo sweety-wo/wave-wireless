@@ -10,6 +10,18 @@
             </sup></label>
             <div class="d-flex justify-content-end align-items-center">
                 <div class="input-group search-group mr-3">
+                    <div class="input-group-prepend">
+                        <div ngbDropdown class="d-inline-block">
+                            <button class="btn rounded-0 btn-dark" ngbDropdownToggle id="dropdown" style="border: 1px solid #ced4da;">
+                                {{selectedSearchOption.name}}
+                            </button>
+                            <div ngbDropdownMenu>
+                                <button ngbDropdownItem (click)="fnSetSearchOption(option)"
+                                        *ngFor="let option of searchOptions">{{option.name}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <input type="text" class="form-control"
                            (keyup)="fnSearchDevices($event)"
                            [(ngModel)]="searchText"

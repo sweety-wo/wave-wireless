@@ -4,6 +4,11 @@ export class DropdownOptions {
         {name: 'Custom', value: 'Custom'},
     ];
 
+    public static dashboardSearchOptions = [
+        {name: 'Devices', value: 'devices'},
+        {name: 'Clusters', value: 'clusters'},
+    ];
+
     public static alarmOptions = {
         '700_dl_high_alm': 'Donor input > -30dBm - 700 MHz',
         '700_dl_low_alm': 'Donor input <  -80dBm - 700 MHz',

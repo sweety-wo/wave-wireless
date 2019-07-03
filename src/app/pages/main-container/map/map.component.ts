@@ -7,6 +7,7 @@ import {Paho} from 'ng2-mqtt/mqttws31';
 import {DeviceService} from '../../../services/node/device.service';
 import {CommonService} from '../../../services/custom/common-service/common.service';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
+import {DeviceImageService} from '../../../services/custom/deviceImage-service/device-image.service';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class MapComponent implements OnInit, OnDestroy {
 
     constructor(private _device: DeviceService,
                 private _common: CommonService,
-                private _auth: AuthService) {
+                private _auth: AuthService,
+                private _deviceImageService: DeviceImageService) {
         this.isDeviceLoading = true;
     }
 
@@ -77,7 +79,13 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     getDevices(query?: string, isCustomSearch?: boolean) {
-        this._device.getDevices(query).subscribe((devices) => {
+        this._device.getDevices(query).subscribe((devices: any) => {
+            _.forEach(devices, async(device) => {
+                if (device.data && device.data.photo && device.data.photo[0]) {
+                    device.data.photo[0] = await this._deviceImageService.getDeviceImage(device.data.photo[0]);
+                    return device;
+                }
+            });
             this.deviceData = devices;
             if (isCustomSearch) {
                 this.filteredData = _.filter(this.deviceData, (device: any) => {

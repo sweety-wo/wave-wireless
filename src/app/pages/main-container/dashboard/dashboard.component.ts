@@ -14,6 +14,7 @@ import {PhotoGalleryComponent} from '../../../modals/photo-gallery/photo-gallery
 import {AttributeToggleConfirmationComponent} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.component';
 import {SelectClustersModalComponent} from '../../../modals/select-clusters-modal/select-clusters-modal.component';
 import {AuthService} from '../../../services/custom/auth-service/auth.service';
+import {DropdownOptions} from '../../../constant/dropdown-options';
 
 @Component({
     selector: 'app-dashboard',
@@ -35,6 +36,8 @@ export class DashboardComponent implements OnInit {
     centerLat: any;
     centerLong: any;
     selectedFooterDropDownOption: any;
+    searchOptions: any;
+    selectedSearchOption: any = {};
     dashboardFooterItemsArr = [{
         id: 'addToGroup',
         name: 'Add to Group'
@@ -61,6 +64,8 @@ export class DashboardComponent implements OnInit {
         this.centerLat = 38.89511;
         this.centerLong = -77.03637;
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[0];
+        this.searchOptions = DropdownOptions.dashboardSearchOptions;
+        this.selectedSearchOption = DropdownOptions.dashboardSearchOptions[0];
     }
 
     async ngOnInit() {
@@ -86,18 +91,36 @@ export class DashboardComponent implements OnInit {
     fnSearchDevices(e) {
         if (this.searchText.length) {
             if (e.keyCode === 13) {
-                const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ' +
-                    '${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) ' +
-                    'or contains(#{phase}, ${' + this.searchText + '}) or contains(#{typeId}, ' +
-                    '${' + this.searchText + '}) or contains(#{health}, ${' + this.searchText + '}) ' +
-                    'or contains(#{defaultHealth}, ${' + this.searchText + '})';
-                this.isDataLoading = true;
-                this.getDevices(query);
+                console.log('this.selectedSearchOption', this.selectedSearchOption);
+                if (this.selectedSearchOption.value === 'devices') {
+                    const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ' +
+                        '${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) ' +
+                        'or contains(#{phase}, ${' + this.searchText + '}) or contains(#{typeId}, ' +
+                        '${' + this.searchText + '}) or contains(#{health}, ${' + this.searchText + '}) ' +
+                        'or contains(#{defaultHealth}, ${' + this.searchText + '})';
+                    this.isDataLoading = true;
+                    this.getDevices(query);
+                } else {
+                    const clusterQuery = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ' +
+                        '${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) ' +
+                        'or contains(#{deviceIds}, ${' + this.searchText + '})';
+                    this.isDataLoading = true;
+                    this.getClusters(clusterQuery);
+                }
             }
         } else if (!this.searchText) {
             this.isDataLoading = true;
             this.getDevices();
         }
+    }
+
+    fnSetSearchOption(option) {
+        if (this.searchText && this.searchText.length) {
+            this.searchText = '';
+            this.isDataLoading = true;
+            this.getDevices();
+        }
+        this.selectedSearchOption = option;
     }
 
     fnGetHealthCounts(healthCode) {
@@ -108,35 +131,46 @@ export class DashboardComponent implements OnInit {
 
     async getDevices(query?: string) {
         this._device.getDevices(query).subscribe((devices: any) => {
-            _.forEach(devices, (async (device) => {
-                if (device.gatewayId) {
-                    device.gateway = _.find(this.gatewayData, {'id': device.gatewayId});
+            if (devices.length) {
+                _.forEach(devices, (async (device) => {
+                    if (device.gatewayId) {
+                        device.gateway = _.find(this.gatewayData, {'id': device.gatewayId});
+                    } else {
+                        device.gateway = {};
+                    }
+                    const clusterArr = _.filter(this.clustersData, (cluster: any) => {
+                        return cluster.deviceIds && cluster.deviceIds.includes(device.id);
+                    });
+                    device.clusters = clusterArr.length ? clusterArr : [];
+                    if (device.data && device.data.photo && device.data.photo[0]) {
+                        device.photo = await this._deviceImageService.getDeviceImage(device.data.photo[0]);
+                        return device;
+                    }
+                }));
+                this.deviceData = devices;
+                this.okCount = this.fnGetHealthCounts(200);
+                this.attentionCount = this.fnGetHealthCounts(300);
+                this.criticalCount = this.fnGetHealthCounts(500);
+                if (this.deviceData.length > 0) {
+                    this.fnGetDeviceAttributes();
                 } else {
-                    device.gateway = {};
+                    this.isDataLoading = false;
                 }
-                const clusterArr = _.filter(this.clustersData, (cluster: any) => {
-                    return cluster.deviceIds && cluster.deviceIds.includes(device.id);
-                });
-                device.clusters = clusterArr.length ? clusterArr : [];
-                if (device.data && device.data.photo && device.data.photo[0]) {
-                    device.photo = await this._deviceImageService.getDeviceImage(device.data.photo[0]);
-                    return device;
-                }
-            }));
-            devices[devices.length - 1].testingAttr = 'test';
-            this.deviceData = devices;
-            this.okCount = this.fnGetHealthCounts(200);
-            this.attentionCount = this.fnGetHealthCounts(300);
-            this.criticalCount = this.fnGetHealthCounts(500);
-            if (this.deviceData.length > 0) {
-                this.fnGetDeviceAttributes();
             } else {
+                this.okCount = 0;
+                this.attentionCount = 0;
+                this.criticalCount = 0;
+                this.deviceData = [];
                 this.isDataLoading = false;
             }
         }, (err) => {
             if (err && err.error && err.error.message) {
                 this._toastr.error(err.error.message);
             }
+            this.okCount = 0;
+            this.attentionCount = 0;
+            this.criticalCount = 0;
+            this.deviceData = [];
             this.isDataLoading = false;
         });
     }
@@ -179,11 +213,33 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-    getClusters() {
+    getClusters(query?: string) {
         this.isDataLoading = true;
-        this._cluster.getClusters().subscribe((clusters) => {
+        this._cluster.getClusters(query).subscribe((clusters) => {
             this.clustersData = clusters;
-            this.getGateways();
+            if (query) {
+                if (this.clustersData.length) {
+                    _.forEach(this.clustersData, (cluster) => {
+                        if (cluster.deviceIds) {
+                            const deviceCp = [];
+                            _.forEach(cluster.deviceIds, (deviceId) => {
+                                const deviceIndex = _.findIndex(this.deviceData, (device: any) => {
+                                    return device.id === deviceId
+                                });
+                                if (deviceIndex !== -1) {
+                                    deviceCp.push(this.deviceData[deviceIndex]);
+                                }
+                            });
+                            this.deviceData = deviceCp;
+                        }
+                    });
+                } else {
+                    this.deviceData = [];
+                }
+                this.isDataLoading = false;
+            } else {
+                this.getGateways();
+            }
         }, (err) => {
             if (err && err.error && err.error.message) {
                 this._toastr.error(err.error.message);
