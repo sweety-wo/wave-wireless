@@ -57,7 +57,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     this.map.fitBounds(this.geoResult[0].bounds);
                 }
             }
-
         }
     }
 
@@ -85,27 +84,24 @@ export class CustomMapComponent implements OnInit, OnChanges {
                         noWrap: true,
                     })
                 ],
-                zoom: this.zone === 'USA' ? 5 : 4 ,
+                zoom: this.zone === 'USA' ? 5 : 4,
                 minZoom: this.zone === 'USA' ? 5 : 4,
                 center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
                 attributionControl: false,
                 maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
                 zoomControl: false,
             };
-            if (this.map) {
-                if (this.zone !== 'USA') {
-                    setTimeout(() => {
-                        this.map.fitBounds(this.geoResult[0].bounds);
-                    }, 1000);
-                }
-                // If zone is USA and cross is clicked in search input move map back to USA with center
-                if (this.zone === 'USA' && this.isReset) {
-                    this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
-                    this.map.setZoom(4);
-                }
+            if (this.zone !== 'USA') {
+                setTimeout(() => {
+                    this.map.fitBounds(this.geoResult[0].bounds);
+                }, 1000);
+            }
+            // If zone is USA and cross is clicked in search input move map back to USA with center
+            if (this.zone === 'USA' && this.isReset) {
+                this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
+                this.map.setZoom(4);
             }
         } else if (this.centerLat) {
-            console.log("in center")
             this.options = {
                 layers: [
                     tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -113,8 +109,8 @@ export class CustomMapComponent implements OnInit, OnChanges {
                         noWrap: true,
                     })
                 ],
-                zoom: 4 ,
-                minZoom:  4,
+                zoom: 4,
+                minZoom: 4,
                 center: latLng([this.centerLat, this.centerLong]),
                 attributionControl: false,
                 zoomControl: false,

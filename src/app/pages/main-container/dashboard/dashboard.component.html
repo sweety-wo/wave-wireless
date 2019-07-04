@@ -270,21 +270,23 @@
                           [svgStyle]="{ 'height.px':18, 'width.px':18}"></svg-icon>
             </div>
             <!-- Body -->
-            <div class="body overflow-auto" *ngIf="geoResult && !selectedDevices.length">
+            <div class="body overflow-auto" >
                 <app-custom-map [(mapData)]="selectedDevices"
                                 [hideZoomControls]="true"
                                 [geoResult]="geoResult"
                                 [zone]="zone"
+                                *ngIf="geoResult && !selectedDevices.length"
                 ></app-custom-map>
 
-            </div>
-            <div class="body overflow-auto" *ngIf="selectedDevices.length">
                 <app-custom-map [(mapData)]="selectedDevices"
                                 [centerLat]="centerLat"
                                 [centerLong]="centerLong"
                                 [hideZoomControls]="true"
+                                *ngIf="selectedDevices.length"
                 ></app-custom-map>
+
             </div>
+
         </div>
 
         <!-- right-bottom-container -->

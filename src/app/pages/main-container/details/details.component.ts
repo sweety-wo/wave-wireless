@@ -80,6 +80,28 @@ export class DetailsComponent implements OnInit {
         }
     }
 
+    fnGetCoordinates(data) {
+        if (data && data.length) {
+            const coordinates = this._common.setLatLng(data);
+            this.centerLat = coordinates.centerLat;
+            this.centerLong = coordinates.centerLong;
+        } else {
+            this._auth.loggedInUser.subscribe(async user => {
+                if (user && user.data && user.data.zone) {
+                    this.zone =  user.data.zone;
+                    if (this.zone) {
+                        const provider = new OpenStreetMapProvider();
+                        this.geoResult = await provider.search({query: this.zone});
+                    }
+                } else {
+                    this.zone = 'USA';
+                    const provider = new OpenStreetMapProvider();
+                    this.geoResult = await provider.search({query: this.zone});
+                }
+            });
+        }
+    }
+
     getDevice(deviceId) {
         this.isDeviceLoading = true;
         this.isIssueLoading = true;
@@ -92,6 +114,7 @@ export class DetailsComponent implements OnInit {
             this.getGateway(this.gatewayId);
             this.getIssues();
             this.getDeviceGhosts(this.deviceId);
+            this.fnGetCoordinates([this.device]);
         }, (err) => {
             this.isDeviceLoading = false;
         });
