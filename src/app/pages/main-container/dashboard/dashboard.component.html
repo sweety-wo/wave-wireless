@@ -297,14 +297,15 @@
                 <div class="d-flex align-items-center">
                     <div class="btn-group mr-2">
                         <button type="button" class="btn btn-dark" style="margin-right: 2px">
-                            <small>Last 1hr</small>
+                            <small>{{selectedChartFilterOption.name}}</small>
                         </button>
                         <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
                             <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
                             <div class="dropdown-menu" ngbDropdownMenu>
-                                <button ngbDropdownItem>One</button>
-                                <button ngbDropdownItem>Two</button>
-                                <button ngbDropdownItem>Four!</button>
+                                <button ngbDropdownItem
+                                        *ngFor="let filterOption of chartFilterOptions" (click)="fnSelectFilterOption(filterOption)">
+                                    {{filterOption.name}}
+                                </button>
                             </div>
                         </div>
                     </div>

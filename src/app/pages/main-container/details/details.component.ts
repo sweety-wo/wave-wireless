@@ -43,6 +43,8 @@ export class DetailsComponent implements OnInit {
     isDeviceLoading: boolean;
     isGhostLoading: boolean;
     healthClass: string;
+    chartFilterOptions: any = [];
+    selectedChartFilterOption: any = {};
 
     constructor(private _route: ActivatedRoute,
                 private _device: DeviceService,
@@ -58,6 +60,8 @@ export class DetailsComponent implements OnInit {
         this.common = _common;
         this.isGhostLoading = true;
         this.healthClass = 'bg-default';
+        this.chartFilterOptions = DropdownOptions.chartFilterOptions;
+        this.selectedChartFilterOption = this.chartFilterOptions[0];
     }
 
     async ngOnInit() {
@@ -250,6 +254,10 @@ export class DetailsComponent implements OnInit {
         if (_.isEmpty(this.filteredGhosts)) {
             this.filteredGhosts = null;
         }
+    }
+
+    fnSelectFilterOption(filterOption) {
+        this.selectedChartFilterOption = filterOption;
     }
 
     openTelemetryStatisticsModal(ghost) {

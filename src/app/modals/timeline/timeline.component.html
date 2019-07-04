@@ -4,7 +4,7 @@
               *ngIf="issue && issue.labels"
               [ngStyle]="getIssuesLabelColor(issue.labels[0])">{{issue.labels[0].title.toUpperCase()}}</span>
         <h4 class="modal-title mr-2">{{issue.title}}</h4>
-        <span (click)="isCommentSectionClicked= !isCommentSectionClicked" *ngIf="comments"
+        <span (click)="fnExpandCollapseComments()" *ngIf="comments && comments.length > 0"
               [title]="isCommentSectionClicked ? 'Collapse all Comments': 'Expand all Comments' ">
                     <i class="fa fa-2x cursor-pointer" [ngClass]="isCommentSectionClicked ? 'fa-minus-circle': 'fa-plus-circle'"></i>
         </span>
@@ -21,10 +21,10 @@
             <div class="d-flex flex-grow-1 align-items-center"
                  (click)="firstComment.isDetailClicked= !firstComment.isDetailClicked">
                 <div class="flex-column d-none d-sm-flex">
-                    <div class="row h-50">
+                    <!--<div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
-                    </div>
+                    </div>-->
                     <h5 class="m-2 cursor-pointer">
                         <i class="fa fa-fw fa-clock-o" *ngIf="checkComment(firstComment)"></i>
                         <i class="fa fa-fw fa-tag" *ngIf="firstComment.commentHasLabels === true"></i>
@@ -188,10 +188,10 @@
                         <i class="fa fa-fw fa-user" *ngIf="lastComment.commentHasParticipants === true"></i>
                         <i class="fa fa-fw fa-user-circle-o" *ngIf="lastComment.commentHasAssignees === true"></i>
                     </h5>
-                    <div class="row h-50">
+                    <!--<div class="row h-50">
                         <div class="col border-right">&nbsp;</div>
                         <div class="col">&nbsp;</div>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="d-flex flex-grow-1" *ngIf="checkComment(lastComment)">
                     <span class="text-muted cursor-pointer">{{lastComment.createdAt}}</span>

@@ -9,6 +9,12 @@ export class DropdownOptions {
         {name: 'Clusters', value: 'clusters'},
     ];
 
+    public static chartFilterOptions = [
+        {name: 'Last 1h', value: '1'},
+        {name: 'Last 3h', value: '3'},
+        {name: 'Last 12h', value: '12'},
+    ];
+
     public static alarmOptions = {
         '700_dl_high_alm': 'Donor input > -30dBm - 700 MHz',
         '700_dl_low_alm': 'Donor input <  -80dBm - 700 MHz',

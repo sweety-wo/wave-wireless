@@ -49,6 +49,8 @@ export class DashboardComponent implements OnInit {
     zone: any;
     private _client: Paho.MQTT.Client;
     common: any;
+    chartFilterOptions: any = [];
+    selectedChartFilterOption: any = {};
 
     constructor(private _device: DeviceService,
                 private _gateway: GatewayService,
@@ -66,6 +68,8 @@ export class DashboardComponent implements OnInit {
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[0];
         this.searchOptions = DropdownOptions.dashboardSearchOptions;
         this.selectedSearchOption = DropdownOptions.dashboardSearchOptions[0];
+        this.chartFilterOptions = DropdownOptions.chartFilterOptions;
+        this.selectedChartFilterOption = this.chartFilterOptions[0];
     }
 
     ngOnInit() {
@@ -289,13 +293,16 @@ export class DashboardComponent implements OnInit {
     fnSelectFooterItem(index) {
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[index];
     }
+    fnSelectFilterOption(filterOption) {
+        this.selectedChartFilterOption = filterOption;
+    }
 
     fnTriggerFooterEvent() {
         switch (this.selectedFooterDropDownOption.id) {
             case 'addToGroup':
             case 'removeFromGroup':
                 const modal: NgbModalRef = this._modalService.open(SelectClustersModalComponent,
-                    { size: 'sm', backdrop: 'static', centered: true });
+                    { size: 'lg', backdrop: 'static', centered: true });
                 modal.result.then((result) => {
                     this.clustersData = result.clustersArr;
                     _.forEach(this.deviceData, (device) => {

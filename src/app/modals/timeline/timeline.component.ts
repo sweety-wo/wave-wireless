@@ -39,7 +39,7 @@ export class TimelineComponent implements OnInit {
         this._issue.getIssueComments(this.issue.id).subscribe((response: any) => {
             this.isCommentLoading = false;
             if (response && response.length) {
-                _.forEach(response, (comment) => {
+                _.forEach(response, (comment, index) => {
                     comment.humanDateCreated = moment.unix(comment.created).format('MM/DD/YYYY HH:mm:ss');
                     comment.createdAt = moment(comment.humanDateCreated).fromNow();
                     comment.isDetailClicked = false;
@@ -81,7 +81,13 @@ export class TimelineComponent implements OnInit {
                     return moment(o.humanDateCreated);
                 });
                 this.firstComment = this.comments.shift();
+                if (this.firstComment) {
+                    this.firstComment.isDetailClicked = true;
+                }
                 this.lastComment = this.comments.pop();
+                if (this.lastComment) {
+                    this.lastComment.isDetailClicked = true;
+                }
                 this.totalComments = this.comments.length;
             }
         });
@@ -90,6 +96,13 @@ export class TimelineComponent implements OnInit {
     checkComment(commentType) {
         return commentType.commentHasLabels !== true &&
             commentType.commentHasParticipants !== true && commentType.commentHasAssignees !== true;
+    }
+
+    fnExpandCollapseComments() {
+        this.isCommentSectionClicked = !this.isCommentSectionClicked;
+        _.forEach(this.comments, (comment) => {
+            comment.isDetailClicked = this.isCommentSectionClicked;
+        });
     }
 
     addComment() {
