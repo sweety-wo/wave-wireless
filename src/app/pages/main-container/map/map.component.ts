@@ -22,7 +22,6 @@ export class MapComponent implements OnInit, OnDestroy {
     pieData = [];
     isDeviceLoading: boolean;
     private _client: Paho.MQTT.Client;
-    isGeoSearch: boolean;
     isReset: boolean;
     zone: any;
     healthArr: any = [500, 300];
@@ -34,19 +33,20 @@ export class MapComponent implements OnInit, OnDestroy {
         this.isDeviceLoading = true;
     }
 
-    async ngOnInit() {
-        this._auth.loggedInUser.subscribe(user => {
+    ngOnInit() {
+        this._auth.loggedInUser.subscribe(async user => {
             if (user && user.data && user.data.zone) {
-                this.zone =  user.data.zone[0];
+                this.zone =  user.data.zone;
+                if (this.zone) {
+                    const provider = new OpenStreetMapProvider();
+                    this.geoResult = await provider.search({query: this.zone});
+                }
             } else {
                 this.zone = 'USA';
+                const provider = new OpenStreetMapProvider();
+                this.geoResult = await provider.search({query: this.zone});
             }
         });
-        if (this.zone) {
-            const provider = new OpenStreetMapProvider();
-            this.geoResult = await provider.search({query: this.zone});
-
-        }
         this.getDevices();
     }
 
@@ -195,13 +195,11 @@ export class MapComponent implements OnInit, OnDestroy {
             if (res.isGeoSearch && res.searchText) {
                 const provider = new OpenStreetMapProvider();
                 this.geoResult = await provider.search({query: res.searchText});
-                this.isGeoSearch = res.isGeoSearch;
                 this.isReset = res.isReset;
                 // search reset
             } else if (!res.isGeoSearch && !res.isFromFilter) {
                 const provider = new OpenStreetMapProvider();
                 this.geoResult = await provider.search({query: this.zone});
-                this.isGeoSearch = res.isGeoSearch;
                 this.isReset = res.isReset;
             }
         }

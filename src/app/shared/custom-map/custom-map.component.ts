@@ -25,7 +25,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     @Input() mapData: any;
     @Input() centerLat: any;
     @Input() centerLong: any;
-    @Input() isGeoSearch: any;
     @Input() geoResult: any;
     @Input() hideZoomControls: any;
     @Input() isReset: any;
@@ -82,8 +81,8 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     noWrap: true,
                 })
             ],
-            zoom: 4,
-            minZoom: 4,
+            zoom: this.zone === 'USA' ? 5 : 4 ,
+            minZoom: this.zone === 'USA' ? 5 : 4,
             center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
             attributionControl: false,
             maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
@@ -91,7 +90,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
         };
 
         if (this.map) {
-            if (this.isGeoSearch || this.zone !== 'USA') {
+            if (this.zone !== 'USA') {
                 setTimeout(() => {
                     this.map.fitBounds(this.geoResult[0].bounds);
                 }, 1000);
@@ -102,10 +101,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 this.map.setZoom(4);
             }
         }
-
-        if (mapData && mapData.length) {
-            this.markerClusterData = this.generateMarkers(mapData);
-        }
+        this.markerClusterData = this.generateMarkers(mapData);
     }
 
     generateMarkers(dataArr: any) {

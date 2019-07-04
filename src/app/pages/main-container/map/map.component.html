@@ -3,9 +3,9 @@
 </div>
 <div class="container-fluid d-flex p-3" *ngIf="!isDeviceLoading">
     <app-search-bar (searchChangeEvent)="fnSearch($event)" [zone]="zone"></app-search-bar>
-    <div class="d-flex bg-light w-100" *ngIf="geoResult">
+    <div class="d-flex bg-light w-100" *ngIf="geoResult && zone">
         <app-custom-map [mapData]="filteredData" [zone]="zone"
-                        [isGeoSearch]="isGeoSearch" [geoResult]="geoResult" [isReset]="isReset"
+                        [geoResult]="geoResult" [isReset]="isReset"
                         class="w-100 h-100"></app-custom-map>
     </div>
     <div class="position-absolute chart-div" *ngIf="!isDeviceLoading">
