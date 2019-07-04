@@ -19,11 +19,22 @@
             </ng-container>
 
             <!-- Body -->
-            <div class="body overflow-auto" *ngIf="geoResult && device">
+            <div class="body overflow-auto" *ngIf="geoResult && device && !(device.data && device.data.lat && device.data.lat[0])">
                 <app-custom-map [mapData]="[device]"
                                 [hideZoomControls]="true"
                                 [geoResult]="geoResult"
-                                [zone]="zone"></app-custom-map>
+                                [zone]="zone"
+                ></app-custom-map>
+                <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
+                    <app-loader></app-loader>
+                </div>
+            </div>
+            <div class="body overflow-auto" *ngIf="device && device.data && device.data.lat && device.data.lat[0]">
+                <app-custom-map [mapData]="[device]"
+                                [centerLat]="centerLat"
+                                [centerLong]="centerLong"
+                                [hideZoomControls]="true"
+                ></app-custom-map>
                 <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isDeviceLoading">
                     <app-loader></app-loader>
                 </div>

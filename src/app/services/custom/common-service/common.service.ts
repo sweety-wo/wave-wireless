@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
 import * as json2csv from 'json2csv';
+import * as _ from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,24 @@ export class CommonService {
         }
         return {color, title};
     }
+
+    setLatLng(data) {
+        let centerLat;
+        let centerLong;
+        if (data && data.length) {
+            _.forEach(data, (o) => {
+                if (o.data && o.data.lat && o.data.long && o.data.long[0] && o.data.lat[0]) {
+                    centerLat = o.data.lat[0];
+                    centerLong = o.data.long[0];
+                    if (centerLat && centerLong) {
+                        return false;
+                    }
+                }
+            });
+        }
+        return {centerLat, centerLong};
+    }
+
 
     exportToCsv(data, fileName) {
         const csvData =

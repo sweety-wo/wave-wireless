@@ -51,10 +51,13 @@ export class CustomMapComponent implements OnInit, OnChanges {
         if (!this.hideZoomControls) {
             this.map.addControl(L.control.zoom({position: 'bottomleft'}));
         } else {
-            // To set zoom over user zone for dashboard and details component
-            if (this.zone !== 'USA') {
-                this.map.fitBounds(this.geoResult[0].bounds);
+            if (this.zone) {
+                // To set zoom over user zone for dashboard and details component
+                if (this.zone !== 'USA') {
+                    this.map.fitBounds(this.geoResult[0].bounds);
+                }
             }
+
         }
     }
 
@@ -74,37 +77,58 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
-        this.options = {
-            layers: [
-                tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; OpenStreetMap contributors',
-                    noWrap: true,
-                })
-            ],
-            zoom: this.zone === 'USA' ? 5 : 4 ,
-            minZoom: this.zone === 'USA' ? 5 : 4,
-            center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
-            attributionControl: false,
-            maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
-            zoomControl: false,
-        };
-
-        if (this.map) {
-            if (this.zone !== 'USA') {
-                setTimeout(() => {
-                    this.map.fitBounds(this.geoResult[0].bounds);
-                }, 1000);
+        if (this.zone) {
+            this.options = {
+                layers: [
+                    tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors',
+                        noWrap: true,
+                    })
+                ],
+                zoom: this.zone === 'USA' ? 5 : 4 ,
+                minZoom: this.zone === 'USA' ? 5 : 4,
+                center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
+                attributionControl: false,
+                maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
+                zoomControl: false,
+            };
+            if (this.map) {
+                if (this.zone !== 'USA') {
+                    setTimeout(() => {
+                        this.map.fitBounds(this.geoResult[0].bounds);
+                    }, 1000);
+                }
+                // If zone is USA and cross is clicked in search input move map back to USA with center
+                if (this.zone === 'USA' && this.isReset) {
+                    this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
+                    this.map.setZoom(4);
+                }
             }
-            // If zone is USA and cross is clicked in search input move map back to USA with center
-            if (this.zone === 'USA' && this.isReset) {
-                this.map.panTo([Constant.USA.centerLat, Constant.USA.centerLong]);
-                this.map.setZoom(4);
+        } else if (this.centerLat) {
+            console.log("in center")
+            this.options = {
+                layers: [
+                    tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors',
+                        noWrap: true,
+                    })
+                ],
+                zoom: 4 ,
+                minZoom:  4,
+                center: latLng([this.centerLat, this.centerLong]),
+                attributionControl: false,
+                zoomControl: false,
+            };
+            if (this.map) {
+                // Move map to the latitude/longitude mentioned
+                this.map.panTo([this.centerLat, this.centerLong]);
             }
         }
         this.markerClusterData = this.generateMarkers(mapData);
     }
 
     generateMarkers(dataArr: any) {
+        console.log('dataArr', dataArr);
         this.markers = [];
         let color = '';
         let className = '';

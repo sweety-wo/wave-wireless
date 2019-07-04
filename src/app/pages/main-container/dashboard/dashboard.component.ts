@@ -68,23 +68,13 @@ export class DashboardComponent implements OnInit {
         this.selectedSearchOption = DropdownOptions.dashboardSearchOptions[0];
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         // Todo: Remove the boolean assignment and enable cluster call
         /*this.isDataLoading = false;
         this.okCount = this.fnGetHealthCounts(200);
         this.attentionCount = this.fnGetHealthCounts(300);
         this.criticalCount = this.fnGetHealthCounts(500);*/
-        this._auth.loggedInUser.subscribe(user => {
-            if (user && user.data && user.data.zone) {
-                this.zone =  user.data.zone[0];
-            } else {
-                this.zone = 'USA';
-            }
-        });
-        if (this.zone) {
-            const provider = new OpenStreetMapProvider();
-            this.geoResult = await provider.search({query: this.zone});
-        }
+        this.fnGetCoordinates(this.selectedDevices);
         this.getClusters();
     }
 
@@ -113,6 +103,31 @@ export class DashboardComponent implements OnInit {
             this.getDevices();
         }
     }
+
+    fnGetCoordinates(data) {
+        if (data && data.length) {
+            console.log('called if');
+            const coordinates = this._common.setLatLng(data);
+            this.centerLat = coordinates.centerLat;
+            this.centerLong = coordinates.centerLong;
+        } else {
+            console.log('called else');
+            this._auth.loggedInUser.subscribe(async user => {
+                if (user && user.data && user.data.zone) {
+                    this.zone =  user.data.zone;
+                    if (this.zone) {
+                        const provider = new OpenStreetMapProvider();
+                        this.geoResult = await provider.search({query: this.zone});
+                    }
+                } else {
+                    this.zone = 'USA';
+                    const provider = new OpenStreetMapProvider();
+                    this.geoResult = await provider.search({query: this.zone});
+                }
+            });
+        }
+    }
+
 
     fnSetSearchOption(option) {
         if (this.searchText && this.searchText.length) {
@@ -253,6 +268,8 @@ export class DashboardComponent implements OnInit {
         this.selectedDevices = _.filter(this.deviceData, (device: any) => {
             return device.state;
         });
+
+        this.fnGetCoordinates(this.selectedDevices);
     }
 
     checkAll(event?) {
@@ -262,6 +279,7 @@ export class DashboardComponent implements OnInit {
         } else {
             this.selectedDevices = [];
         }
+        this.fnGetCoordinates(this.selectedDevices);
     }
 
     isAllChecked() {
