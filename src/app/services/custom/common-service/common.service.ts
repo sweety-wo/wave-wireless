@@ -51,7 +51,7 @@ export class CommonService {
         const blob = new Blob([csvData], {type: 'text/csv'});
         const url = URL.createObjectURL(blob);
         a.href = url;
-        a.download = fileName + '.csv';
+        a.download = fileName + '-' + Date.now() + '.csv';
         a.click();
     }
 }

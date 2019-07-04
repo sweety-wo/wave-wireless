@@ -42,6 +42,7 @@ export class DetailsComponent implements OnInit {
     isIssueLoading: boolean;
     isDeviceLoading: boolean;
     isGhostLoading: boolean;
+    healthClass: string;
 
     constructor(private _route: ActivatedRoute,
                 private _device: DeviceService,
@@ -56,6 +57,7 @@ export class DetailsComponent implements OnInit {
         this._ = _;
         this.common = _common;
         this.isGhostLoading = true;
+        this.healthClass = 'bg-default';
     }
 
     async ngOnInit() {
@@ -84,6 +86,7 @@ export class DetailsComponent implements OnInit {
         this.isGhostLoading = true;
         this._device.getDevice(deviceId).subscribe((device) => {
             this.device = device;
+            this.fnGetDeviceHealthClass();
             this.getDeviceImage();
             this.gatewayId = this.device.gatewayId;
             this.getGateway(this.gatewayId);
@@ -92,6 +95,24 @@ export class DetailsComponent implements OnInit {
         }, (err) => {
             this.isDeviceLoading = false;
         });
+    }
+
+    fnGetDeviceHealthClass() {
+        if (this.device.health) {
+            switch (this.device.health) {
+                case 200:
+                    this.healthClass = 'bg-primary';
+                    break;
+                case 300:
+                    this.healthClass = 'bg-orange';
+                    break;
+                case 500:
+                    this.healthClass = 'bg-red';
+                    break;
+                default:
+                    this.healthClass = 'bg-default';
+            }
+        }
     }
 
     async getDeviceImage() {

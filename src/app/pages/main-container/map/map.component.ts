@@ -20,6 +20,7 @@ export class MapComponent implements OnInit, OnDestroy {
     filteredData: any;
     geoResult: any = [];
     pieData = [];
+    isPieDataEmpty: boolean;
     isDeviceLoading: boolean;
     private _client: Paho.MQTT.Client;
     isReset: boolean;
@@ -31,6 +32,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 private _auth: AuthService,
                 private _deviceImageService: DeviceImageService) {
         this.isDeviceLoading = true;
+        this.isPieDataEmpty = true;
     }
 
     ngOnInit() {
@@ -60,6 +62,7 @@ export class MapComponent implements OnInit, OnDestroy {
         const ok = deviceData.reduce(function (n, device) {
             return n + (device.health === 200);
         }, 0);
+        this.isPieDataEmpty = attention === 0 && critical === 0 && ok === 0;
         this.pieData = [
             {
                 name: this._common.getHealthDetail(300).title,
@@ -76,6 +79,7 @@ export class MapComponent implements OnInit, OnDestroy {
                 color: this._common.getHealthDetail(200).color,
                 y: ok,
             }];
+        console.log('pieData', this.pieData);
     }
 
     getDevices(query?: string, isCustomSearch?: boolean) {

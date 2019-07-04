@@ -9,7 +9,11 @@
                         class="w-100 h-100"></app-custom-map>
     </div>
     <div class="position-absolute chart-div" *ngIf="!isDeviceLoading">
-        <app-pie-chart [data]="pieData"></app-pie-chart>
+        <div *ngIf="isPieDataEmpty" class="h-100 d-flex flex-column justify-content-center align-items-center">
+            <i class="fa fa-2x fa-exclamation-circle"></i>
+            <label class="mt-2">No data found for current filter criteria</label>
+        </div>
+        <app-pie-chart *ngIf="!isPieDataEmpty" [data]="pieData"></app-pie-chart>
     </div>
 </div>
 

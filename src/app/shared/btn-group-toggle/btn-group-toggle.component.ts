@@ -21,7 +21,7 @@ export class BtnGroupToggleComponent implements OnChanges {
           fieldValue: true,
           itemIndex: 1
       }, {
-          fieldTitle: 'N/A',
+          fieldTitle: '700/800',
           fieldValue: null,
           itemIndex: 2
       }, {
