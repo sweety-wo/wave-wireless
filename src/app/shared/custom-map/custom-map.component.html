@@ -1,8 +1,15 @@
-<div leaflet
+<div leaflet *ngIf="!hideZoomControls"
      [leafletOptions]="options"
      (leafletMapReady)="mapReady($event)"
      [leafletMarkerCluster]="markerClusterData"
      [leafletLayersControl]="layersControl"
+     [leafletMarkerClusterOptions]="markerClusterOptions">
+</div>
+
+<div leaflet *ngIf="hideZoomControls"
+     [leafletOptions]="options"
+     (leafletMapReady)="mapReady($event)"
+     [leafletMarkerCluster]="markerClusterData"
      [leafletMarkerClusterOptions]="markerClusterOptions">
 </div>
 

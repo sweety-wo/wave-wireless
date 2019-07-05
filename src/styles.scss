@@ -10,3 +10,9 @@
 @import 'scss/accordion';
 @import 'scss/custom';
 @import 'scss/markdown';
+
+
+router-outlet {
+    //here you put your <p> css code for router-outlet
+    display: none;
+}

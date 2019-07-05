@@ -35,7 +35,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
     map: L.Map;
-    layersControl: any;
+    layersControl: any = {};
 
     constructor(private _router: Router,
                 private _toastr: ToastrService) {
@@ -79,8 +79,13 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     fnCreateMap(mapData) {
-        if (this.zone) {
-            const summit = layerGroup();
+        const baseLayer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
+            noWrap: true,
+        });
+        const summit = layerGroup();
+
+        if (!this.hideZoomControls) {
             const coordinates = [
                 { 'type': 'Feature', 'properties': { 'Name': 'Reeves Center', 'description': '20001 14th St NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 38.9072, 77.0369 ] } },
                 { 'type': 'Feature', 'properties': { 'Name': '4D Public Safety Site', 'description': '6001 Georgia Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 40.741112, -73.989723 ] } },
@@ -98,8 +103,8 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     `<div class="body px-3 pt-3 overflow-auto d-flex">` +
                     `   <div class="w-75">` +
                     `<div class="d-flex align-items-center mb-3">` +
-                        `        <span>${coordObj.properties.description}</span>` +
-                        ` </div>` +
+                    `        <span>${coordObj.properties.description}</span>` +
+                    ` </div>` +
                     `   </div>` +
                     `</div>` +
                     `</div>`;
@@ -118,11 +123,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 summit.addLayer(marker);
             });
 
-            const baseLayer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors',
-                noWrap: true,
-            });
-
             this.layersControl = {
                 baseLayers: {
                     'Street Maps': baseLayer
@@ -131,11 +131,13 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     'Public Safety Towers': summit
                 }
             };
+        }
+        if (this.zone) {
             this.options = {
-                layers: [
+                layers: !this.hideZoomControls ? [
                     baseLayer,
                     summit
-                ],
+                ] : [baseLayer],
                 zoom: this.zone === 'USA' ? 5 : 4,
                 minZoom: this.zone === 'USA' ? 5 : 4,
                 center: this.zone === 'USA' ? latLng([Constant.USA.centerLat, Constant.USA.centerLong]) : latLng([this.geoResult[0].y, this.geoResult[0].x]),
@@ -155,12 +157,10 @@ export class CustomMapComponent implements OnInit, OnChanges {
             }
         } else if (this.centerLat) {
             this.options = {
-                layers: [
-                    tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors',
-                        noWrap: true,
-                    })
-                ],
+                layers: !this.hideZoomControls ? [
+                    baseLayer,
+                    summit
+                ] : [baseLayer],
                 zoom: 4,
                 minZoom: 4,
                 center: latLng([this.centerLat, this.centerLong]),

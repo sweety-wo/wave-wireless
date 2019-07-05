@@ -156,7 +156,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="body px-3 py-2 overflow-auto position-relative">
+            <div class="body px-3 py-2 overflow-auto">
                 <div class="w-75 h-100">
                     <app-bar-chart></app-bar-chart>
                 </div>
@@ -243,7 +243,12 @@
                                   *ngIf="ghost && ghost.value.health"
                                   [ngClass]="getGhostHealthDetail(ghost.value.health).className">
                                 {{getGhostHealthDetail(ghost.value.health).title}}</span>
-                            <label class="w-50 m-0 mr-2">{{ghost && ghost.value.name}}</label>
+                            <label class="w-50 m-0 mr-2" style="" *ngIf="ghost && ghost.value.name && alarmNameMappingOptions[ghost.value.name]">
+                                {{alarmNameMappingOptions[ghost.value.name]}}
+                            </label>
+                            <label class="w-50 m-0 mr-2" *ngIf="ghost && ghost.value.name && !alarmNameMappingOptions[ghost.value.name]">
+                                {{ghost.value.name}}
+                            </label>
                             <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
                             <div class="flex-grow-1 text-right">
                                 <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
