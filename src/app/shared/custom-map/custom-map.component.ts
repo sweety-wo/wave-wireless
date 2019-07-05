@@ -29,6 +29,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     @Input() hideZoomControls: any;
     @Input() isReset: any;
     @Input() zone: any;
+    @Input() isFromFilter: any;
     options: any;
     markers: L.Marker[];
     markerClusterData: L.Marker[] = [];
@@ -62,6 +63,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(change: any) {
+        console.log('change.isFromFilter', change.isFromFilter);
         if (change.mapData && change.mapData.currentValue) {
             this.fnCreateMap(change.mapData.currentValue);
         } else if (change.geoResult && change.geoResult.currentValue && change.geoResult.currentValue.length) {
@@ -141,7 +143,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 maxBounds: this.zone === 'USA' ? Constant.USA.maxBounds : this.geoResult[0].bounds,
                 zoomControl: false,
             };
-            if (this.zone !== 'USA') {
+            if (this.zone !== 'USA' && !this.isFromFilter) {
                 setTimeout(() => {
                     this.map.fitBounds(this.geoResult[0].bounds);
                 }, 1000);
@@ -264,6 +266,11 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 this.markers.push(L.marker([o.data.lat[0], o.data.long[0]], {icon})
                     .bindPopup(content)
                     .openPopup()
+                    .on('click', (e: any) => {
+                        e.stopPropogation();
+                    }).on('clusterClick', (e: any) => {
+                        e.stopPropogation();
+                    })
                 );
             }
         });

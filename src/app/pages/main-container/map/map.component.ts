@@ -22,6 +22,7 @@ export class MapComponent implements OnInit, OnDestroy {
     pieData = [];
     isPieDataEmpty: boolean;
     isDeviceLoading: boolean;
+    isFromFilter: boolean;
     private _client: Paho.MQTT.Client;
     isReset: boolean;
     zone: any;
@@ -185,6 +186,7 @@ export class MapComponent implements OnInit, OnDestroy {
     }
 
     async fnSearch(res: any) {
+        this.isFromFilter = res.isFromFilter;
         if (res.searchOption === 'Custom' && res.searchText) {
             const text = res.searchText;
             const query = 'contains(#{id}, ${' + text + '}) or contains(#{name}, ${' + text + '}) or contains(#{description}, ${' + text + '}) or contains(#{phase}, ${' + text + '}) or contains(#{typeId}, ${' + text + '}) or contains(#{health}, ${' + text + '}) or contains(#{defaultHealth}, ${' + text + '})';
