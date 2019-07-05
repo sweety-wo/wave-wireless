@@ -14,3 +14,15 @@
     white-space: nowrap;
     overflow: hidden;
 }
+
+.card {
+    background-color: transparent;
+    border: none;
+    border-radius: 0
+}
+
+.card-body {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
