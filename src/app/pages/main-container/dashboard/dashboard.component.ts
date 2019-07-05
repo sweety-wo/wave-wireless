@@ -85,7 +85,6 @@ export class DashboardComponent implements OnInit {
     fnSearchDevices(e) {
         if (this.searchText.length) {
             if (e.keyCode === 13) {
-                console.log('this.selectedSearchOption', this.selectedSearchOption);
                 if (this.selectedSearchOption.value === 'devices') {
                     const query = 'contains(#{id}, ${' + this.searchText + '}) or contains(#{name}, ' +
                         '${' + this.searchText + '}) or contains(#{description}, ${' + this.searchText + '}) ' +
@@ -110,12 +109,10 @@ export class DashboardComponent implements OnInit {
 
     fnGetCoordinates(data) {
         if (data && data.length) {
-            console.log('called if');
             const coordinates = this._common.setLatLng(data);
             this.centerLat = coordinates.centerLat;
             this.centerLong = coordinates.centerLong;
         } else {
-            console.log('called else');
             this._auth.loggedInUser.subscribe(async user => {
                 if (user && user.data && user.data.zone) {
                     this.zone =  user.data.zone;

@@ -79,7 +79,6 @@ export class MapComponent implements OnInit, OnDestroy {
                 color: this._common.getHealthDetail(200).color,
                 y: ok,
             }];
-        console.log('pieData', this.pieData);
     }
 
     getDevices(query?: string, isCustomSearch?: boolean) {

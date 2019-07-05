@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import * as L from 'leaflet';
 import * as _ from 'lodash';
-import {tileLayer} from 'leaflet';
+import {layerGroup, tileLayer} from 'leaflet';
 import {latLng} from 'leaflet';
 import '../../../scss/_variables.scss';
 import {Router} from '@angular/router';
@@ -34,6 +34,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
     markerClusterData: L.Marker[] = [];
     markerClusterOptions: L.MarkerClusterGroupOptions;
     map: L.Map;
+    layersControl: any;
 
     constructor(private _router: Router,
                 private _toastr: ToastrService) {
@@ -77,12 +78,61 @@ export class CustomMapComponent implements OnInit, OnChanges {
 
     fnCreateMap(mapData) {
         if (this.zone) {
+            const summit = layerGroup();
+            const coordinates = [
+                { 'type': 'Feature', 'properties': { 'Name': 'Reeves Center', 'description': '20001 14th St NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 38.9072, 77.0369 ] } },
+                { 'type': 'Feature', 'properties': { 'Name': '4D Public Safety Site', 'description': '6001 Georgia Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 40.741112, -73.989723 ] } },
+                { 'type': 'Feature', 'properties': { 'Name': 'GW Hospital', 'description': '2150 Pennsylvania Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 38.897095, -77.006332 ] } },
+                { 'type': 'Feature', 'properties': { 'Name': 'UDC Public Safety', 'description': '4200 Connecticut Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 39.937778, -82.406670 ] } }
+            ];
+            _.forEach(coordinates, (coordObj: any) => {
+                const content =
+                    `<div class="d-flex flex-column flex-grow-1">` +
+                    `<div class="text-white rounded-top bg-primary">` +
+                    `    <div class="d-flex px-3 py-3 align-items-center">` +
+                    `        <label class="m-0 h6">${coordObj.properties.Name}</label>` +
+                    `    </div>` +
+                    `</div>` +
+                    `<div class="body px-3 pt-3 overflow-auto d-flex">` +
+                    `   <div class="w-75">` +
+                    `<div class="d-flex align-items-center mb-3">` +
+                        `        <span>${coordObj.properties.description}</span>` +
+                        ` </div>` +
+                    `   </div>` +
+                    `</div>` +
+                    `</div>`;
+                const marker = L.marker(coordObj.geometry.coordinates, {
+                    icon: L.icon({
+                        iconSize: [25, 41], // size of the icon
+                        shadowSize: [50, 64], // size of the shadow
+                        iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+                        shadowAnchor: [4, 62],  // the same for the shadow
+                        popupAnchor: [0, -42], // point from which the popup should open relative to the iconAnchor
+                        iconUrl: 'leaflet/marker-icon.png',
+                        shadowUrl: 'leaflet/marker-shadow.png'
+                    })
+                }).bindPopup(content)
+                    .openPopup();
+                summit.addLayer(marker);
+            });
+
+            const baseLayer = tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                noWrap: true,
+            });
+
+            this.layersControl = {
+                baseLayers: {
+                    'Street Maps': baseLayer
+                },
+                overlays: {
+                    'Public Safety Towers': summit
+                }
+            };
             this.options = {
                 layers: [
-                    tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors',
-                        noWrap: true,
-                    })
+                    baseLayer,
+                    summit
                 ],
                 zoom: this.zone === 'USA' ? 5 : 4,
                 minZoom: this.zone === 'USA' ? 5 : 4,
@@ -124,7 +174,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     generateMarkers(dataArr: any) {
-        console.log('dataArr', dataArr);
         this.markers = [];
         let color = '';
         let className = '';
