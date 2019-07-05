@@ -1,6 +1,6 @@
 <div class="modal-header">
-    <div class="d-flex align-items-center ju flex-grow-1 mb-3">
-        <h4 class="modal-title">{{doEnable ? 'Enable' : 'Disable'}} Switch</h4>
+    <div class="d-flex align-items-center ju flex-grow-1">
+        <h4 class="modal-title">{{doEnable ? 'Enable' : 'Disable'}} Amp</h4>
     </div>
     <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
@@ -8,7 +8,7 @@
 </div>
 <div class="modal-body">
     <div class="h-100 w-100 d-flex flex-column" *ngIf="!showDisableConfirmation">
-        <label>Please select which switch do you want to {{doEnable ? 'enable' : 'disable'}}?</label>
+        <label>Please select the frequencies to {{doEnable ? 'enable' : 'disable'}}</label>
         <div class="my-2" *ngFor="let switchObj of switchArr">
             <label [for]="switchObj.label" class="check-input">
                 <input type="radio" [id]="switchObj.label" class="mr-2" [disabled]="isValueChanging"
@@ -18,8 +18,19 @@
             </label>
         </div>
     </div>
-    <div class="h-100 w-100 d-flex flex-column" *ngIf="showDisableConfirmation">
-        <label>Are you sure? Disabling this will prevent it from being monitored.</label>
+    <div class="h-100 w-100 d-flex flex-column my-3" *ngIf="showDisableConfirmation">
+        <label>Please type in the word "Confirm" to {{doEnable ? 'enable' : 'disable'}} Amp.</label>
+        <div class="my-2">
+            <div class="input-group search-group mr-3">
+                <input type="text" class="form-control border-right-0" placeholder="Enter Confirmation Text"
+                       [(ngModel)]="confirmText">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
@@ -31,12 +42,13 @@
     <div *ngIf="!showDisableConfirmation">
         <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
                 [disabled]="selectedSwitch === null"
-                (click)="fnToggleAttribute()">
+                (click)="this.showDisableConfirmation = true">
             {{doEnable ? 'Enable' : 'Disable'}}
         </button>
     </div>
     <div *ngIf="showDisableConfirmation">
         <button class="btn btn-primary pull-right" *ngIf="!isValueChanging"
+                [disabled]="confirmText === null || confirmText !== 'Confirm'"
                 (click)="fnEnableDisableSwitch()">
             {{doEnable ? 'Enable' : 'Disable'}}
         </button>

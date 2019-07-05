@@ -1,3 +1,8 @@
 .close, close:focus  {
     outline: none;
 }
+.clusters-modal-body  {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    height: 500px
+}

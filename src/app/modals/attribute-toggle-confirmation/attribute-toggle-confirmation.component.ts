@@ -15,14 +15,15 @@ export class AttributeToggleConfirmationComponent implements OnInit {
     selectedSwitch: string = null;
     isValueChanging: boolean;
     showDisableConfirmation: boolean;
+    confirmText: string = null;
 
   constructor(public activeModal: NgbActiveModal,
               private _device: DeviceService) {
       this.switchArr = [{
-          label: '700\'s Switch',
+          label: '700 Frequency',
           value: '700'
       }, {
-          label: '800\'s Switch',
+          label: '800 Frequency',
           value: '800'
       }, {
           label: 'Both',

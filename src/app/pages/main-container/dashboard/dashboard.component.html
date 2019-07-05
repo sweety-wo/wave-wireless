@@ -51,18 +51,24 @@
                 <div class="d-flex align-items-center justify-content-end" *ngIf="!isDataLoading">
                     <label class="mr-3 m-0 d-flex align-items-center cursor-pointer">
                         <svg-icon src="assets/images/icons/verified.svg" class="fill-primary"
+                                  (click)="getFilterData(filterArr[0])"
+                                  [ngClass]="{'healthOpacity': !filterArr[0].isSelected}"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-                        <span class="text-white ml-3">{{okCount}}</span>
+                        <span class="text-white ml-3">{{filterArr[0].count}}</span>
                     </label>
                     <label class="mr-3 m-0 d-flex align-items-center cursor-pointer">
                         <svg-icon src="assets/images/icons/round-error-symbol.svg" class="fill-orange"
+                                  (click)="getFilterData(filterArr[1])"
+                                  [ngClass]="{'healthOpacity': !filterArr[1].isSelected}"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-                        <span class="text-white ml-3">{{attentionCount}}</span>
+                        <span class="text-white ml-3">{{filterArr[1].count}}</span>
                     </label>
                     <label class="mr-3 m-0 d-flex align-items-center cursor-pointer">
                         <svg-icon src="assets/images/icons/cancel.svg" class="fill-red"
+                                  (click)="getFilterData(filterArr[2])"
+                                  [ngClass]="{'healthOpacity': !filterArr[2].isSelected}"
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
-                        <span class="text-white ml-3">{{criticalCount}}</span>
+                        <span class="text-white ml-3">{{filterArr[2].count}}</span>
                     </label>
                     <app-btn-group-toggle [ngClass]="{'pace': !selectedDevices.length}"
                                           (toggledChange)="openAttributeToggleConfirmationModal($event)"

@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
     isDataLoading: boolean;
 
     deviceData: any = Constant.deviceData; // Constant.deviceData
+    resetDeviceData: any = []; // Constant.deviceData
     gatewayData: any = [];
     clustersData: any = [];
     selectedDevices: any = [];
@@ -51,6 +52,26 @@ export class DashboardComponent implements OnInit {
     common: any;
     chartFilterOptions: any = [];
     selectedChartFilterOption: any = {};
+    filterArr: any = [
+        {
+            name: 'OK_HEALTH',
+            count: 0,
+            code: 200,
+            isSelected: true
+        },
+        {
+            name: 'ATTENTION_HEALTH',
+            count: 0,
+            code: 300,
+            isSelected: true
+        },
+        {
+            name: 'CRITICAL_HEALTH',
+            count: 0,
+            code: 500,
+            isSelected: true
+        }
+    ];
 
     constructor(private _device: DeviceService,
                 private _gateway: GatewayService,
@@ -115,7 +136,7 @@ export class DashboardComponent implements OnInit {
         } else {
             this._auth.loggedInUser.subscribe(async user => {
                 if (user && user.data && user.data.zone) {
-                    this.zone =  user.data.zone;
+                    this.zone = user.data.zone;
                     if (this.zone) {
                         const provider = new OpenStreetMapProvider();
                         this.geoResult = await provider.search({query: this.zone});
@@ -164,9 +185,9 @@ export class DashboardComponent implements OnInit {
                     }
                 }));
                 this.deviceData = devices;
-                this.okCount = this.fnGetHealthCounts(200);
-                this.attentionCount = this.fnGetHealthCounts(300);
-                this.criticalCount = this.fnGetHealthCounts(500);
+                this.filterArr[0].count = this.fnGetHealthCounts(200);
+                this.filterArr[1].count = this.fnGetHealthCounts(300);
+                this.filterArr[2].count = this.fnGetHealthCounts(500);
                 if (this.deviceData.length > 0) {
                     this.fnGetDeviceAttributes();
                 } else {
@@ -213,6 +234,7 @@ export class DashboardComponent implements OnInit {
             }
             this.deviceData[index].deviceEnabledObj = enabledObj;
         }));
+        this.resetDeviceData = _.cloneDeepWith(this.deviceData);
         this.isDataLoading = false;
     }
 
@@ -240,7 +262,7 @@ export class DashboardComponent implements OnInit {
                             const deviceCp = [];
                             _.forEach(cluster.deviceIds, (deviceId) => {
                                 const deviceIndex = _.findIndex(this.deviceData, (device: any) => {
-                                    return device.id === deviceId
+                                    return device.id === deviceId;
                                 });
                                 if (deviceIndex !== -1) {
                                     deviceCp.push(this.deviceData[deviceIndex]);
@@ -290,6 +312,7 @@ export class DashboardComponent implements OnInit {
     fnSelectFooterItem(index) {
         this.selectedFooterDropDownOption = this.dashboardFooterItemsArr[index];
     }
+
     fnSelectFilterOption(filterOption) {
         this.selectedChartFilterOption = filterOption;
     }
@@ -299,7 +322,7 @@ export class DashboardComponent implements OnInit {
             case 'addToGroup':
             case 'removeFromGroup':
                 const modal: NgbModalRef = this._modalService.open(SelectClustersModalComponent,
-                    { size: 'lg', backdrop: 'static', centered: true });
+                    {size: 'lg', backdrop: 'static', centered: true});
                 modal.result.then((result) => {
                     this.clustersData = result.clustersArr;
                     _.forEach(this.deviceData, (device) => {
@@ -381,17 +404,17 @@ export class DashboardComponent implements OnInit {
     }
 
     openPhotoGalleryModal(photo, name) {
-        const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, { size: 'lg', backdrop: 'static' });
+        const modal: NgbModalRef = this._modalService.open(PhotoGalleryComponent, {size: 'lg', backdrop: 'static'});
         modal.componentInstance.photoURL = photo;
         modal.componentInstance.title = name;
     }
 
     openAttributeToggleConfirmationModal(event) {
         const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent,
-            { size: 'sm', backdrop: 'static', centered: true });
+            {size: 'lg', backdrop: 'static', centered: true});
         modal.result.then((result) => {
             _.forEach(result.deviceIdArr, (deviceId) => {
-                const index  = _.findIndex(this.deviceData, {'id': deviceId});
+                const index = _.findIndex(this.deviceData, {'id': deviceId});
                 if (index !== -1) {
                     const deviceObj = Object.assign({}, this.deviceData[index]);
                     const enabledObj = {
@@ -431,4 +454,18 @@ export class DashboardComponent implements OnInit {
 
     }
 
+    getFilterData(option) {
+        option.isSelected = !option.isSelected;
+        const tempHealthArr = [];
+        _.forEach(this.filterArr, (filterObj: any) => {
+            if (filterObj.isSelected === true) {
+                tempHealthArr.push(filterObj.code);
+            }
+        });
+        this.deviceData = _.filter(this.resetDeviceData, (deviceObj: any) => {
+            if (tempHealthArr.includes(deviceObj.health)) {
+                return deviceObj;
+            }
+        });
+    }
 }

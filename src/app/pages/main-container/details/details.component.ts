@@ -278,7 +278,7 @@ export class DetailsComponent implements OnInit {
 
     openAttributeToggleConfirmationModal(event) {
         const modal: NgbModalRef = this._modalService.open(AttributeToggleConfirmationComponent,
-            { size: 'sm', backdrop: 'static', centered: true });
+            { size: 'lg', backdrop: 'static', centered: true });
         modal.result.then((result) => {
             const deviceObj = Object.assign({}, this.device);
             const enabledObj = {

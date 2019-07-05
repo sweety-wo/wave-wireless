@@ -7,7 +7,9 @@
         <input type="radio" name="options" autocomplete="off"
                (click)="fnToggle(btnGroup)"
                [checked]="selectedIndex === btnGroup.itemIndex">
-        <span *ngIf="btnGroup.fieldTitle === '700/800'"><sup>700</sup>/<sub>800</sub></span>
+        <span *ngIf="btnGroup.fieldTitle === '700/800'">
+            <i class="fa fa-hourglass-half"></i>
+        </span>
     <span *ngIf="btnGroup.fieldTitle !== '700/800'">{{btnGroup.fieldTitle}}</span>
     </label>
 </div>
@@ -19,7 +21,7 @@
     </label>
     <label class="btn btn-primary neutral active">
         <input type="radio" class="neutral" name="options" autocomplete="off" checked>
-        <small><sup>700</sup>/<sub>800</sub></small>
+        <small><i class="fa fa-hourglass-half"></i></small>
     </label>
     <label class="btn btn-primary">
         <input type="radio" name="options" autocomplete="off" (click)="fnToggleHeader(false)"> OFF
