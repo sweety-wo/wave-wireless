@@ -11,9 +11,13 @@ import {DropdownOptions} from '../../constant/dropdown-options';
 export class TelemetryStatisticsComponent implements OnInit {
     @Input() ghost: any;
     alarmNameMappingOptions: any;
+    chartFilterOptions: any = [];
+    selectedChartFilterOption: any = {};
 
     constructor(public activeModal: NgbActiveModal) {
         this.alarmNameMappingOptions = DropdownOptions.alarmOptions;
+        this.chartFilterOptions = DropdownOptions.chartFilterOptions;
+        this.selectedChartFilterOption = this.chartFilterOptions[0];
     }
 
     ngOnInit() {
@@ -38,6 +42,10 @@ export class TelemetryStatisticsComponent implements OnInit {
             default:
         }
         return {className, title};
+    }
+
+    fnSelectFilterOption(filterOption) {
+        this.selectedChartFilterOption = filterOption;
     }
 
 

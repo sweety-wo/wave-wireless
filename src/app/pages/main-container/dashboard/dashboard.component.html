@@ -70,7 +70,7 @@
                                   [svgStyle]="{ 'height.px':20, 'width.px':20}"></svg-icon>
                         <span class="text-white ml-3">{{filterArr[2].count}}</span>
                     </label>
-                    <app-btn-group-toggle [ngClass]="{'pace': !selectedDevices.length}"
+                    <app-btn-group-toggle [ngClass]="{'pace': !selectedDevices.length || (selectedDevices.length === 1 && selectedDevices[0].deviceEnabledObj.missingAttr === true)}"
                                           (toggledChange)="openAttributeToggleConfirmationModal($event)"
                                           type="header"
                                           [dataObj]="{}"></app-btn-group-toggle>
@@ -321,9 +321,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="body px-3 py-2 overflow-auto d-flex align-items-center justify-content-center">
-                TODO
-            </div>
+            <div class="body px-3 py-2 overflow-auto d-flex align-items-center justify-content-center"></div>
         </div>
     </div>
 </div>

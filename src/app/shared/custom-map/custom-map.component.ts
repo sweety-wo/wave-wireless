@@ -63,7 +63,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(change: any) {
-        console.log('change.isFromFilter', change.isFromFilter);
         if (change.mapData && change.mapData.currentValue) {
             this.fnCreateMap(change.mapData.currentValue);
         } else if (change.geoResult && change.geoResult.currentValue && change.geoResult.currentValue.length) {
@@ -110,12 +109,12 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     `</div>`;
                 const marker = L.marker(coordObj.geometry.coordinates, {
                     icon: L.icon({
-                        iconSize: [25, 41], // size of the icon
+                        iconSize: [35, 41], // size of the icon
                         shadowSize: [50, 64], // size of the shadow
                         iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
                         shadowAnchor: [4, 62],  // the same for the shadow
                         popupAnchor: [0, -42], // point from which the popup should open relative to the iconAnchor
-                        iconUrl: 'leaflet/marker-icon.png',
+                        iconUrl: 'assets/images/icons/signalTower.png',
                         shadowUrl: 'leaflet/marker-shadow.png'
                     })
                 }).bindPopup(content)

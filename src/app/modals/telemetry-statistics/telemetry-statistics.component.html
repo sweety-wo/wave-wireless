@@ -6,13 +6,14 @@
             {{getGhostHealthDetail(ghost.health).title}}</span>
         <h4 class="modal-title">{{alarmNameMappingOptions[ghost.name] ? alarmNameMappingOptions[ghost.name]: ghost.name }}</h4>
         <div class="btn-group mr-3 ml-auto">
-            <button type="button" class="btn btn-dark" style="margin-right: 2px">Split me</button>
+            <button type="button" class="btn btn-dark" style="margin-right: 2px">{{selectedChartFilterOption.name}}</button>
             <div class="btn-group" ngbDropdown role="group" aria-label="Button group with nested dropdown">
                 <button class="btn btn-dark dropdown-toggle-split" ngbDropdownToggle></button>
                 <div class="dropdown-menu" ngbDropdownMenu>
-                    <button ngbDropdownItem>One</button>
-                    <button ngbDropdownItem>Two</button>
-                    <button ngbDropdownItem>Four!</button>
+                    <button ngbDropdownItem
+                            *ngFor="let filterOption of chartFilterOptions" (click)="fnSelectFilterOption(filterOption)">
+                        {{filterOption.name}}
+                    </button>
                 </div>
             </div>
         </div>
