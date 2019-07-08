@@ -40,6 +40,7 @@ export class DetailsComponent implements OnInit {
     alarmSearch: string;
     telemetrySearch: string;
     isIssueLoading: boolean;
+    showAllTelemetaryData: boolean;
     isDeviceLoading: boolean;
     isGhostLoading: boolean;
     healthClass: string;
@@ -62,6 +63,7 @@ export class DetailsComponent implements OnInit {
         this.healthClass = 'bg-default';
         this.chartFilterOptions = DropdownOptions.chartFilterOptions;
         this.selectedChartFilterOption = this.chartFilterOptions[0];
+        this.showAllTelemetaryData = false;
     }
 
     async ngOnInit() {
@@ -92,7 +94,7 @@ export class DetailsComponent implements OnInit {
         } else {
             this._auth.loggedInUser.subscribe(async user => {
                 if (user && user.data && user.data.zone) {
-                    this.zone =  user.data.zone;
+                    this.zone =  user.data.zone[0];
                     if (this.zone) {
                         const provider = new OpenStreetMapProvider();
                         this.geoResult = await provider.search({query: this.zone});
@@ -258,6 +260,10 @@ export class DetailsComponent implements OnInit {
 
     fnSelectFilterOption(filterOption) {
         this.selectedChartFilterOption = filterOption;
+    }
+
+    fnToggleAdvanceTelemetries() {
+        this.showAllTelemetaryData = !this.showAllTelemetaryData;
     }
 
     openTelemetryStatisticsModal(ghost) {

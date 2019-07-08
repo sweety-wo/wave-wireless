@@ -9,8 +9,9 @@
             <!-- Header -->
             <ng-container *ngIf="device">
                 <div class="header px-3 py-2 d-flex justify-content-between align-items-center"
+                     style="height: 55px"
                     [ngClass]="healthClass">
-                    <label class="m-0 h5 mr-1 text-white">{{device.name}}</label>
+                    <label class="m-0 h3 mr-1 text-white">{{device.name}}</label>
                     <app-btn-group-toggle *ngIf="device.deviceEnabledObj && !device.deviceEnabledObj.missingAttr && !isGhostLoading"
                                           (toggledChange)="openAttributeToggleConfirmationModal($event)"
                                           [addBackground]="true"
@@ -19,7 +20,7 @@
             </ng-container>
 
             <!-- Body -->
-            <div class="body overflow-auto">
+            <div class="px-2 py-2 body overflow-auto">
                 <app-custom-map [mapData]="[device]"
                                 [hideZoomControls]="true"
                                 [geoResult]="geoResult"
@@ -42,6 +43,7 @@
         <div class="d-flex flex-column flex-grow-1 mr-2 mt-2 container-card">
             <!-- Header -->
             <div class="header px-3 py-2 d-flex justify-content-between align-items-center"
+                 style="height: 55px"
                  *ngIf="device && !isDeviceLoading">
                 <label class="m-0 h3">Details</label>
                 <div>
@@ -223,7 +225,13 @@
                     <label class="m-0 h3">Telemetry</label>
                     <div class="d-flex justify-content-end align-items-center">
                         <div class="input-group search-group mr-3">
+                            <button class="btn btn-link text-primary"
+                                    *ngIf="!isGhostLoading"
+                                    (click)="fnToggleAdvanceTelemetries()">
+                                {{showAllTelemetaryData ? 'Hide Advanced Telemetries' : 'Show Advanced Telemetries'}}
+                            </button>
                             <input type="text" class="form-control border-right-0" placeholder="Search"
+                                   [disabled]="isGhostLoading"
                                    [(ngModel)]="telemetrySearch"
                                    (keyup)="customSearch($event)">
                             <div class="input-group-append">
@@ -240,25 +248,46 @@
                 </div>
                 <!-- Body -->
                 <div class="body px-3 py-2 overflow-auto">
-                    <ng-container *ngFor="let ghost of filteredGhosts | keyvalue">
-                        <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="ghost">
-                            <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
-                                  *ngIf="ghost && ghost.value.health"
-                                  [ngClass]="getGhostHealthDetail(ghost.value.health).className">
-                                {{getGhostHealthDetail(ghost.value.health).title}}</span>
-                            <label class="w-50 m-0 mr-2" style="" *ngIf="ghost && ghost.value.name && alarmNameMappingOptions[ghost.value.name]">
-                                {{alarmNameMappingOptions[ghost.value.name]}}
-                            </label>
-                            <label class="w-50 m-0 mr-2" *ngIf="ghost && ghost.value.name && !alarmNameMappingOptions[ghost.value.name]">
-                                {{ghost.value.name}}
-                            </label>
-                            <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
-                            <div class="flex-grow-1 text-right">
-                                <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
-                                          [svgStyle]="{ 'height.px':26, 'width.px':26 }"
-                                          (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
+                    <ng-container *ngIf="showAllTelemetaryData">
+                        <ng-container *ngFor="let ghost of filteredGhosts | keyvalue">
+                            <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="ghost">
+                                <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
+                                      *ngIf="ghost && ghost.value.health"
+                                    [ngClass]="getGhostHealthDetail(ghost.value.health).className">
+                                    {{getGhostHealthDetail(ghost.value.health).title}}</span>
+                                <label class="w-50 m-0 mr-2" style="" *ngIf="ghost && ghost.value.name && alarmNameMappingOptions[ghost.value.name]">
+                                    {{alarmNameMappingOptions[ghost.value.name]}}
+                                </label>
+                                <label class="w-50 m-0 mr-2" *ngIf="ghost && ghost.value.name && !alarmNameMappingOptions[ghost.value.name]">
+                                    {{ghost.value.name}}
+                                </label>
+                                <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
+                                <div class="flex-grow-1 text-right">
+                                    <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
+                                              [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                                              (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
+                                </div>
                             </div>
-                        </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="!showAllTelemetaryData">
+                        <ng-container *ngFor="let ghost of filteredGhosts | keyvalue">
+                            <div class="d-flex align-items-center flex-grow-1 mb-3" *ngIf="ghost && ghost.value && ghost.value.name && alarmNameMappingOptions[ghost.value.name]">
+                                <span class="badge ellipsis-badge font-weight-normal p-2 mr-3 text-white"
+                                      *ngIf="ghost && ghost.value.health"
+                                      [ngClass]="getGhostHealthDetail(ghost.value.health).className">
+                                    {{getGhostHealthDetail(ghost.value.health).title}}</span>
+                                <label class="w-50 m-0 mr-2">
+                                    {{alarmNameMappingOptions[ghost.value.name]}}
+                                </label>
+                                <small class="w-25 m-0 mr-2">{{ghost && ghost.value.reported}}</small>
+                                <div class="flex-grow-1 text-right">
+                                    <svg-icon src="assets/images/icons/analytics.svg" class="cursor-pointer"
+                                              [svgStyle]="{ 'height.px':26, 'width.px':26 }"
+                                              (click)="openTelemetryStatisticsModal(ghost.value)"></svg-icon>
+                                </div>
+                            </div>
+                        </ng-container>
                     </ng-container>
                     <div class="h-100 d-flex align-items-center justify-content-center" *ngIf="isGhostLoading">
                         <app-loader></app-loader>

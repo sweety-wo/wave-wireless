@@ -136,7 +136,7 @@ export class DashboardComponent implements OnInit {
         } else {
             this._auth.loggedInUser.subscribe(async user => {
                 if (user && user.data && user.data.zone) {
-                    this.zone = user.data.zone;
+                    this.zone = user.data.zone[0];
                     if (this.zone) {
                         const provider = new OpenStreetMapProvider();
                         this.geoResult = await provider.search({query: this.zone});

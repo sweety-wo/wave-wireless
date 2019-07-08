@@ -13,21 +13,36 @@ export class BtnGroupToggleComponent implements OnChanges {
     @Output() toggledChange: EventEmitter<any> = new EventEmitter<any>();
 
     btnGroupArr: any = [];
+    attributeToggleOptions: any = [];
     selectedIndex: number;
 
   constructor() {
       this.btnGroupArr = [{
           fieldTitle: 'ON',
           fieldValue: true,
+          fieldTooltip: 'Enable amp',
           itemIndex: 1
-      }, {
+      }, /*{
           fieldTitle: '700/800',
           fieldValue: null,
           itemIndex: 2
+      }, */{
+          fieldTitle: 'OFF',
+          fieldValue: false,
+          fieldTooltip: 'Disable amp',
+          itemIndex: 2
+      }];
+
+      this.attributeToggleOptions = [{
+          fieldTitle: 'ON',
+          fieldValue: true,
+          fieldTooltip: 'Enable amp of selected devices',
+          itemIndex: 1
       }, {
           fieldTitle: 'OFF',
           fieldValue: false,
-          itemIndex: 3
+          fieldTooltip: 'Disable amp of selected devices',
+          itemIndex: 2
       }];
   }
 
@@ -36,9 +51,9 @@ export class BtnGroupToggleComponent implements OnChanges {
           if (this.dataObj.deviceEnabledObj.both) {
               this.selectedIndex = 1;
           } else if (this.dataObj.deviceEnabledObj.none) {
-              this.selectedIndex = 3;
-          } else {
               this.selectedIndex = 2;
+          } else {
+              this.selectedIndex = 3;
           }
       }
   }

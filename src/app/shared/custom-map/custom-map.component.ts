@@ -84,19 +84,36 @@ export class CustomMapComponent implements OnInit, OnChanges {
         });
         const summit = layerGroup();
 
-        if (!this.hideZoomControls) {
-            const coordinates = [
-                { 'type': 'Feature', 'properties': { 'Name': 'Reeves Center', 'description': '20001 14th St NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 38.9072, 77.0369 ] } },
-                { 'type': 'Feature', 'properties': { 'Name': '4D Public Safety Site', 'description': '6001 Georgia Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 40.741112, -73.989723 ] } },
-                { 'type': 'Feature', 'properties': { 'Name': 'GW Hospital', 'description': '2150 Pennsylvania Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 38.897095, -77.006332 ] } },
-                { 'type': 'Feature', 'properties': { 'Name': 'UDC Public Safety', 'description': '4200 Connecticut Ave NW' }, 'geometry': { 'type': 'Point', 'coordinates': [ 39.937778, -82.406670 ] } }
-            ];
-            _.forEach(coordinates, (coordObj: any) => {
+        if (!this.hideZoomControls && !this.isFromFilter && this.zone && this.zone !== 'USA') {
+            let coordinates;
+            switch (this.zone) {
+                case 'washington':
+                    coordinates = Constant.washingtonCoOrds;
+                    break;
+                case 'los Angeles':
+                    coordinates = Constant.laCoOrds;
+                    break;
+                case 'san Diego':
+                    coordinates = Constant.sanDiegoCoOrds;
+                    break;
+                default:
+                    coordinates = Constant.washingtonCoOrds;
+            }
+            _.forEach(coordinates.features, (coordObj: any) => {
+                const photo = coordObj.properties.photo ? `<div class="d-flex px-3 py-3 align-items-center">` +
+                    `        <img class="rounded">${coordObj.properties.photo}</img>` +
+                    `    </div>` : '';
+
+                const placePageUri = coordObj.properties.placePageUri ? `<div class="d-flex align-items-center mb-3">` +
+                    `        <span>placePageUri : ${coordObj.properties.placePageUri}</span>` +
+                    ` </div>` : '';
+
                 const content =
                     `<div class="d-flex flex-column flex-grow-1">` +
                     `<div class="text-white rounded-top bg-primary">` +
-                    `    <div class="d-flex px-3 py-3 align-items-center">` +
+                    `    <div class="d-flex px-3 py-3 align-items-center justify-content-between">` +
                     `        <label class="m-0 h6">${coordObj.properties.Name}</label>` +
+                             photo +
                     `    </div>` +
                     `</div>` +
                     `<div class="body px-3 pt-3 overflow-auto d-flex">` +
@@ -104,6 +121,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                     `<div class="d-flex align-items-center mb-3">` +
                     `        <span>${coordObj.properties.description}</span>` +
                     ` </div>` +
+                    placePageUri +
                     `   </div>` +
                     `</div>` +
                     `</div>`;
@@ -123,9 +141,6 @@ export class CustomMapComponent implements OnInit, OnChanges {
             });
 
             this.layersControl = {
-                baseLayers: {
-                    'Street Maps': baseLayer
-                },
                 overlays: {
                     'Public Safety Towers': summit
                 }
@@ -253,7 +268,7 @@ export class CustomMapComponent implements OnInit, OnChanges {
                 `       <a class="pull-right cursor-pointer text-primary" data-link="/device/${o.id}">View Details</a>` +
                 `</div>` +
                 `</div>`;
-            if (o.data && o.data.long[0] && o.data.lat[0]) {
+            if (o.data && o.data.long && o.data.long[0] && o.data.lat && o.data.lat[0]) {
                 const icon = L.icon({
                     iconUrl: 'data:image/svg+xml;base64,' + btoa(svg),
                     iconSize: [25, 41], // size of the icon

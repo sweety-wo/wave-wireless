@@ -10,6 +10,7 @@ import {LoaderModule} from '../../../shared/loader/loader.module';
 import {CustomMapModule} from '../../../shared/custom-map/custom-map.module';
 import {BtnGroupToggleModule} from '../../../shared/btn-group-toggle/btn-group-toggle.module';
 import {AttributeToggleConfirmationModule} from '../../../modals/attribute-toggle-confirmation/attribute-toggle-confirmation.module';
+import {HorizontalBarChartModule} from '../../../shared/horizontal-bar-chart/horizontal-bar-chart.module';
 
 const routes = [
     {path: '', component: DashboardComponent}
@@ -27,7 +28,8 @@ const routes = [
         NgbDropdownModule,
         NgbAccordionModule,
         AngularSvgIconModule,
-        AttributeToggleConfirmationModule
+        AttributeToggleConfirmationModule,
+        HorizontalBarChartModule
     ],
     exports: [DashboardComponent]
 })

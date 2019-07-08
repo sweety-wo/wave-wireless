@@ -1,29 +1,27 @@
-<div class="btn-group btn-group-toggle" *ngIf="type !== 'header'"
-     data-toggle="buttons">
-    <label class="btn btn-sm btn-primary cursor-pointer"
-           *ngFor="let btnGroup of btnGroupArr"
-           [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}"
-            [ngStyle]="{'background-color': (selectedIndex !== btnGroup.itemIndex && addBackground) ? '#eeeeee' : ''}">
-        <input type="radio" name="options" autocomplete="off"
-               (click)="fnToggle(btnGroup)"
-               [checked]="selectedIndex === btnGroup.itemIndex">
-        <span *ngIf="btnGroup.fieldTitle === '700/800'">
-            <i class="fa fa-hourglass-half"></i>
-        </span>
-    <span *ngIf="btnGroup.fieldTitle !== '700/800'">{{btnGroup.fieldTitle}}</span>
-    </label>
+<div class="d-flex align-items-center" *ngIf="type !== 'header'">
+    <i class="mr-1 fa fa-info-circle"
+       [ngStyle]="{'color' : addBackground ? '#eeeeee' : ''}"
+       title="Some amp's are disabled for this device"
+       *ngIf="selectedIndex === 3"></i>
+    <div class="btn-group btn-group-toggle"
+         data-toggle="buttons">
+        <label class="btn btn-sm btn-primary cursor-pointer"
+               *ngFor="let btnGroup of btnGroupArr"
+               [ngClass]="{'active': selectedIndex === btnGroup.itemIndex}"
+               [ngStyle]="{'background-color': (selectedIndex !== btnGroup.itemIndex && addBackground) ? '#eeeeee' : ''}">
+            <input type="radio" name="options" autocomplete="off"
+                   [title]="btnGroup.fieldTooltip"
+                   (click)="fnToggle(btnGroup)"
+                   [checked]="selectedIndex === btnGroup.itemIndex">
+            <span *ngIf="btnGroup.fieldTitle !== '700/800'">{{btnGroup.fieldTitle}}</span>
+        </label>
+    </div>
 </div>
 
-<div class="btn-group btn-group-toggle headerToggle" *ngIf="type === 'header'"
-     data-toggle="buttons">
-    <label class="btn btn-primary">
-        <input type="radio" name="options" autocomplete="off" (click)="fnToggleHeader(true)"> ON
-    </label>
-    <label class="btn btn-primary neutral active">
-        <input type="radio" class="neutral" name="options" autocomplete="off" checked>
-        <small><i class="fa fa-hourglass-half"></i></small>
-    </label>
-    <label class="btn btn-primary">
-        <input type="radio" name="options" autocomplete="off" (click)="fnToggleHeader(false)"> OFF
-    </label>
+<div class="btn-group" *ngIf="type === 'header'">
+    <button class="btn btn-primary mr-1" *ngFor="let headerOption of attributeToggleOptions"
+            [title]="headerOption.fieldTooltip"
+            (click)="fnToggleHeader(headerOption.fieldValue)">
+        {{headerOption.fieldTitle}}
+    </button>
 </div>

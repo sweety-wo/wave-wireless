@@ -6,7 +6,7 @@ export class DropdownOptions {
 
     public static dashboardSearchOptions = [
         {name: 'Devices', value: 'devices'},
-        {name: 'Clusters', value: 'clusters'},
+        {name: 'Groups', value: 'groups'},
     ];
 
     public static chartFilterOptions = [
